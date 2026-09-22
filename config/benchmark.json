@@ -15,7 +15,7 @@
   "cells": [
     {
       "model": "deepseek-v4.1-flash",
-      "cli_model": "ds-off/deepseek-flash",
+      "alias": "deepseek-flash",
       "source": "deepseek-official",
       "harness": "opencode",
       "effort": "high",
@@ -23,7 +23,6 @@
     },
     {
       "model": "deepseek-v4.1-flash",
-      "cli_model": "opencode-go/deepseek-v4.1-flash",
       "source": "opencode-go",
       "harness": "opencode",
       "effort": "high",
@@ -31,39 +30,27 @@
     },
     {
       "model": "gemini-3.8-flash",
-      "cli_model": "cpa/gemini-3.8-flash",
-      "source": "cpa",
+      "source": "antigravity-cliproxyapi",
       "harness": "opencode",
       "effort": "high",
-      "queue": "google-gemini"
+      "queue": "antigravity"
     },
     {
       "model": "gemini-3.8-flash",
-      "cli_model": "gemini-3.8-flash-high",
-      "source": "google-antigravity",
+      "source": "antigravity",
       "harness": "antigravity",
       "effort": "high",
-      "queue": "google-gemini"
+      "queue": "antigravity"
     },
     {
-      "model": "gemini-3.8-flash",
-      "cli_model": "gemini-3.8-flash-low",
-      "source": "google-antigravity",
-      "harness": "antigravity",
-      "effort": "low",
-      "queue": "google-gemini"
-    },
-    {
-      "model": "mimo-v2.6-flash",
-      "cli_model": "mimo-v2.6-flash",
-      "source": "mimo-official",
+      "model": "mimo-v2.6-pro",
+      "source": "opencode-go",
       "harness": "opencode",
       "effort": null,
-      "queue": "mimo-official"
+      "queue": "opencode-go"
     },
     {
       "model": "mimo-v2.6-flash",
-      "cli_model": "opencode-go/mimo-v2.6-flash",
       "source": "opencode-go",
       "harness": "opencode",
       "effort": null,
@@ -71,43 +58,73 @@
     },
     {
       "model": "muse-spark-1.3-contributor",
-      "cli_model": "opencode-go/muse-spark-1.3-contributor",
-      "source": "muse",
+      "source": "opencode-go",
       "harness": "opencode",
       "effort": "high",
       "queue": "opencode-go"
     },
     {
-      "model": "step-5-preview",
-      "cli_model": "stepfun/step-5-preview",
-      "source": "stepfun",
+      "model": "muse-spark-1.3-contributor",
+      "source": "opencode-go",
       "harness": "opencode",
+      "effort": "xhigh",
+      "queue": "opencode-go"
+    },
+    {
+      "model": "grok-4.7-fast",
+      "source": "grok-build",
+      "harness": "grok-build",
       "effort": "high",
-      "queue": "stepfun-official"
+      "queue": "grok-build"
     },
     {
       "model": "grok-4.7",
-      "cli_model": "grok-4.7",
-      "source": "xai",
-      "harness": "grok",
+      "source": "grok-build",
+      "harness": "grok-build",
+      "effort": "high",
+      "queue": "grok-build"
+    },
+    {
+      "model": "grok-4.7",
+      "source": "grok-build",
+      "harness": "grok-build",
       "effort": "xhigh",
-      "queue": "xai-grok"
+      "queue": "grok-build"
     },
     {
       "model": "gpt-5.6-luna",
-      "cli_model": "gpt-5.6-luna",
-      "source": "openai",
+      "source": "codex",
       "harness": "codex",
       "effort": "high",
-      "queue": "openai-codex"
+      "queue": "codex"
     },
     {
-      "model": "k3",
-      "cli_model": "kimi-code/k3",
-      "source": "moonshot",
-      "harness": "kimi",
+      "model": "gpt-5.6-luna",
+      "source": "codex",
+      "harness": "codex",
+      "effort": "max",
+      "queue": "codex"
+    },
+    {
+      "model": "gpt-6-astra",
+      "source": "codex",
+      "harness": "codex",
       "effort": "high",
-      "queue": "moonshot-kimi"
+      "queue": "codex"
+    },
+    {
+      "model": "k3-256k",
+      "source": "kimi-code",
+      "harness": "kimi-code",
+      "effort": "high",
+      "queue": "kimi"
+    },
+    {
+      "model": "k2.8-preview",
+      "source": "kimi-code",
+      "harness": "kimi-code",
+      "effort": "high",
+      "queue": "kimi"
     }
   ]
 }
