@@ -58,7 +58,7 @@
 - 队列之间并行。不另设全局并发上限。
 - DeepSeek 官方（官方直连）与 opencode-go 的 DeepSeek 不是同一条队列，可以同时跑。
 - opencode 上 source 不同的模型可以同时跑：Muse、Gemini（`cpa/`）、MiMo、Step、opencode-go 的 DeepSeek 各一条。
-- Codex 上的 GPT 模型一条。Grok 模型一条。Kimi 模型一条。
+- Codex 上的 GPT 模型一条。Grok 模型一条。Kimi 模型一条。Antigravity 上的 Gemini 模型一条。
 
 Kimi 没有命令行 effort 档位，effort 取全局 `~/.kimi-code/config.toml` 的实际值；请求的档与全局不符时跳过该组，不伪造标注。Kimi 的 200K 切片经 `-p` argv 直传，不借工具读文件。
 
@@ -79,6 +79,7 @@ Kimi 没有命令行 effort 档位，effort 取全局 `~/.kimi-code/config.toml`
     - grok：最后一条内容增量的到达时刻减去 TTFT。不用 `duration_api_ms`。
     - kimi：session 落盘的 `llmServerDecodeMs`。
     - codex：事件流没有生成窗口，字段为空。
+    - antigravity：最后一条内容增量（`text_delta`）到达时刻减去 TTFT。
 
 两个 TPS：
 
