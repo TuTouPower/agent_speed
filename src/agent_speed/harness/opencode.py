@@ -36,7 +36,10 @@ class OpencodeHarness(BaseHarness):
             "run",
             "--format", "json",
             "--dir", str(cwd_path),
-            "--variant", cell.effort,
+        ]
+        if cell.effort:
+            cmd += ["--variant", cell.effort]
+        cmd += [
             "-m", cell.resolved_cli_model,
             prompt,
             "-f", str(fixture_path.resolve()),

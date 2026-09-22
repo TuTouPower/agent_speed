@@ -39,7 +39,10 @@ class CodexHarness(BaseHarness):
             "--skip-git-repo-check",
             "--sandbox", "read-only",
             "-C", str(cwd_path),
-            "-c", f'model_reasoning_effort="{cell.effort}"',
+        ]
+        if cell.effort:
+            cmd += ["-c", f'model_reasoning_effort="{cell.effort}"']
+        cmd += [
             "-m", cell.resolved_cli_model,
             "-",
         ]

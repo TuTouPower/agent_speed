@@ -12,6 +12,7 @@ class GridCell:
     effort: str | None
     source: str
     harness: str
+    alias: str | None = None
     cli_model: str | None = None
     queue: str | None = None
     cl100k_tokens: int = 200000
@@ -27,7 +28,7 @@ class GridCell:
 
     @property
     def resolved_cli_model(self) -> str:
-        return self.cli_model if self.cli_model else self.model
+        return self.alias or self.cli_model or self.model
 
     @classmethod
     def from_dict(cls, data: dict[str, Any], default_scenario: str = "200k") -> GridCell:
@@ -37,6 +38,7 @@ class GridCell:
             effort=data.get("effort"),
             source=data["source"],
             harness=data["harness"],
+            alias=data.get("alias"),
             cli_model=data.get("cli_model"),
             queue=data.get("queue"),
             cl100k_tokens=data.get("cl100k_tokens", 200000),

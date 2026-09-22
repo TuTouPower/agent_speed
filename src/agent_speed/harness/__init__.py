@@ -8,11 +8,15 @@ from agent_speed.harness.antigravity import AntigravityHarness
 
 def get_harness(name: str) -> BaseHarness:
     mapping = {
+        # 官方权威包名 / CLI
         "opencode": OpencodeHarness,
-        "grok": GrokHarness,
+        "grok-build": GrokHarness,
         "codex": CodexHarness,
-        "kimi": KimiHarness,
+        "kimi-code": KimiHarness,
         "antigravity": AntigravityHarness,
+        # 别名向下兼容
+        "grok": GrokHarness,
+        "kimi": KimiHarness,
         "agy": AntigravityHarness,
     }
     cls = mapping.get(name)

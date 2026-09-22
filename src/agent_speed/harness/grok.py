@@ -42,7 +42,10 @@ class GrokHarness(BaseHarness):
             "--output-format", "streaming-messages-json",
             "--include-partial-messages",
             "-m", cell.resolved_cli_model,
-            "--effort", cell.effort,
+        ]
+        if cell.effort:
+            cmd += ["--effort", cell.effort]
+        cmd += [
             "--always-approve",
             "--cwd", str(cwd_path),
             "--prompt-file", str(prompt_file),

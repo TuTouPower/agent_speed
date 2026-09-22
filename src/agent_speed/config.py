@@ -3,6 +3,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
+try:
+    import yaml
+except ImportError:
+    yaml = None
 
 from agent_speed.models import GridCell
 
@@ -24,13 +28,24 @@ class BenchmarkConfig:
 def load_benchmark_config(config_path: Path | str | None = None) -> BenchmarkConfig:
     if config_path is None:
         repo_root = Path(__file__).resolve().parent.parent.parent
-        config_path = repo_root / "config" / "benchmark.json"
+        yaml_path = repo_root / "config" / "benchmark.yaml"
+        json_path = repo_root / "config" / "benchmark.json"
+        config_path = yaml_path if yaml_path.exists() else json_path
 
     path = Path(config_path)
     if not path.exists():
         raise FileNotFoundError(f"Configuration file not found: {path}")
 
-    data = json.loads(path.read_text(encoding="utf-8"))
+    raw_text = path.read_text(encoding="utf-8")
+    if path.suffix.lower() in (".yaml", ".yml"):
+        if yaml is None:
+            raise ImportError(
+                "PyYAML is required to read benchmark.yaml. "
+                "Please run via 'uv run ...' or ensure pyyaml is installed."
+            )
+        data = yaml.safe_load(raw_text)
+    else:
+        data = json.loads(raw_text)
 
     conc = data.get("concurrency", {})
     global_max = conc.get("global_max", 10)

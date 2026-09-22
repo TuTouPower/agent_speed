@@ -83,17 +83,28 @@ class ConcurrencyTrackerHarness:
 
 
 def test_load_benchmark_config_file():
-    """AC-001: 校验 config/benchmark.json 主配置加载与字段完整性"""
+    """AC-001: 校验 config/benchmark.yaml 主配置加载与字段完整性"""
     cfg = load_benchmark_config()
     assert cfg.global_max_concurrency == 10
     assert cfg.per_queue_concurrency == 2
-    assert len(cfg.cells) >= 10
+    assert len(cfg.cells) == 16
 
     # 验证模型名解耦与渠道正名 (AC-002)
     for c in cfg.cells:
         assert c.source != "official", f"Forbidden raw 'official' source: {c.model}"
         assert c.queue is not None, f"Missing explicit queue for {c.model}"
         assert c.resolved_cli_model is not None
+
+    # 验证别名映射仅在必要时存在
+    ds_off = next(c for c in cfg.cells if c.source == "deepseek-official")
+    assert ds_off.alias == "deepseek-flash"
+    assert ds_off.resolved_cli_model == "deepseek-flash"
+
+    # 验证 MiMo 特殊处理：effort 为 None
+    mimo_cells = [c for c in cfg.cells if "mimo" in c.model]
+    assert len(mimo_cells) == 2
+    for m in mimo_cells:
+        assert m.effort is None
 
 
 def test_scheduler_two_tier_concurrency_limits():
@@ -133,13 +144,13 @@ def test_scheduler_two_tier_concurrency_limits():
 
 
 def test_gemini_shared_queue_and_deepseek_parallelism():
-    """AC-004: Gemini CPA 与 Antigravity 共享 google-gemini 队列（<=2并发）；DeepSeek 官方与网关不同队"""
+    """AC-004: Gemini CPA 与 Antigravity 共享 antigravity 队列（<=2并发）；DeepSeek 官方与网关不同队"""
     cfg = load_benchmark_config()
 
     gemini_cells = [c for c in cfg.cells if "gemini" in c.model]
     assert len(gemini_cells) >= 2
     for c in gemini_cells:
-        assert c.queue_key == "google-gemini", f"Gemini cell {c.cli_model} should be in google-gemini queue"
+        assert c.queue_key == "antigravity", f"Gemini cell {c.cli_model} should be in antigravity queue"
 
     ds_off = next(c for c in cfg.cells if c.source == "deepseek-official")
     ds_gw = next(c for c in cfg.cells if c.source == "opencode-go" and "deepseek" in c.model)

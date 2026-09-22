@@ -29,7 +29,7 @@ from agent_speed.collector import append_result_record
 
 
 def main(argv: list[str] | None = None) -> int:
-    default_config = REPO_ROOT / "config/benchmark.json"
+    default_config = REPO_ROOT / "config/benchmark.yaml"
 
     ap = argparse.ArgumentParser(description="按 queue 分队列双层并发基准测速驱动")
     ap.add_argument("--config", default=str(default_config), help="集中配置文件路径")
