@@ -98,7 +98,9 @@ def generate_latest_json(
         in_toks_median = statistics.median(in_toks_list) if in_toks_list else 0
 
         cl100k = used[-1].get("cl100k_tokens") or used[0].get("cl100k_tokens") or 200000
-        if in_toks_median < (cl100k / 2.0):
+        # antigravity CLI 受客户端 150KB 软上限限制，账单输入约 6.1 万，门槛设为 50,000
+        min_in = 50000 if harness in ("antigravity", "agy") else (cl100k / 2.0)
+        if in_toks_median < min_in:
             continue
 
         e2e_list = [r["e2e_tps"] for r in used if r.get("e2e_tps") is not None]

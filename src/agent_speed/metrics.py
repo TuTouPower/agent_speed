@@ -313,13 +313,23 @@ def parse_antigravity_metrics(
                 ttft = t
             last_delta_t = t
 
-        # 从 step_update 或 result 中提取 usage
-        usage = step_update.get("usage") or result.get("usage")
-        if isinstance(usage, dict):
-            if usage.get("input_tokens") is not None:
-                in_toks = usage["input_tokens"]
-            if usage.get("output_tokens") is not None:
-                out_toks = usage["output_tokens"]
+        # 优先从最终 result 事件中提取全量结算 usage，防止被中间增量 step 覆盖
+        if evt == "result" and isinstance(result.get("usage"), dict):
+            u = result["usage"]
+            raw_in = u.get("input_tokens") or 0
+            cached_in = u.get("cache_read_tokens") or 0
+            if raw_in + cached_in > 0:
+                in_toks = raw_in + cached_in
+            if u.get("output_tokens") is not None:
+                out_toks = u["output_tokens"]
+        elif in_toks is None and isinstance(step_update.get("usage"), dict):
+            u = step_update["usage"]
+            raw_in = u.get("input_tokens") or 0
+            cached_in = u.get("cache_read_tokens") or 0
+            if raw_in + cached_in > 0:
+                in_toks = raw_in + cached_in
+            if u.get("output_tokens") is not None:
+                out_toks = u["output_tokens"]
 
     decode_window: float | None = None
     source: str | None = None

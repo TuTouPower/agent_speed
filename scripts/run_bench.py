@@ -119,7 +119,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
 
     # 测速完成后自动刷新 latest.json 报告
-    latest_path = repo_root / "latest.json"
+    latest_path = REPO_ROOT / "latest.json"
     rows = generate_latest_json(out_path, latest_path)
     print(f"Auto-generated latest.json ({len(rows)} models on leaderboard)")
     return 0
