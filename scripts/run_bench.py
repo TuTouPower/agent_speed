@@ -39,6 +39,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--sources", help="以逗号分隔的 source 过滤白名单")
     ap.add_argument("--harnesses", help="以逗号分隔的 harness 过滤白名单")
     ap.add_argument("--models", help="以逗号分隔的 model 过滤白名单")
+    ap.add_argument("--efforts", help="以逗号分隔的 effort 过滤白名单")
     ap.add_argument("--reps", type=int, help="每格执行次数（默认从配置读取）")
     ap.add_argument("--timeout", type=int, help="单次调用超时（秒，默认从配置读取）")
     args = ap.parse_args(argv)
@@ -71,6 +72,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.models:
         mod_set = set(args.models.split(","))
         cells = [c for c in cells if c.model in mod_set or (c.cli_model and c.cli_model in mod_set)]
+    if args.efforts:
+        eff_set = set(args.efforts.split(","))
+        cells = [c for c in cells if str(c.effort) in eff_set]
 
     if not cells:
         print("No cells to run after filtering.")
