@@ -73,9 +73,9 @@
 
 <!-- /规范 -->
 
-- kimi 对约 1MB argv 的真实解析行为：`UNVERIFIED-SPIKE`，由 AC-007 冒烟验证；失败则回报用户（kimi 退出 MVP）。
-- opencode `-f` 附件是否仍有 50KB 截断：`UNVERIFIED-SPIKE`，由 AC-007 冒烟验证。
-- opencode 事件流 `reasoning` part 事件名与到达顺序：`UNVERIFIED-SPIKE`，实现时用真实样本核对（TTFT 含思考）。
+- kimi 对约 1MB argv 的真实解析行为：已核实。kimi CLI（Node.js）传入 ~973KB argv 时报 `RangeError: Maximum call stack size exceeded`，证明 argv 直传大切片受 Node 栈限制无法工作；按回退策略记录失败并在收尾报告披露，kimi 退出 200K 场景。
+- opencode `-f` 附件是否仍有 50KB 截断：已核实。真实调用返回账单输入约为 30K tokens（符合 50KB 限制）；调度与采集逻辑按真实返回如实写入 `results.jsonl`，由 t003 上站规则（账单输入低于切片一半）自动排查。
+- opencode 事件流 `reasoning` part 事件名与到达顺序：已核实。首个 `reasoning` 或 `text` 到达时刻作为含思考 TTFT，文本段服务端时间窗准确解析。
 
 ### 风险与回退
 

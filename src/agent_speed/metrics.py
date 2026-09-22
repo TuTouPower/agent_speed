@@ -1,0 +1,248 @@
+from __future__ import annotations
+
+import json
+import re
+from typing import Any
+
+RE_OUT = re.compile(r'"(?:output_tokens|outputTokens|completion_tokens)"\s*:\s*(\d+)')
+RE_IN = re.compile(r'"(?:input_tokens|inputTokens|prompt_tokens|promptTokens)"\s*:\s*(\d+)')
+RE_REASON = re.compile(r'"reasoning(?:_tokens|Tokens)?"\s*:\s*(\d+)')
+
+
+def calculate_tps(
+    wall: float | None,
+    decode_window: float | None,
+    out_tokens: int | None,
+) -> tuple[float | None, float | None]:
+    """AC-004: 计算端到端 TPS 与生成 TPS。"""
+    e2e_tps: float | None = None
+    gen_tps: float | None = None
+
+    if wall is not None and wall > 0 and out_tokens is not None and out_tokens > 0:
+        e2e_tps = round(out_tokens / wall, 2)
+
+    if decode_window is not None and decode_window > 0 and out_tokens is not None and out_tokens > 0:
+        gen_tps = round(out_tokens / decode_window, 2)
+
+    return e2e_tps, gen_tps
+
+
+def parse_opencode_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+    """opencode 指标解析。
+
+    - TTFT: 首个可见 token（含 reasoning 与 text）到达时间
+    - 生成窗口: text part 的 time.end - time.start
+    - 来源: opencode:text_part_time
+    """
+    ttft: float | None = None
+    decode_window: float | None = None
+    source: str | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(o, dict):
+            continue
+
+        evt_type = o.get("type")
+        part = o.get("part") if isinstance(o.get("part"), dict) else {}
+
+        # TTFT: 首个可见 token，含 reasoning 和 text
+        if ttft is None:
+            if evt_type in ("reasoning", "thought", "thinking"):
+                ttft = t
+            elif evt_type == "text" and (part.get("text") or "text" in o):
+                ttft = t
+
+        # 生成窗口: text part 的 start 到 end
+        if evt_type == "text" and isinstance(part, dict):
+            tm = part.get("time") or {}
+            if tm.get("start") and tm.get("end") and tm["end"] > tm["start"]:
+                decode_window = round((tm["end"] - tm["start"]) / 1000.0, 3)
+                source = "opencode:text_part_time"
+
+        # usage 统计
+        if evt_type in ("step-finish", "step_finish"):
+            toks = part.get("tokens") or {}
+            if isinstance(toks, dict):
+                in_toks = toks.get("input", in_toks)
+                out_toks = toks.get("output", out_toks)
+
+    # 如果 json 未能完全提取 tokens，正则兜底
+    if in_toks is None or out_toks is None:
+        for _, line in lines:
+            m_in = RE_IN.search(line)
+            if m_in and in_toks is None:
+                in_toks = int(m_in.group(1))
+            m_out = RE_OUT.search(line)
+            if m_out and out_toks is None:
+                out_toks = int(m_out.group(1))
+
+    return ttft, decode_window, source, in_toks, out_toks
+
+
+def parse_grok_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+    """grok 指标解析。
+
+    - TTFT: 首个内容行到达时刻
+    - 生成窗口: 最后一条内容增量到达时刻 - TTFT（不用 duration_api_ms）
+    - 来源: grok:last_content_minus_ttft
+    """
+    ttft: float | None = None
+    last_content_t: float | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            o = None
+
+        is_content = False
+        if isinstance(o, dict):
+            # grok streaming-messages-json: type=content / delta / text / reasoning
+            evt_type = o.get("type")
+            if evt_type in ("content", "message", "thinking", "reasoning") or "delta" in o or "text" in o:
+                is_content = True
+            usage = o.get("usage") or {}
+            if isinstance(usage, dict):
+                if usage.get("prompt_tokens") is not None:
+                    in_toks = usage["prompt_tokens"]
+                elif usage.get("input_tokens") is not None:
+                    in_toks = usage["input_tokens"]
+                if usage.get("completion_tokens") is not None:
+                    out_toks = usage["completion_tokens"]
+                elif usage.get("output_tokens") is not None:
+                    out_toks = usage["output_tokens"]
+        else:
+            if any(h in line for h in ('"content":', '"delta"', '"text":')):
+                is_content = True
+
+        if is_content:
+            if ttft is None:
+                ttft = t
+            last_content_t = t
+
+        # token 正则兜底
+        m_in = RE_IN.search(line)
+        if m_in and in_toks is None:
+            in_toks = int(m_in.group(1))
+        m_out = RE_OUT.search(line)
+        if m_out and out_toks is None:
+            out_toks = int(m_out.group(1))
+
+    decode_window: float | None = None
+    source: str | None = None
+    if ttft is not None and last_content_t is not None and last_content_t >= ttft:
+        decode_window = round(last_content_t - ttft, 3)
+        source = "grok:last_content_minus_ttft"
+
+    return ttft, decode_window, source, in_toks, out_toks
+
+
+def parse_kimi_metrics(
+    lines: list[tuple[float, str]],
+    wire_info: dict[str, Any] | None = None,
+) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+    """kimi 指标解析。
+
+    - TTFT: 首个可见 token
+    - 生成窗口: session wire.jsonl 落盘的 llmServerDecodeMs
+    - 来源: kimi:llm_server_decode_ms
+    """
+    ttft: float | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            o = None
+
+        if ttft is None:
+            if isinstance(o, dict) and any(o.get(k) for k in ("text", "content", "delta")):
+                ttft = t
+            elif len(line) > 50:
+                ttft = t
+
+        m_in = RE_IN.search(line)
+        if m_in and in_toks is None:
+            in_toks = int(m_in.group(1))
+        m_out = RE_OUT.search(line)
+        if m_out and out_toks is None:
+            out_toks = int(m_out.group(1))
+
+    decode_window: float | None = None
+    source: str | None = None
+
+    if wire_info:
+        if wire_info.get("llmServerDecodeMs") is not None:
+            decode_window = round(wire_info["llmServerDecodeMs"] / 1000.0, 3)
+            source = "kimi:llm_server_decode_ms"
+        if wire_info.get("in_tokens") is not None:
+            in_toks = wire_info["in_tokens"]
+        if wire_info.get("out_tokens") is not None:
+            out_toks = wire_info["out_tokens"]
+
+    return ttft, decode_window, source, in_toks, out_toks
+
+
+def parse_codex_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+    """codex 指标解析。
+
+    - TTFT: 首个可见 token
+    - 生成窗口: 契约 §5 codex 事件流没有生成窗口，字段为空
+    - 来源: None
+    """
+    ttft: float | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            o = None
+
+        if ttft is None:
+            if isinstance(o, dict):
+                evt_type = o.get("type", "")
+                if evt_type in ("item.completed", "response.output_item.added", "message"):
+                    ttft = t
+                elif any(k in o for k in ("content", "text", "delta")):
+                    ttft = t
+            elif any(h in line for h in ('"item"', '"text":', '"delta"')):
+                ttft = t
+
+        if isinstance(o, dict):
+            usage = o.get("usage") or {}
+            if isinstance(usage, dict):
+                if usage.get("input_tokens") is not None:
+                    in_toks = usage["input_tokens"]
+                elif usage.get("prompt_tokens") is not None:
+                    in_toks = usage["prompt_tokens"]
+                if usage.get("output_tokens") is not None:
+                    out_toks = usage["output_tokens"]
+                elif usage.get("completion_tokens") is not None:
+                    out_toks = usage["completion_tokens"]
+
+        m_in = RE_IN.search(line)
+        if m_in and in_toks is None:
+            in_toks = int(m_in.group(1))
+        m_out = RE_OUT.search(line)
+        if m_out and out_toks is None:
+            out_toks = int(m_out.group(1))
+
+    return ttft, None, None, in_toks, out_toks

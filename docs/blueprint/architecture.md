@@ -5,6 +5,7 @@
 ## 模块划分
 
 - `src/`：核心测速与分析工具链
+    - `agent_speed/`：重构的评测驱动核心包，提供数据模型、各 harness（opencode/grok/codex/kimi）适配器、指标计算与按 source+harness 分队列调度器。
     - `bench_speed.py`：常规三档（short/medium/long）矩阵测速驱动器，支持并发/串行、样本过滤与中位数统计。
     - `bench_ctx.py`：300K 长上下文输入基准评测，测量首 token 延迟（TTFT）与解码 TPS。
     - `bench_stream.py`：流式捕获与事件记录驱动（支持 opencode / codex / grok 等直调）。
@@ -12,6 +13,7 @@
     - `build_fixture.py`：超长输入切片构建工具（生成 `fixtures/chunks_300k/`）。
     - `merge_final.py` / `rescan_stream.py` / `ts_capture.py`：历史数据重扫与合并工具。
 - `scripts/`：项目构建与工具脚本。
+    - `run_bench.py`：按 source+harness 分队列基准测速驱动入口。
     - `build_django_corpus.py`：公开语料构建工具，pin `django/django` tag 6.1.1，按 cl100k 组装 10K/100K/200K 嵌套切片与 manifest。
 - `fixtures/`：评测输入素材与元数据（包含 `django_10k.txt`、`django_100k.txt`、`django_200k.txt` 及对应 manifest 与 task 文件）。
 - `prompts/`：标准评测 prompt 集（`short.md`、`medium.md`、`long.md`、`task_200k.md`）。
