@@ -122,6 +122,7 @@ def generate_latest_json(
 
         # batch_id：最近一次成功所属 batch（兼容字段；页面可不展示）
         latest_batch_id = used[-1].get("batch_id")
+        sample_times = [str(r["start_time"]) for r in used if r.get("start_time")]
 
         row = {
             "scenario": scenario,
@@ -137,6 +138,7 @@ def generate_latest_json(
             "out_tokens": out_toks_median,
             "in_tokens": in_toks_res,
             "batch_id": latest_batch_id,
+            "sample_times": sample_times,
             "generated_at": now_iso,
         }
         rows.append(row)
