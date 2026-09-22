@@ -2,5 +2,22 @@
     "generated_by": ".repo_template/scripts/task.py",
     "authority": "docs/tasks/{tid}_{slug}/task.md front matter",
     "workspace": ".",
-    "tasks": []
+    "tasks": [
+        {
+            "tid": "t006",
+            "slug": "queue_concurrency_config",
+            "title": "调度器重构：双层并发（单队2/全局10）、单一配置benchmark.json与模型别名解耦",
+            "status": "backlog",
+            "branch": "",
+            "worktree": "",
+            "review_level": "full",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "",
+            "depends_on": "",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/tasks/t006_queue_concurrency_config"
+        }
+    ]
 }
