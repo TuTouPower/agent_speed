@@ -9,8 +9,8 @@
 - **基准比较单位**：
     基准比较单位为五元组：「`model` × `effort` × `source` × `harness` × `scenario`」。
     - `scenario`：评测场景（MVP 阶段固定为 `200k`）。
-    - `source`：模型服务提供方，区分官方直连（如 `official`、`moonshot`、`openai`）或聚合网关（如 `opencode-go`、`cpa`）。
-    - `harness`：评测运行驱动框架（如 `opencode`、`grok`、`codex`、`kimi`）。
+    - `source`：模型服务提供方，区分官方直连（如 `official`、`moonshot`、`openai`、`google`）或聚合网关（如 `opencode-go`、`cpa`）。
+    - `harness`：评测运行驱动框架（如 `opencode`、`grok`、`codex`、`kimi`、`antigravity`）。
     - `model`：被测模型标识（按 CLI/API 原文，不做别名归一）。
     - `effort`：模型思考强度或变体档位（按 CLI 原文显示，不做别名归一）。
 - **网格键（Grid Key）**：
@@ -42,6 +42,7 @@
     - `grok`：取最后一个内容 chunk 到达时间减去 TTFT 的增量时间窗。
     - `kimi`：取服务端返回指标中的 `llmServerDecodeMs`。
     - `codex`：CLI 未暴露解码时间戳，统一置为 `null`。
+    - `antigravity`：取最后一个内容增量（`text_delta`）到达时间减去 TTFT 的增量时间窗（`last_delta_minus_ttft`）。
 - **端到端 TPS（E2E TPS）**：
     - 公式：`输出 token 数 ÷ Wall Time`。
     - 作为公开基准排序的主指标。
@@ -57,6 +58,10 @@
     - 切片与任务通过 `-p` 命令行参数（argv）直传。
     - 自动读取 `~/.kimi-code/config.toml` 中的全局 effort 配置；若与待测网格 effort 不一致，则标记为 `skipped` 并记录原因。
     - 若遇 Node.js argv 栈溢出（1MB 限制），如实捕获错误、记录为 `failed`。
+- **antigravity (agy) 特殊契约**：
+    - 使用 `agy` CLI，通过 `-p` 命令行参数直传任务说明与 200K 切片。
+    - 采用 `--output-format stream-json` 输出模式，逐行打点解析事件流。
+    - 支持通过 `--model` 与 `--effort` 透传模型与思考档位。
 
 ## 6. 结果持久化（`results.jsonl`）
 
