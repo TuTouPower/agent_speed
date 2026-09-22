@@ -8,7 +8,7 @@
   python3 scripts/screenshot_board.py
   python3 scripts/screenshot_board.py --url https://agent-speed.ooll.lol
   python3 scripts/screenshot_board.py --web-dir ../great_websites/systems/agent_speed/web \\
-      --latest data/latest.json -o docs/board-preview.png
+      --latest data/latest.json -o docs/board-preview-dark.png
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ from pathlib import Path
 from PIL import Image, ImageChops
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview.png"
+DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview-dark.png"
 DEFAULT_URL = "https://agent-speed.ooll.lol/?theme=dark"
 DEFAULT_LATEST = REPO_ROOT / "data" / "latest.json"
 

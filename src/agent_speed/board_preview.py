@@ -8,7 +8,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = REPO_ROOT / "scripts" / "screenshot_board.py"
-DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview.png"
+DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview-dark.png"
 
 
 def refresh_board_preview(*, latest: Path | None = None, out: Path | None = None) -> Path | None:
