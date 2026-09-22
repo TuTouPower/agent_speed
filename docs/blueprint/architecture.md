@@ -11,8 +11,10 @@
     - `render_md.py`：基准结果 Markdown 转高分辨率 Retina 图片渲染器。
     - `build_fixture.py`：超长输入切片构建工具（生成 `fixtures/chunks_300k/`）。
     - `merge_final.py` / `rescan_stream.py` / `ts_capture.py`：历史数据重扫与合并工具。
-- `fixtures/`：评测输入素材与元数据（如 `chunks_300k/`、`manifest_300k.json`、`task_ctx.md`）。
-- `prompts/`：标准评测 prompt 集（`short.md`、`medium.md`、`long.md`）。
+- `scripts/`：项目构建与工具脚本。
+    - `build_django_corpus.py`：公开语料构建工具，pin `django/django` tag 6.1.1，按 cl100k 组装 10K/100K/200K 嵌套切片与 manifest。
+- `fixtures/`：评测输入素材与元数据（包含 `django_10k.txt`、`django_100k.txt`、`django_200k.txt` 及对应 manifest 与 task 文件）。
+- `prompts/`：标准评测 prompt 集（`short.md`、`medium.md`、`long.md`、`task_200k.md`）。
 - `runs/`：每次运行产物（`meta.json`、`results.jsonl`、`summary.md` 等，本地保留，不入库）。
 - `docs/`：项目规范与知识库。
     - `docs/specs/public_site_spec.md`：未来公开展示站（Cloudflare Pages 静态站 + `django/django` 切片语料）设计契约（待拆分 task 实现）。

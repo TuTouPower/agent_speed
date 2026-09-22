@@ -1,0 +1,46 @@
+{
+  "source": "django/django",
+  "tag": "6.1.1",
+  "commit": "249b13d6e93ee3164dee8ed1775395622a50c337",
+  "target_tokens": 10000,
+  "actual_tokens": 10000,
+  "n_files": 7,
+  "encoding": "cl100k_base",
+  "files": [
+    {
+      "path": "django/__init__.py",
+      "tokens": 184,
+      "truncated": false
+    },
+    {
+      "path": "django/__main__.py",
+      "tokens": 56,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/__init__.py",
+      "tokens": 35,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/config.py",
+      "tokens": 2239,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/registry.py",
+      "tokens": 3445,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/__init__.py",
+      "tokens": 3157,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/global_settings.py",
+      "tokens": 888,
+      "truncated": true
+    }
+  ]
+}
