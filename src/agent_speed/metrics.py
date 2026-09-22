@@ -109,11 +109,16 @@ def parse_grok_metrics(
 
         is_content = False
         if isinstance(o, dict):
-            # grok streaming-messages-json: type=content / delta / text / reasoning
-            evt_type = o.get("type")
-            if evt_type in ("content", "message", "thinking", "reasoning") or "delta" in o or "text" in o:
+            # 解包 grok streaming-messages-json: type=stream_event -> event
+            evt = o.get("event") if isinstance(o.get("event"), dict) else o
+            evt_type = evt.get("type") or o.get("type")
+
+            if evt_type in ("content_block_delta", "content_block_start", "content", "message", "thinking", "reasoning"):
                 is_content = True
-            usage = o.get("usage") or {}
+            elif "delta" in evt or "delta" in o or "text" in evt or "text" in o:
+                is_content = True
+
+            usage = evt.get("usage") or o.get("usage") or {}
             if isinstance(usage, dict):
                 if usage.get("prompt_tokens") is not None:
                     in_toks = usage["prompt_tokens"]
@@ -124,7 +129,7 @@ def parse_grok_metrics(
                 elif usage.get("output_tokens") is not None:
                     out_toks = usage["output_tokens"]
         else:
-            if any(h in line for h in ('"content":', '"delta"', '"text":')):
+            if any(h in line for h in ('"content":', '"delta"', '"text":', '"thinking"')):
                 is_content = True
 
         if is_content:

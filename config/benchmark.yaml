@@ -13,25 +13,28 @@ defaults:
 
 cells:
   - model: "deepseek-v4.1-flash"
-    alias: "deepseek-flash"
+    alias: "deepseek-official/deepseek-flash"
     source: "deepseek-official"
     harness: "opencode"
     effort: "high"
     queue: "deepseek-official"
 
   - model: "deepseek-v4.1-flash"
+    alias: "opencode-go/deepseek-v4.1-flash"
     source: "opencode-go"
     harness: "opencode"
     effort: "high"
     queue: "opencode-go"
 
   - model: "gemini-3.8-flash"
+    alias: "cpa/gemini-3.8-flash"
     source: "antigravity-cliproxyapi"
     harness: "opencode"
     effort: "high"
     queue: "antigravity"
 
   - model: "gemini-3.8-flash"
+    alias: "gemini-3.8-flash-high"
     source: "antigravity"
     harness: "antigravity"
     effort: "high"
@@ -39,30 +42,35 @@ cells:
 
   # MiMo 不支持设置思考强度（只支持 auto），effort 设为 null，CLI 不传 --variant
   - model: "mimo-v2.6-pro"
+    alias: "opencode-go/mimo-v2.6-pro"
     source: "opencode-go"
     harness: "opencode"
     effort: null
     queue: "opencode-go"
 
   - model: "mimo-v2.6-flash"
+    alias: "opencode-go/mimo-v2.6-flash"
     source: "opencode-go"
     harness: "opencode"
     effort: null
     queue: "opencode-go"
 
   - model: "muse-spark-1.3-contributor"
+    alias: "opencode-go/muse-spark-1.3-contributor"
     source: "opencode-go"
     harness: "opencode"
     effort: "high"
     queue: "opencode-go"
 
   - model: "muse-spark-1.3-contributor"
+    alias: "opencode-go/muse-spark-1.3-contributor"
     source: "opencode-go"
     harness: "opencode"
     effort: "xhigh"
     queue: "opencode-go"
 
   - model: "grok-4.7-fast"
+    alias: "grok-4.7-build-fast"
     source: "grok-build"
     harness: "grok-build"
     effort: "high"
@@ -100,12 +108,14 @@ cells:
 
   # Kimi 思考强度受全局 ~/.kimi-code/config.toml 控制，命令行无单独参数
   - model: "k3-256k"
+    alias: "kimi-code/k3-256k"
     source: "kimi-code"
     harness: "kimi-code"
     effort: "high"
     queue: "kimi"
 
   - model: "k2.8-preview"
+    alias: "kimi-code/kimi-for-coding"
     source: "kimi-code"
     harness: "kimi-code"
     effort: "high"

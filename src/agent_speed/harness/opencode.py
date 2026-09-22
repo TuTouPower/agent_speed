@@ -23,14 +23,23 @@ class OpencodeHarness(BaseHarness):
         rep: int,
         batch_id: str,
         prompt: str,
-        fixture_path: Path,
-        cwd: Path | str,
+        fixture_path: Path | None = None,
+        fixture_text: str | None = None,
+        cwd: Path | str = ".",
         timeout: int = 300,
     ) -> CallRecord:
         start_iso = datetime.now(timezone.utc).astimezone().isoformat()
         cwd_path = Path(cwd)
 
-        # command: opencode run --format json --dir <cwd> --variant <effort> -m <model> <prompt> -f <fixture>
+        # 直传完整 200K 切片，避免 opencode -f 附件的 50KB 内部截断
+        if fixture_text is None:
+            if fixture_path and fixture_path.exists():
+                fixture_text = fixture_path.read_text(encoding="utf-8")
+            else:
+                fixture_text = ""
+
+        full_message = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}" if fixture_text else prompt
+
         cmd = [
             self.bin_path,
             "run",
@@ -41,8 +50,7 @@ class OpencodeHarness(BaseHarness):
             cmd += ["--variant", cell.effort]
         cmd += [
             "-m", cell.resolved_cli_model,
-            prompt,
-            "-f", str(fixture_path.resolve()),
+            full_message,
         ]
 
         t0 = time.monotonic()

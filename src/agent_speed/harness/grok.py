@@ -23,17 +23,24 @@ class GrokHarness(BaseHarness):
         rep: int,
         batch_id: str,
         prompt: str,
-        fixture_path: Path,
-        cwd: Path | str,
+        fixture_path: Path | None = None,
+        fixture_text: str | None = None,
+        cwd: Path | str = ".",
         timeout: int = 300,
     ) -> CallRecord:
         start_iso = datetime.now(timezone.utc).astimezone().isoformat()
         cwd_path = Path(cwd)
 
+        if fixture_text is None:
+            if fixture_path and fixture_path.exists():
+                fixture_text = fixture_path.read_text(encoding="utf-8")
+            else:
+                fixture_text = ""
+
         # 构造 prompt-file
         prompt_file = cwd_path / "grok_prompt.md"
         prompt_file.write_text(
-            f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_path.read_text(encoding='utf-8')}",
+            f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}",
             encoding="utf-8",
         )
 

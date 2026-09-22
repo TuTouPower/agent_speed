@@ -97,8 +97,8 @@ def test_load_benchmark_config_file():
 
     # 验证别名映射仅在必要时存在
     ds_off = next(c for c in cfg.cells if c.source == "deepseek-official")
-    assert ds_off.alias == "deepseek-flash"
-    assert ds_off.resolved_cli_model == "deepseek-flash"
+    assert ds_off.alias == "deepseek-official/deepseek-flash"
+    assert ds_off.resolved_cli_model == "deepseek-official/deepseek-flash"
 
     # 验证 MiMo 特殊处理：effort 为 None
     mimo_cells = [c for c in cfg.cells if "mimo" in c.model]

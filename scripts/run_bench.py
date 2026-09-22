@@ -88,27 +88,16 @@ def main(argv: list[str] | None = None) -> int:
     def run_single_cell(cell: GridCell, rep: int, batch_id: str) -> CallRecord:
         harness = get_harness(cell.harness)
         with tempfile.TemporaryDirectory(prefix="bench-call-") as tmpdir:
-            if cell.harness in ("kimi", "antigravity", "agy"):
-                # kimi 与 antigravity 均支持通过 argv 直传文本
-                rec = harness.run(
-                    cell=cell,
-                    rep=rep,
-                    batch_id=batch_id,
-                    prompt=prompt_text,
-                    fixture_text=fixture_text,
-                    cwd=tmpdir,
-                    timeout=timeout_sec,
-                )
-            else:
-                rec = harness.run(
-                    cell=cell,
-                    rep=rep,
-                    batch_id=batch_id,
-                    prompt=prompt_text,
-                    fixture_path=fixture_path,
-                    cwd=tmpdir,
-                    timeout=timeout_sec,
-                )
+            rec = harness.run(
+                cell=cell,
+                rep=rep,
+                batch_id=batch_id,
+                prompt=prompt_text,
+                fixture_path=fixture_path,
+                fixture_text=fixture_text,
+                cwd=tmpdir,
+                timeout=timeout_sec,
+            )
 
         # 实时追加写入 results.jsonl
         append_result_record(out_path, rec)
