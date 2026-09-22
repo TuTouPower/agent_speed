@@ -100,6 +100,24 @@ cells:
     effort: "high"
     queue: "codex"
 
+  - model: "gpt-6-luna"
+    source: "codex"
+    harness: "codex"
+    effort: "high"
+    queue: "codex"
+
+  - model: "gpt-6-luna"
+    source: "codex"
+    harness: "codex"
+    effort: "max"
+    queue: "codex"
+
+  - model: "gpt-6-sol"
+    source: "codex"
+    harness: "codex"
+    effort: "high"
+    queue: "codex"
+
   # Kimi 思考强度受全局 ~/.kimi-code/config.toml 控制，命令行无单独参数
   - model: "k3-256k"
     alias: "kimi-code/k3-256k"
