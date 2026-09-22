@@ -40,36 +40,39 @@
 - **首字延迟（TTFT, Time To First Token）**：
     首个可见 token 到达的相对耗时（秒）。
     - **重要约束**：TTFT 必须包含模型思考与推理过程；若模型先输出 reasoning token，首个 reasoning token 到达时刻即为 TTFT。
-- **解码生成窗口（Decode Window）**：
-    模型处于真实正文解码阶段的时间窗口（秒）。来源按各 harness 特性严格划分：
-    - `opencode`：提取服务端报告的文本段解码时间窗（`text_part_time`）。
-    - `grok`：取最后一个内容 chunk 到达时间减去 TTFT 的增量时间窗。
+- **生成时间窗（Generation Window）**：
+    模型进入正文生成阶段的真实时间窗口（秒，不含预填时间）。来源按各 harness 特性严格划分：
+    - `opencode`：提取服务端报告的文本段生成时间窗（`text_part_time`）。
+    - `grok`：取最后一个内容 chunk 到达时间减去 TTFT 的增量时间窗（`last_content_minus_ttft`）。
     - `kimi`：取服务端返回指标中的 `llmServerDecodeMs`。
-    - `codex`：CLI 未暴露解码时间戳，统一置为 `null`。
+    - `codex`：CLI 未暴露生成时间戳，统一置为 `null`。
     - `antigravity`：取最后一个内容增量（`text_delta`）到达时间减去 TTFT 的增量时间窗（`last_delta_minus_ttft`）。
 - **端到端 TPS（E2E TPS）**：
     - 公式：`输出 token 数 ÷ Wall Time`。
     - 作为公开基准排序的主指标。
 - **生成 TPS（Generation TPS）**：
-    - 公式：`输出 token 数 ÷ Decode Window`。
-    - 当解码生成窗口为空（如 codex）时，生成 TPS 严格记录为 `null`。
+    - 公式：`输出 token 数 ÷ Generation Window`。
+    - 当生成时间窗为空（如 codex）时，生成 TPS 严格记录为 `null`。
+- **超长上下文（200K）下的指标物理机制（关键发现 d001）**：
+    - **预填摊薄效应**：在 200K 超长输入下，模型对数十万 Token 的前置预填时间（TTFT，通常在 10s~35s）是一笔固定的沉没成本。端到端 TPS（`输出 token ÷ Wall Time`）受阿姆达尔定律影响，与模型**输出 Token 的绝对数量呈强正相关**（输出内容越多，固定的预填时间在总时长中被摊薄得越薄，计算出的端到端 TPS 显得越高；实测同一模型 3.8K 输出为 114 TPS，10.5K 输出直接飙升至 196 TPS）。
+    - **生成 TPS 的核心度量地位**：生成 TPS 剔除了固定的前置预填延迟，直接度量模型在进入纯吐字阶段后的物理流式速率（实测同一模型长短输出下的生成 TPS 高度恒定在 255~273 tok/s）。在 200K 场景下，生成 TPS 才是反映底层真实物理生成速度的硬核指标。
 
 ## 5. Harness 适配规则
 
 各 harness 统一以 `prompts/task_200k.md` 为任务说明，以 `fixtures/django_200k.txt` 为评测输入切片。
 
 - **`opencode`**：
-    - 参数：`opencode run --format json --dir <cwd> --variant <effort> -m <model> <prompt> -f <fixture>`。
-    - 输入：切片文件通过 `-f` 命令行参数挂载。
+    - 参数：`opencode run --format json --dir <cwd> --variant <effort> -m <model> <full_message>`。
+    - 输入：切片与任务说明合并为单一完整 message 传入，避免单文件附件的 50KB 软截断。
     - 指标：解析 `text` part 的服务端时间戳（`text_part_time`）。
-- **`grok`**：
+- **`grok-build`**：
     - 参数：`grok --output-format streaming-messages-json --include-partial-messages -m <model> --effort <effort> --always-approve --cwd <cwd> --prompt-file <prompt_file>`。
     - 输入：任务文本与切片合并写入工作区临时 `grok_prompt.md` 文件传入。
     - 指标：取最后一个内容增量 chunk 到达时刻减去 TTFT 作为生成窗口（`last_content_minus_ttft`），不用 `duration_api_ms`。
 - **`codex`**：
     - 参数：`codex exec --json --skip-git-repo-check --sandbox read-only -C <cwd> -c model_reasoning_effort="<effort>" -m <model> -`。
     - 输入：任务文本与切片合并后通过 stdin 标准输入传入。
-    - 指标：事件流无解码时间戳，生成窗口置为 `null`。
+    - 指标：事件流无生成时间戳，生成窗口置为 `null`。
 - **`kimi`**：
     - 参数：`kimi -m <model> -p "<prompt>\n\n<fixture>" --output-format stream-json`。
     - 输入：任务文本与切片经 `-p` 命令行参数直传，禁止工具读写文件。

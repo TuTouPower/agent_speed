@@ -19,22 +19,23 @@
 
 ### 队列调度
 
-- **队列键**：按「`source` + `harness`」天然划分队列（例如 `official:opencode` 与 `opencode-go:opencode` 独立分流）。
-- **并发策略**：同一队列内绝对串行（不同模型、不同 effort、不同 rep 均排队，避免服务商端并发争抢与限流）；不同队列间全并行并发，不设全局上限。
+- **物理队列隔离**：按物理服务配额划分独立队列 `queue`（例如 DeepSeek 官方直连与 OpenCode-Go 网关分流，Gemini 多渠道共享配额同队）。
+- **双层受控并发**：单队列最多 **2 并发**（防止单账号/单端点排队争抢与限流抖动）；全系统设置 **10 并发** 物理上限。
 - **3+1 Batch 机制**：每个格子（场景 × 模型 × effort × source × harness）跑 3 次调用，分配唯一样本批次 `batch_id`；若某次调用失败，在该队列末尾追加 1 次补测。无单独 warmup 轮次。
 
 ### 指标口径
 
 - **wall**：进程启动至退出的端到端总时间（秒）。
 - **TTFT**：首个可见 token（含思考推理与正文）的到达时刻（秒）。
-- **生成窗口（decode window）**：真实解码阶段时间窗：
+- **生成时间窗（generation window）**：模型进入正文生成阶段的真实时间窗（秒，不含预填延迟）：
     - `opencode`：文本段服务端时间窗（`text` part 的 `time.start` 到 `time.end`）。
-    - `grok`：最后一条内容增量到达时刻减去 TTFT。
-    - `kimi`：session 落盘的 `llmServerDecodeMs`。
-    - `codex`：事件流无生成窗口，字段为空（None）。
+    - `grok-build`：最后一条内容增量到达时刻减去 TTFT。
+    - `kimi-code`：session 落盘的 `llmServerDecodeMs`。
+    - `codex`：事件流无生成时间戳，字段为空（None）。
+    - `antigravity`：最后一条内容增量（`text_delta`）到达时刻减去 TTFT。
 - **两个 TPS**：
-    - 端到端 TPS = `输出 token ÷ wall`
-    - 生成 TPS = `输出 token ÷ 生成窗口`（无生成窗口时为空）
+    - **端到端 TPS** = `输出 token ÷ wall`（全流程吞吐；在 200K 场景下受预填固定时间摊薄影响，与模型输出 token 数量呈强正相关）。
+    - **生成 TPS** = `输出 token ÷ 生成时间窗`（纯流式生成吞吐；剔除了超长输入的预填耗时稀释，是衡量底层物理生成速度的核心指标）。无生成时间窗时为空。
 
 ## 数据产物
 
