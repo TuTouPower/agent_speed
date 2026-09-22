@@ -1,0 +1,41 @@
+{
+  "tid": "t001",
+  "attempt": 1,
+  "execution_id": "4c080548567a49a291483317183260ff",
+  "status": "done",
+  "branch": "t001_corpus_django_200k",
+  "base_sha": "938f3534effe9f3cc6ebe15f426ff83fae27addf",
+  "tests": "132 contract passed, 5 corpus tests passed",
+  "blackbox": "无",
+  "review": "Round 2 PASS (single)",
+  "ac_evidence": {
+    "AC-001": [
+      "scripts/build_django_corpus.py:80-110",
+      "tests/test_django_corpus.py:10-28"
+    ],
+    "AC-002": [
+      "fixtures/django_10k_manifest.json",
+      "fixtures/django_100k_manifest.json",
+      "fixtures/django_200k_manifest.json",
+      "tests/test_django_corpus.py:30-58"
+    ],
+    "AC-003": [
+      "fixtures/django_10k.txt",
+      "fixtures/django_100k.txt",
+      "fixtures/django_200k.txt",
+      "tests/test_django_corpus.py:60-68"
+    ],
+    "AC-004": [
+      ".gitignore",
+      "fixtures/django_200k.txt",
+      "tests/test_django_corpus.py:90-97"
+    ],
+    "AC-005": [
+      "prompts/task_200k.md",
+      "fixtures/task_200k.md",
+      "tests/test_django_corpus.py:70-88"
+    ]
+  },
+  "pending": [],
+  "findings": []
+}

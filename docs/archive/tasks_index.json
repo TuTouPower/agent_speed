@@ -2,5 +2,70 @@
     "generated_by": ".repo_template/scripts/task.py",
     "authority": "docs/archive/tasks/{tid}_{slug}/task.md front matter",
     "workspace": ".",
-    "tasks": []
+    "tasks": [
+        {
+            "tid": "t001",
+            "slug": "corpus_django_200k",
+            "title": "公开站语料与任务：django 6.1.1 切片（10K/100K/200K）+ 公开任务文本",
+            "status": "done",
+            "branch": "t001_corpus_django_200k",
+            "worktree": "",
+            "review_level": "single",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "938f3534effe9f3cc6ebe15f426ff83fae27addf",
+            "depends_on": "",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/archive/tasks/t001_corpus_django_200k"
+        },
+        {
+            "tid": "t002",
+            "slug": "collector_scheduler",
+            "title": "采集与调度重构：source+harness 队列、3+1 batch、kimi argv 直传、两个 TPS、results.jsonl",
+            "status": "done",
+            "branch": "t002_collector_scheduler",
+            "worktree": "",
+            "review_level": "full",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "c01c8bfcde06f14510a57d5fe9bc25df6576aa90",
+            "depends_on": "t001",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/archive/tasks/t002_collector_scheduler"
+        },
+        {
+            "tid": "t003",
+            "slug": "latest_json_report",
+            "title": "latest.json 报告：最新 batch、上站规则、中位数",
+            "status": "done",
+            "branch": "t003_latest_json_report",
+            "worktree": "",
+            "review_level": "single",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "122f59268ad6e13cbe90fb1ea52858039b14a66e",
+            "depends_on": "t002",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/archive/tasks/t003_latest_json_report"
+        },
+        {
+            "tid": "t004",
+            "slug": "public_repo_release",
+            "title": "清理、文档与公开仓：AGPL、README/AGENTS/blueprint、旧资产删除、GitHub 建仓",
+            "status": "done",
+            "branch": "t004_public_repo_release",
+            "worktree": "",
+            "review_level": "full",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "6894ee2e861c72dcf38ce16f374c01be6b8d93d0",
+            "depends_on": "t001,t002,t003",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/archive/tasks/t004_public_repo_release"
+        }
+    ]
 }

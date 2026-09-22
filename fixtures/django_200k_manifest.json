@@ -1,0 +1,706 @@
+{
+  "source": "django/django",
+  "tag": "6.1.1",
+  "commit": "249b13d6e93ee3164dee8ed1775395622a50c337",
+  "target_tokens": 200000,
+  "actual_tokens": 200000,
+  "n_files": 139,
+  "encoding": "cl100k_base",
+  "files": [
+    {
+      "path": "django/__init__.py",
+      "tokens": 184,
+      "truncated": false
+    },
+    {
+      "path": "django/__main__.py",
+      "tokens": 56,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/__init__.py",
+      "tokens": 35,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/config.py",
+      "tokens": 2239,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/registry.py",
+      "tokens": 3445,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/__init__.py",
+      "tokens": 3157,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/global_settings.py",
+      "tokens": 6085,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/__init__.py",
+      "tokens": 79,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/i18n.py",
+      "tokens": 265,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/static.py",
+      "tokens": 212,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/__init__.py",
+      "tokens": 322,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/actions.py",
+      "tokens": 660,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/apps.py",
+      "tokens": 176,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/checks.py",
+      "tokens": 10022,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/decorators.py",
+      "tokens": 750,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/exceptions.py",
+      "tokens": 112,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/filters.py",
+      "tokens": 5758,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/formfields.py",
+      "tokens": 270,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/forms.py",
+      "tokens": 197,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/helpers.py",
+      "tokens": 3701,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/models.py",
+      "tokens": 1268,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/options.py",
+      "tokens": 22419,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/sites.py",
+      "tokens": 4642,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_filters.py",
+      "tokens": 524,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_list.py",
+      "tokens": 4053,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_modify.py",
+      "tokens": 1136,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_urls.py",
+      "tokens": 466,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/base.py",
+      "tokens": 412,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/log.py",
+      "tokens": 487,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/utils.py",
+      "tokens": 4805,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/autocomplete.py",
+      "tokens": 865,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/decorators.py",
+      "tokens": 153,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/main.py",
+      "tokens": 4366,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/widgets.py",
+      "tokens": 4494,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/apps.py",
+      "tokens": 56,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/middleware.py",
+      "tokens": 273,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/urls.py",
+      "tokens": 321,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/utils.py",
+      "tokens": 2225,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/views.py",
+      "tokens": 3697,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/__init__.py",
+      "tokens": 2926,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/admin.py",
+      "tokens": 1974,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/apps.py",
+      "tokens": 279,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/backends.py",
+      "tokens": 2687,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/base_user.py",
+      "tokens": 987,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/checks.py",
+      "tokens": 1780,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/context_processors.py",
+      "tokens": 453,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/decorators.py",
+      "tokens": 943,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/forms.py",
+      "tokens": 4128,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/handlers/modwsgi.py",
+      "tokens": 354,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/hashers.py",
+      "tokens": 5130,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/management/__init__.py",
+      "tokens": 1996,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/management/commands/changepassword.py",
+      "tokens": 574,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/management/commands/createsuperuser.py",
+      "tokens": 2389,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/middleware.py",
+      "tokens": 2271,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/mixins.py",
+      "tokens": 914,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/models.py",
+      "tokens": 4476,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/password_validation.py",
+      "tokens": 1968,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/signals.py",
+      "tokens": 37,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/templatetags/auth.py",
+      "tokens": 216,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/tokens.py",
+      "tokens": 953,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/urls.py",
+      "tokens": 267,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/validators.py",
+      "tokens": 188,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/views.py",
+      "tokens": 2728,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/admin.py",
+      "tokens": 1142,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/apps.py",
+      "tokens": 172,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/checks.py",
+      "tokens": 276,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/fields.py",
+      "tokens": 6475,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/forms.py",
+      "tokens": 864,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/management/__init__.py",
+      "tokens": 1003,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py",
+      "tokens": 791,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/models.py",
+      "tokens": 1475,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/prefetch.py",
+      "tokens": 287,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/contenttypes/views.py",
+      "tokens": 729,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/admin.py",
+      "tokens": 162,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/apps.py",
+      "tokens": 65,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/forms.py",
+      "tokens": 513,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/middleware.py",
+      "tokens": 163,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/models.py",
+      "tokens": 382,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/sitemaps.py",
+      "tokens": 132,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/templatetags/flatpages.py",
+      "tokens": 800,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/urls.py",
+      "tokens": 53,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/flatpages/views.py",
+      "tokens": 604,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/admin/__init__.py",
+      "tokens": 146,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/admin/options.py",
+      "tokens": 175,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/apps.py",
+      "tokens": 99,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/adapter.py",
+      "tokens": 168,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/features.py",
+      "tokens": 827,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/models.py",
+      "tokens": 855,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/operations.py",
+      "tokens": 1450,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/base.py",
+      "tokens": 123,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/features.py",
+      "tokens": 285,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/introspection.py",
+      "tokens": 351,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/operations.py",
+      "tokens": 1125,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/schema.py",
+      "tokens": 742,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/adapter.py",
+      "tokens": 456,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/base.py",
+      "tokens": 118,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/features.py",
+      "tokens": 248,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/introspection.py",
+      "tokens": 418,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/models.py",
+      "tokens": 501,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/operations.py",
+      "tokens": 2225,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/schema.py",
+      "tokens": 1171,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/adapter.py",
+      "tokens": 485,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/base.py",
+      "tokens": 1203,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/const.py",
+      "tokens": 651,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/features.py",
+      "tokens": 112,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/introspection.py",
+      "tokens": 650,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/models.py",
+      "tokens": 477,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/operations.py",
+      "tokens": 3867,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/pgraster.py",
+      "tokens": 1201,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/schema.py",
+      "tokens": 1026,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/adapter.py",
+      "tokens": 86,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/base.py",
+      "tokens": 667,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/client.py",
+      "tokens": 48,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/features.py",
+      "tokens": 187,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/introspection.py",
+      "tokens": 702,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/models.py",
+      "tokens": 446,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/operations.py",
+      "tokens": 1923,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/schema.py",
+      "tokens": 1445,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/backends/utils.py",
+      "tokens": 196,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/__init__.py",
+      "tokens": 233,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/aggregates.py",
+      "tokens": 684,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/fields.py",
+      "tokens": 3461,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/functions.py",
+      "tokens": 4740,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/lookups.py",
+      "tokens": 2655,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/proxy.py",
+      "tokens": 733,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/sql/__init__.py",
+      "tokens": 51,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/db/models/sql/conversion.py",
+      "tokens": 504,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/feeds.py",
+      "tokens": 1331,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/forms/__init__.py",
+      "tokens": 95,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/forms/fields.py",
+      "tokens": 1052,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/forms/widgets.py",
+      "tokens": 877,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/__init__.py",
+      "tokens": 436,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/base.py",
+      "tokens": 57,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/datasource.py",
+      "tokens": 1010,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/driver.py",
+      "tokens": 739,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/envelope.py",
+      "tokens": 1689,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/error.py",
+      "tokens": 472,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/feature.py",
+      "tokens": 934,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/gis/gdal/field.py",
+      "tokens": 428,
+      "truncated": true
+    }
+  ]
+}

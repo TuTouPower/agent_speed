@@ -1,0 +1,226 @@
+{
+  "source": "django/django",
+  "tag": "6.1.1",
+  "commit": "249b13d6e93ee3164dee8ed1775395622a50c337",
+  "target_tokens": 100000,
+  "actual_tokens": 100000,
+  "n_files": 43,
+  "encoding": "cl100k_base",
+  "files": [
+    {
+      "path": "django/__init__.py",
+      "tokens": 184,
+      "truncated": false
+    },
+    {
+      "path": "django/__main__.py",
+      "tokens": 56,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/__init__.py",
+      "tokens": 35,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/config.py",
+      "tokens": 2239,
+      "truncated": false
+    },
+    {
+      "path": "django/apps/registry.py",
+      "tokens": 3445,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/__init__.py",
+      "tokens": 3157,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/global_settings.py",
+      "tokens": 6085,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/__init__.py",
+      "tokens": 79,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/i18n.py",
+      "tokens": 265,
+      "truncated": false
+    },
+    {
+      "path": "django/conf/urls/static.py",
+      "tokens": 212,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/__init__.py",
+      "tokens": 322,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/actions.py",
+      "tokens": 660,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/apps.py",
+      "tokens": 176,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/checks.py",
+      "tokens": 10022,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/decorators.py",
+      "tokens": 750,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/exceptions.py",
+      "tokens": 112,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/filters.py",
+      "tokens": 5758,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/formfields.py",
+      "tokens": 270,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/forms.py",
+      "tokens": 197,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/helpers.py",
+      "tokens": 3701,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/models.py",
+      "tokens": 1268,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/options.py",
+      "tokens": 22419,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/sites.py",
+      "tokens": 4642,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_filters.py",
+      "tokens": 524,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_list.py",
+      "tokens": 4053,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_modify.py",
+      "tokens": 1136,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_urls.py",
+      "tokens": 466,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/base.py",
+      "tokens": 412,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/templatetags/log.py",
+      "tokens": 487,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/utils.py",
+      "tokens": 4805,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/autocomplete.py",
+      "tokens": 865,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/decorators.py",
+      "tokens": 153,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/views/main.py",
+      "tokens": 4366,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admin/widgets.py",
+      "tokens": 4494,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/apps.py",
+      "tokens": 56,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/middleware.py",
+      "tokens": 273,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/urls.py",
+      "tokens": 321,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/utils.py",
+      "tokens": 2225,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/admindocs/views.py",
+      "tokens": 3697,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/__init__.py",
+      "tokens": 2926,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/admin.py",
+      "tokens": 1974,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/apps.py",
+      "tokens": 279,
+      "truncated": false
+    },
+    {
+      "path": "django/contrib/auth/backends.py",
+      "tokens": 472,
+      "truncated": true
+    }
+  ]
+}

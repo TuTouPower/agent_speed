@@ -23,6 +23,7 @@ command -v md_kx
 
 ```bash
 pytest .repo_template/tests -q -m contract
+python3 -m pytest tests -q
 ```
 
 填本命令时按「门禁类别清单」逐类覆盖；项目不适用某类写「无」并说明理由。运行时通过 ≠ 类型 / 构建正确，每类须有独立验证。

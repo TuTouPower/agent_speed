@@ -1,0 +1,40 @@
+{
+  "tid": "t004",
+  "attempt": 1,
+  "execution_id": "590d96b750c2418bb57d51a3ef284a0b",
+  "status": "done",
+  "branch": "t004_public_repo_release",
+  "base_sha": "6894ee2e861c72dcf38ce16f374c01be6b8d93d0",
+  "tests": "132 contract passed, 16 agent_speed tests passed",
+  "blackbox": "无",
+  "review": "Round 1 PASS (full)",
+  "ac_evidence": {
+    "AC-001": [
+      "README.md:1-120",
+      "AGENTS.md:20-30"
+    ],
+    "AC-002": [
+      "LICENSE:1-660",
+      "fixtures/LICENSE.django:1-27"
+    ],
+    "AC-003": [
+      "README.md:1-120"
+    ],
+    "AC-004": [
+      "AGENTS.md:20-30"
+    ],
+    "AC-005": [
+      "docs/blueprint/architecture.md:1-20",
+      "docs/blueprint/domain.md:1-25",
+      "docs/blueprint/testing.md:20-30"
+    ],
+    "AC-006": [
+      "AGENTS.md:30-35"
+    ],
+    "AC-007": [
+      "docs/tasks/t004_public_repo_release/spec.md:46-47"
+    ]
+  },
+  "pending": [],
+  "findings": []
+}
