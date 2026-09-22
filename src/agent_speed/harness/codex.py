@@ -93,7 +93,7 @@ class CodexHarness(BaseHarness):
 
         wall = round(time.monotonic() - t0, 3)
 
-        ttft, decode_window, win_source, in_toks, out_toks = parse_codex_metrics(lines)
+        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_codex_metrics(lines)
         e2e_tps, gen_tps = calculate_tps(wall, decode_window, out_toks)
 
         return CallRecord(
@@ -115,5 +115,6 @@ class CodexHarness(BaseHarness):
             decode_window_source=win_source,
             cl100k_tokens=cell.cl100k_tokens,
             status=status,
+            used_tools=used_tools,
             error_summary=err_msg,
         )

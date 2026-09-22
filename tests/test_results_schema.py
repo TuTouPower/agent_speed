@@ -8,7 +8,7 @@ REQUIRED_FIELDS = {
     "scenario", "model", "effort", "source", "harness", "rep", "batch_id",
     "start_time", "wall", "ttft", "decode_window", "out_tokens", "in_tokens",
     "e2e_tps", "gen_tps", "decode_window_source", "cl100k_tokens",
-    "status", "exclude_reason", "error_summary",
+    "status", "used_tools", "exclude_reason", "error_summary",
 }
 
 

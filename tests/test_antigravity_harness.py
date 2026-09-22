@@ -54,13 +54,14 @@ def test_parse_antigravity_metrics():
         (8.0, '{"event":"result","result":{"status":"SUCCESS","duration_seconds":6.2,"usage":{"input_tokens":61500,"output_tokens":850,"thinking_tokens":50,"total_tokens":62350}}}'),
     ]
 
-    ttft, decode_window, source, in_toks, out_toks = parse_antigravity_metrics(lines)
+    ttft, decode_window, source, in_toks, out_toks, used_tools = parse_antigravity_metrics(lines)
 
     assert ttft == 1.8
     assert decode_window == 6.0  # 7.8 - 1.8
     assert source == "antigravity:last_delta_minus_ttft"
     assert in_toks == 61500
     assert out_toks == 850
+    assert not used_tools
 
 
 def test_harness_registry_antigravity():

@@ -29,18 +29,20 @@ def calculate_tps(
 
 def parse_opencode_metrics(
     lines: list[tuple[float, str]],
-) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
     """opencode 指标解析。
 
     - TTFT: 首个可见 token（含 reasoning 与 text）到达时间
     - 生成窗口: text part 的 time.end - time.start
     - 来源: opencode:text_part_time
+    - used_tools: 是否调用了工具
     """
     ttft: float | None = None
     decode_window: float | None = None
     source: str | None = None
     in_toks: int | None = None
     out_toks: int | None = None
+    used_tools: bool = False
 
     for t, line in lines:
         try:
@@ -52,6 +54,10 @@ def parse_opencode_metrics(
 
         evt_type = o.get("type")
         part = o.get("part") if isinstance(o.get("part"), dict) else {}
+
+        # 工具调用检测
+        if evt_type in ("tool", "action", "tool_call", "call_tool") or (isinstance(part, dict) and part.get("type") in ("tool", "action")):
+            used_tools = True
 
         # TTFT: 首个可见 token，含 reasoning 和 text
         if ttft is None:
@@ -84,22 +90,24 @@ def parse_opencode_metrics(
             if m_out and out_toks is None:
                 out_toks = int(m_out.group(1))
 
-    return ttft, decode_window, source, in_toks, out_toks
+    return ttft, decode_window, source, in_toks, out_toks, used_tools
 
 
 def parse_grok_metrics(
     lines: list[tuple[float, str]],
-) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
     """grok 指标解析。
 
     - TTFT: 首个内容行到达时刻
     - 生成窗口: 最后一条内容增量到达时刻 - TTFT（不用 duration_api_ms）
     - 来源: grok:last_content_minus_ttft
+    - used_tools: 是否调用了工具
     """
     ttft: float | None = None
     last_content_t: float | None = None
     in_toks: int | None = None
     out_toks: int | None = None
+    used_tools: bool = False
 
     for t, line in lines:
         try:
@@ -112,6 +120,12 @@ def parse_grok_metrics(
             # 解包 grok streaming-messages-json: type=stream_event -> event
             evt = o.get("event") if isinstance(o.get("event"), dict) else o
             evt_type = evt.get("type") or o.get("type")
+
+            if evt_type in ("tool_use", "tool_result") or "tool_use" in line or "tool_result" in line:
+                used_tools = True
+            delta = evt.get("delta") if isinstance(evt.get("delta"), dict) else {}
+            if delta.get("stop_reason") == "tool_use":
+                used_tools = True
 
             if evt_type in ("content_block_delta", "content_block_start", "content", "message", "thinking", "reasoning"):
                 is_content = True
@@ -131,13 +145,14 @@ def parse_grok_metrics(
         else:
             if any(h in line for h in ('"content":', '"delta"', '"text":', '"thinking"')):
                 is_content = True
+            if any(h in line for h in ('"tool_use"', '"tool_result"', '"call_tool"')):
+                used_tools = True
 
         if is_content:
             if ttft is None:
                 ttft = t
             last_content_t = t
 
-        # token 正则兜底
         m_in = RE_IN.search(line)
         if m_in and in_toks is None:
             in_toks = int(m_in.group(1))
@@ -151,22 +166,24 @@ def parse_grok_metrics(
         decode_window = round(last_content_t - ttft, 3)
         source = "grok:last_content_minus_ttft"
 
-    return ttft, decode_window, source, in_toks, out_toks
+    return ttft, decode_window, source, in_toks, out_toks, used_tools
 
 
 def parse_kimi_metrics(
     lines: list[tuple[float, str]],
     wire_info: dict[str, Any] | None = None,
-) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
     """kimi 指标解析。
 
     - TTFT: 首个可见 token
     - 生成窗口: session wire.jsonl 落盘的 llmServerDecodeMs
     - 来源: kimi:llm_server_decode_ms
+    - used_tools: 是否调用了工具
     """
     ttft: float | None = None
     in_toks: int | None = None
     out_toks: int | None = None
+    used_tools: bool = False
 
     for t, line in lines:
         try:
@@ -198,22 +215,25 @@ def parse_kimi_metrics(
             in_toks = wire_info["in_tokens"]
         if wire_info.get("out_tokens") is not None:
             out_toks = wire_info["out_tokens"]
+        used_tools = bool(wire_info.get("has_tool_call", False))
 
-    return ttft, decode_window, source, in_toks, out_toks
+    return ttft, decode_window, source, in_toks, out_toks, used_tools
 
 
 def parse_codex_metrics(
     lines: list[tuple[float, str]],
-) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
     """codex 指标解析。
 
     - TTFT: 首个可见 token
     - 生成窗口: 契约 §5 codex 事件流没有生成窗口，字段为空
     - 来源: None
+    - used_tools: 是否调用了工具
     """
     ttft: float | None = None
     in_toks: int | None = None
     out_toks: int | None = None
+    used_tools: bool = False
 
     for t, line in lines:
         try:
@@ -232,6 +252,9 @@ def parse_codex_metrics(
                 ttft = t
 
         if isinstance(o, dict):
+            evt_type = o.get("type", "")
+            if evt_type in ("function_call", "tool_call", "call_tool") or "function_call" in str(o):
+                used_tools = True
             usage = o.get("usage") or {}
             if isinstance(usage, dict):
                 if usage.get("input_tokens") is not None:
@@ -250,22 +273,24 @@ def parse_codex_metrics(
         if m_out and out_toks is None:
             out_toks = int(m_out.group(1))
 
-    return ttft, None, None, in_toks, out_toks
+    return ttft, None, None, in_toks, out_toks, used_tools
 
 
 def parse_antigravity_metrics(
     lines: list[tuple[float, str]],
-) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
     """antigravity (agy stream-json) 指标解析。
 
     - TTFT: 首个可见 token（含 thinking 或 text_delta）到达时刻
     - 生成窗口: 最后一条 text_delta 到达时刻减去 TTFT
     - 来源: antigravity:last_delta_minus_ttft
+    - used_tools: 是否调用了工具
     """
     ttft: float | None = None
     last_delta_t: float | None = None
     in_toks: int | None = None
     out_toks: int | None = None
+    used_tools: bool = False
 
     for t, line in lines:
         try:
@@ -278,6 +303,9 @@ def parse_antigravity_metrics(
         evt = o.get("event")
         step_update = o.get("step_update") if isinstance(o.get("step_update"), dict) else {}
         result = o.get("result") if isinstance(o.get("result"), dict) else {}
+
+        if step_update.get("step_type") in ("tool_call", "tool_result") or "denied_actions" in o or "call_tool" in str(o):
+            used_tools = True
 
         delta = step_update.get("text_delta")
         if delta is not None and len(delta) > 0:
@@ -299,4 +327,4 @@ def parse_antigravity_metrics(
         decode_window = round(last_delta_t - ttft, 3)
         source = "antigravity:last_delta_minus_ttft"
 
-    return ttft, decode_window, source, in_toks, out_toks
+    return ttft, decode_window, source, in_toks, out_toks, used_tools

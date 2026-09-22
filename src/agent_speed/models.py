@@ -65,6 +65,7 @@ class CallRecord:
     decode_window_source: str | None = None
     cl100k_tokens: int = 200000
     status: str = "success"  # "success" | "failed" | "skipped"
+    used_tools: bool = False
     exclude_reason: str | None = None
     error_summary: str | None = None
 
@@ -95,6 +96,7 @@ class CallRecord:
             "decode_window_source": self.decode_window_source,
             "cl100k_tokens": self.cl100k_tokens,
             "status": self.status,
+            "used_tools": self.used_tools,
             "exclude_reason": self.exclude_reason,
             "error_summary": safe_error,
         }

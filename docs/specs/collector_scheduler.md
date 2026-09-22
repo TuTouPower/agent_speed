@@ -87,7 +87,7 @@
 
 - **写入语义**：单次调用对应一行 JSON，以线程安全的原子追加模式写入 `results.jsonl`。
 - **字段规范（Schema）**：
-    必须完整包含以下 19 个字段：
-    `scenario`, `model`, `effort`, `source`, `harness`, `rep`, `batch_id`, `start_time`, `wall`, `ttft`, `decode_window`, `out_tokens`, `in_tokens`, `e2e_tps`, `gen_tps`, `decode_window_source`, `cl100k_tokens`, `status`, `exclude_reason`, `error_summary`。
+    必须完整包含以下 20 个字段：
+    `scenario`, `model`, `effort`, `source`, `harness`, `rep`, `batch_id`, `start_time`, `wall`, `ttft`, `decode_window`, `out_tokens`, `in_tokens`, `e2e_tps`, `gen_tps`, `decode_window_source`, `cl100k_tokens`, `status`, `used_tools`, `exclude_reason`, `error_summary`。
 - **敏感信息治理**：
     严禁将模型生成的完整文本、中间调试事件流、API 密钥以及开发者本机绝对路径落入 `results.jsonl`。

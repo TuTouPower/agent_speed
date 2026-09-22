@@ -175,7 +175,7 @@ class KimiHarness:
             status = "failed"
             err_msg = "disallowed tool call detected in kimi execution"
 
-        ttft, decode_window, win_source, in_toks, out_toks = parse_kimi_metrics(lines, wire_info)
+        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_kimi_metrics(lines, wire_info)
         e2e_tps, gen_tps = calculate_tps(wall, decode_window, out_toks)
 
         return CallRecord(
@@ -197,5 +197,6 @@ class KimiHarness:
             decode_window_source=win_source,
             cl100k_tokens=cell.cl100k_tokens,
             status=status,
+            used_tools=used_tools,
             error_summary=err_msg,
         )

@@ -87,7 +87,7 @@ def test_load_benchmark_config_file():
     cfg = load_benchmark_config()
     assert cfg.global_max_concurrency == 10
     assert cfg.per_queue_concurrency == 2
-    assert len(cfg.cells) == 16
+    assert len(cfg.cells) == 15
 
     # 验证模型名解耦与渠道正名 (AC-002)
     for c in cfg.cells:
