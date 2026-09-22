@@ -5,7 +5,8 @@
 ## 模块划分
 
 - `src/`：核心测速与分析工具链
-    - `agent_speed/`：重构的评测驱动核心包，提供数据模型、各 harness（opencode/grok/codex/kimi）适配器、指标计算与按 source+harness 分队列调度器。
+    - `agent_speed/`：重构的评测驱动核心包，提供数据模型、各 harness（opencode/grok/codex/kimi）适配器、指标计算、按 source+harness 分队列调度器以及报告生成模块。
+    - `report.py`：公开报告生成脚本，读 `results.jsonl` 按最新 batch、有效次数与账单输入过滤规则计算中位数并覆盖写 `latest.json`。
     - `bench_speed.py`：常规三档（short/medium/long）矩阵测速驱动器，支持并发/串行、样本过滤与中位数统计。
     - `bench_ctx.py`：300K 长上下文输入基准评测，测量首 token 延迟（TTFT）与解码 TPS。
     - `bench_stream.py`：流式捕获与事件记录驱动（支持 opencode / codex / grok 等直调）。
