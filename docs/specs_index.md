@@ -4,6 +4,10 @@
 
 |slug|task 清单|最后更新时间|supersedes|
 |---|---|---|---|
+|corpus_django_200k|t001|2026-09-22|-|
+|collector_scheduler|t002|2026-09-22|-|
+|latest_json_report|t003|2026-09-22|-|
+|public_repo_release|t004|2026-09-22|-|
 
 <!-- 示例行（实际项目使用时从真实 task 收尾开始填写；示例勿放表内，「在表即生效」）：
 |example_slug|t000|2026-07-21|-|

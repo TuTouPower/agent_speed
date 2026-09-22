@@ -24,7 +24,7 @@
 
 ## 2. 产品
 
-读者是正在选择 coding agent 或 API 来源的人。比较单位是「`model` × `effort` × `source` × `harness` × 场景」。`source` 是模型服务提供方（官方直连或聚合网关），`harness` 是运行框架。`harness` 名和 `effort` 按 CLI 原文显示，不做别名归一。
+读者是正在选择 coding agent 或 API 来源的人。比较单位是「`model` × `effort` × `source` × `harness` × `scenario`」。`source` 是模型服务提供方（官方直连或聚合网关），`harness` 是运行框架。`harness` 名和 `effort` 按 CLI 原文显示，不做别名归一。
 
 这是速度，不是能力排名。页面写明这一点。不评答案质量。
 

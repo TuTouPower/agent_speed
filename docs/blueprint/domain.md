@@ -4,7 +4,8 @@
 
 |术语|英文|说明|
 |---|---|---|
-|比较单位|Comparison Unit|基准比较单位为「`model` × `effort` × `source` × `harness` × 场景」。|
+|比较单位|Comparison Unit|基准比较单位为「`model` × `effort` × `source` × `harness` × `scenario`」。|
+|评测场景|Scenario|评测输入上下文与任务规模。MVP 版本为 200K 的 prompt，后续还会支持一句话、10K、100K prompt。|
 |服务提供方|Source|模型服务提供方，区分官方直连（如 official）或聚合网关（如 opencode-go、cpa 等）。|
 |运行框架|Harness|调用驱动框架（opencode、grok、codex、kimi）。|
 |思考强度|Reasoning Effort / Variant|模型的思考档位（如 low、high、xhigh、max 等）。按 CLI 原文显示，不做别名归一。|
