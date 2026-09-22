@@ -73,10 +73,11 @@
     - 参数：`codex exec --json --skip-git-repo-check --sandbox read-only -C <cwd> -c model_reasoning_effort="<effort>" -m <model> -`。
     - 输入：任务文本与切片合并后通过 stdin 标准输入传入。
     - 指标：事件流无生成时间戳，生成窗口置为 `null`。
-- **`kimi`**：
+- **`kimi-code`**：
     - 参数：`kimi -m <model> -p "<prompt>\n\n<fixture>" --output-format stream-json`。
     - 输入：任务文本与切片经 `-p` 命令行参数直传，禁止工具读写文件。
-    - 约束：自动读取 `~/.kimi-code/config.toml` 中的全局 `[thinking] effort`，与待测网格不符时标记为 `skipped`；Node.js argv 栈溢出捕获为 `failed`。
+    - 物理上限与安全切片（见 d002）：Node.js 默认栈深度限制下单次 argv 上限为 895KB，故 Kimi 采用 850KB（约 173,218 tokens）安全切片输入，避免 `RangeError: Maximum call stack size exceeded`。
+    - 约束：自动读取 `~/.kimi-code/config.toml` 中的全局 `[thinking] effort`，与待测网格不符时标记为 `skipped`；事件流中严禁出现工具调用（`used_tools: false`）。
     - 指标：从 session 落盘记录提取 `llmServerDecodeMs`。
 - **`antigravity` (`agy`)**：
     - 参数：`agy -p "<prompt>\n\n<fixture>" --model <model> --effort <effort> --output-format stream-json`。

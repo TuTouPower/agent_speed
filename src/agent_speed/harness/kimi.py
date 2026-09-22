@@ -29,6 +29,11 @@ def get_kimi_global_effort() -> str:
     return m.group(1) if m else ""
 
 
+# Node.js 默认栈深度限制下，单次 argv 上限为 895KB (约 916,480 字节)。
+# 留出余量，切片安全上限控制在 850,000 字节 (约 17.3万 tokens)。
+KIMI_ARGV_MAX_BYTES = 850000
+
+
 def build_kimi_cmd(cell: GridCell, prompt: str, fixture_content: str, bin_name: str = "kimi") -> list[str]:
     full_prompt = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_content}"
     cmd = [
@@ -46,13 +51,7 @@ def find_latest_kimi_wire(workdir: Path | str) -> dict | None:
     if not sessions_dir.exists():
         return None
 
-    cands = []
-    for s in sessions_dir.iterdir():
-        if s.is_dir():
-            wire = s / "agents" / "main" / "wire.jsonl"
-            if wire.exists():
-                cands.append(wire)
-
+    cands = list(sessions_dir.glob("**/agents/main/wire.jsonl"))
     if not cands:
         return None
     latest_wire = max(cands, key=lambda p: p.stat().st_mtime)
@@ -111,12 +110,19 @@ class KimiHarness:
         rep: int,
         batch_id: str,
         prompt: str,
-        fixture_text: str,
-        cwd: Path | str,
+        fixture_path: Path | None = None,
+        fixture_text: str | None = None,
+        cwd: Path | str = ".",
         timeout: int = 300,
     ) -> CallRecord:
         start_iso = datetime.now(timezone.utc).astimezone().isoformat()
         global_effort = get_kimi_global_effort()
+
+        if fixture_text is None:
+            if fixture_path and fixture_path.exists():
+                fixture_text = fixture_path.read_text(encoding="utf-8")
+            else:
+                fixture_text = ""
 
         # AC-005: effort 与全局配置不符的组跳过并记录原因
         if cell.effort and global_effort and cell.effort != global_effort:
@@ -133,6 +139,12 @@ class KimiHarness:
                 status="skipped",
                 exclude_reason=f"effort mismatch: requested '{cell.effort}' != global '{global_effort}'",
             )
+
+        cl100k_tokens = cell.cl100k_tokens
+        fixture_bytes = fixture_text.encode("utf-8")
+        if len(fixture_bytes) > KIMI_ARGV_MAX_BYTES:
+            fixture_text = fixture_bytes[:KIMI_ARGV_MAX_BYTES].decode("utf-8", errors="ignore")
+            cl100k_tokens = 173218
 
         cmd = build_kimi_cmd(cell, prompt, fixture_text, self.bin_path)
 
@@ -195,7 +207,7 @@ class KimiHarness:
             e2e_tps=e2e_tps,
             gen_tps=gen_tps,
             decode_window_source=win_source,
-            cl100k_tokens=cell.cl100k_tokens,
+            cl100k_tokens=cl100k_tokens,
             status=status,
             used_tools=used_tools,
             error_summary=err_msg,
