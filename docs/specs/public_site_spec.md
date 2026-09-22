@@ -10,15 +10,15 @@
 
 ## 1. 与当前目录的差异
 
-| 项 | 当前 | 目标 |
-| --- | --- | --- |
-| 位置 | `本地私有目录`，随私有仓库 | 公开仓库 `TuTouPower/agent_speed` |
-| 语料 | `内部项目` 个人项目快照 | `django/django` 的固定 commit 切片 |
-| 已有结果 | `bench_result.md`、`bench_ctx_result.md` 及 png | 不上公开站 |
-| 存储 | 各次 `runs/`、markdown、图片 | `results.jsonl` + `latest.json`。不出图 |
-| 吞吐 | 通道口径混在一个 `tps` 里，codex 用输出 token / wall | 只承认解码窗口。没有解码窗口的不上站 |
-| 并发 | 多次跑分默认并发 | 按「厂商 + 入口」分队列 |
-| 展示 | 本地 markdown / png | Cloudflare Pages 上的静态页 |
+|项|当前|目标|
+|---|---|---|
+|位置|`本地私有目录`，随私有仓库|公开仓库 `TuTouPower/agent_speed`|
+|语料|`内部项目` 个人项目快照|`django/django` 的固定 commit 切片|
+|已有结果|`bench_result.md`、`bench_ctx_result.md` 及 png|不上公开站|
+|存储|各次 `runs/`、markdown、图片|`results.jsonl` + `latest.json`。不出图|
+|吞吐|通道口径混在一个 `tps` 里，codex 用输出 token / wall|只承认解码窗口。没有解码窗口的不上站|
+|并发|多次跑分默认并发|按「厂商 + 入口」分队列|
+|展示|本地 markdown / png|Cloudflare Pages 上的静态页|
 
 `内部项目` 的切片正文、文件清单、任务原文、模型回答和已有跑分都不进入公开仓库，也不进入页面。
 
