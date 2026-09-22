@@ -3,8 +3,8 @@
 
 清单顺序即 fixture 顺序：小档位取大档位的前缀，天然嵌套。
 用法：
-  python3 build_fixture.py --files /tmp/files.txt --tokens 300000 \\
-      --out fixtures/input_300k.txt --manifest fixtures/manifest_300k.json \\
+  python3 build_fixture.py --files /tmp/files.txt --tokens 300000 \
+      --out fixtures/input_300k.txt --manifest fixtures/manifest_300k.json \
       --root /path/to/source_repo
 """
 
