@@ -205,6 +205,8 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no-shuffle", action="store_true")
     ap.add_argument("--out", default="")
+    ap.add_argument("--render", action=argparse.BooleanOptionalAction, default=True,
+                    help="自动渲染 Markdown 结果为高清图片（默认开启，--no-render 关闭）")
     args = ap.parse_args(argv)
 
     if args.mimo:
@@ -337,6 +339,15 @@ def main(argv: list[str]) -> int:
         print("\n[interrupt]", flush=True)
         return 130
     print(f"\n结果目录：{run_dir}")
+    if args.render:
+        try:
+            from render_md import render_markdown
+            res_md = HERE / "bench_ctx_result.md"
+            if res_md.is_file():
+                img = render_markdown(res_md)
+                print(f"自动渲染图片成功：{img}")
+        except Exception as e:
+            print(f"自动渲染图片跳过：{e}", file=sys.stderr)
     return status["rc"]
 
 
