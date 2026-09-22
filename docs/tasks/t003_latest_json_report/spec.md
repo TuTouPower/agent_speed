@@ -30,7 +30,7 @@
 - [ ] AC-003：输出 token < 500 的调用无效；调用失败且补测后仍失败的不计入。
 - [ ] AC-004：对方账单输入 token < 切片 cl100k 一半的格子不上站。
 - [ ] AC-005：无生成窗口的格子（codex）照常上站，生成 TPS 为 null。
-- [ ] AC-006：`latest.json` 覆盖写，行数等于上站格子数；字段含场景、通道、模型、effort、有效次数、端到端 TPS 中位数、生成 TPS 中位数、TTFT 中位数、输出 token 中位数、对方账单输入 token 中位数、`batch_id`、生成时间；按端到端 TPS 降序。
+- [ ] AC-006：`latest.json` 覆盖写，行数等于上站格子数；字段含场景、`model`、`effort`、`source`、`harness`、有效次数、端到端 TPS 中位数、生成 TPS 中位数、TTFT 中位数、输出 token 中位数、对方账单输入 token 中位数、`batch_id`、生成时间；按端到端 TPS 降序。
 - [ ] AC-007：各项中位数由有效次数计算，不是全部次数。
 
 ### 可测试性声明

@@ -2,14 +2,14 @@
 
 ## 背景
 
-公开基准契约（`docs/specs/public_site_spec.md`）§4/§5/§7.1 要求：按「厂商+入口」分队列调度、每格 3 次+失败补测 1 次、只承认生成窗口、两个 TPS、`results.jsonl` 一行一次调用。现有 `src/bench_speed.py`、`bench_stream.py`、`bench_ctx.py` 口径混杂（全局并发、e2e 口径、warmup 丢弃），整体替换为统一实现。
+公开基准契约（`docs/specs/public_site_spec.md`）§4/§5/§7.1 要求：按「source+harness」分队列调度、每格 3 次+失败补测 1 次、只承认生成窗口、两个 TPS、`results.jsonl` 一行一次调用。现有 `src/bench_speed.py`、`bench_stream.py`、`bench_ctx.py` 口径混杂（全局并发、e2e 口径、warmup 丢弃），整体替换为统一实现。
 
 ## 契约区
 
 ### 范围
 
-- 新包 `src/agent_speed/`：矩阵配置、通道适配（opencode/grok/codex/kimi）、单次执行与指标、队列调度器。
-- 队列键 = 厂商+入口；同队列串行、队列间并行、无全局上限。
+- 新包 `src/agent_speed/`：矩阵配置、harness 适配（opencode/grok/codex/kimi）、单次执行与指标、队列调度器。
+- 队列键 = source+harness；同队列串行、队列间并行、无全局上限。
 - 每格 3 次 + 失败在该队列末尾补测 1 次；`batch_id`；无 warmup。
 - 指标：wall、TTFT（含思考）、生成窗口、端到端 TPS、生成 TPS、生成窗口来源；codex 生成窗口为空。
 - kimi：任务+200K 切片经 `-p` argv 直传（不借工具）；effort 取全局 `~/.kimi-code/config.toml`，不匹配则跳过。
@@ -30,7 +30,7 @@
 
 <!-- /规范 -->
 
-- [ ] AC-001：调度器以「厂商+入口」为队列键；同一队列内调用无时间重叠，不同队列可并行（fake 通道测试断言并发窗口；调度日志含队列键）。
+- [ ] AC-001：调度器以「source+harness」为队列键；同一队列内调用无时间重叠，不同队列可并行（fake harness 测试断言并发窗口；调度日志含队列键）。
 - [ ] AC-002：每格 3 次调用属于同一 `batch_id`；失败调用在该队列末尾补测 1 次；无 warmup 记录；同队列同格最多 4 次。
 - [ ] AC-003：生成窗口来源符合契约：opencode=文本段服务端窗、grok=末内容增量−TTFT、kimi=`llmServerDecodeMs`、codex=空。
 - [ ] AC-004：TTFT 取含思考的首个可见 token；端到端 TPS=输出 token ÷ wall；生成 TPS=输出 token ÷ 生成窗口（空则空）。
@@ -46,7 +46,7 @@
 
 <!-- /规范 -->
 
-- AC-001、AC-002、AC-003（解析样本）、AC-004、AC-006：可自动测试（fake 通道、事件流样本、schema 校验）。
+- AC-001、AC-002、AC-003（解析样本）、AC-004、AC-006：可自动测试（fake harness、事件流样本、schema 校验）。
 - AC-005：可用 fake 二进制记录 argv 验证“无工具、argv 含完整切片”；真实行为归 AC-007。
 - AC-007：需真实 API 调用（网络+凭据），人工触发；以 `results.jsonl` 实际行作为证据。
 

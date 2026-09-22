@@ -1,7 +1,7 @@
 ---
 tid: "t002"
 slug: "collector_scheduler"
-title: "采集与调度重构：厂商+入口队列、3+1 batch、kimi argv 直传、两个 TPS、results.jsonl"
+title: "采集与调度重构：source+harness 队列、3+1 batch、kimi argv 直传、两个 TPS、results.jsonl"
 status: "backlog"
 branch: ""
 worktree: ""

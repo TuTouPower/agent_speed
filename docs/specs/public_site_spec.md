@@ -16,15 +16,15 @@
 |语料|内部私有项目快照|`django/django` 的固定 commit 切片|
 |已有结果|私有语料跑分产物|不上公开站|
 |存储|各次 `runs/`、markdown、图片|`results.jsonl` + `latest.json`。不出图|
-|吞吐|通道口径混在一个 `tps` 里，codex 用输出 token / wall|两个 TPS：端到端 TPS = 输出 token ÷ wall；生成 TPS = 输出 token ÷ 生成窗口。codex 无生成窗口，该列为空|
-|并发|多次跑分默认并发|按「厂商 + 入口」分队列|
+|吞吐|口径混在一个 `tps` 里，codex 用输出 token / wall|两个 TPS：端到端 TPS = 输出 token ÷ wall；生成 TPS = 输出 token ÷ 生成窗口。codex 无生成窗口，该列为空|
+|并发|多次跑分默认并发|按「source + harness」分队列|
 |展示|本地 markdown / png|Cloudflare Pages 上的静态页|
 
 内部私有项目的切片正文、文件清单、任务原文、模型回答和已有跑分都不进入公开仓库，也不进入页面。
 
 ## 2. 产品
 
-读者是正在选择 coding agent 或通道的人。比较单位是「模型 × 通道 × effort × 场景」。通道名和 effort 按 CLI 原文显示，不做别名归一。
+读者是正在选择 coding agent 或 API 来源的人。比较单位是「`model` × `effort` × `source` × `harness` × 场景」。`source` 是模型服务提供方（官方直连或聚合网关），`harness` 是运行框架。`harness` 名和 `effort` 按 CLI 原文显示，不做别名归一。
 
 这是速度，不是能力排名。页面写明这一点。不评答案质量。
 
@@ -48,27 +48,27 @@
 - 打包脚本、文件清单、切片正文进公开仓库。
 - 页面写明：这是该 commit 的有序切片，不是整个 Django。
 
-任务对所有通道是同一份中文、同一份字节，全文公开。内容：根据切片说明分层、模块职责、数据流、技术选型。自然长度。禁止工具，禁止读写文件。做不到这一点的通道没有成绩，不为它改协议。
+任务对所有 harness 是同一份中文、同一份字节，全文公开。内容：根据切片说明分层、模块职责、数据流、技术选型。自然长度。禁止工具，禁止读写文件。做不到这一点的 harness 没有成绩，不为它改协议。
 
 ## 4. 调度
 
-队列键是「厂商 + 入口」。
+队列键是「source + harness」。
 
 - 同一队列内，不同模型、不同 effort、不同 rep 都串行。
 - 队列之间并行。不另设全局并发上限。
-- opencode 和官方直连不是同一条。`opencode-go/deepseek` 与 `ds-off/deepseek` 可以同时跑。
-- opencode 上厂商不同的模型可以同时跑。Muse、Gemini（`cpa/`）、MiMo、Step、opencode 上的 DeepSeek 各一条。
+- DeepSeek 官方（官方直连）与 opencode-go 的 DeepSeek 不是同一条队列，可以同时跑。
+- opencode 上 source 不同的模型可以同时跑：Muse、Gemini（`cpa/`）、MiMo、Step、opencode-go 的 DeepSeek 各一条。
 - Codex 上的 GPT 模型一条。Grok 模型一条。Kimi 模型一条。
 
 Kimi 没有命令行 effort 档位，effort 取全局 `~/.kimi-code/config.toml` 的实际值；请求的档与全局不符时跳过该组，不伪造标注。Kimi 的 200K 切片经 `-p` argv 直传，不借工具读文件。
 
-每个格子（场景 × 通道 × 模型 × effort）跑 3 次，不单独做 warmup。失败的调用在该队列末尾补测 1 次，再失败则该次缺失。这几次构成该格子的最新 batch。补测不占用其他队列。
+每个格子（场景 × `source` × `harness` × 模型 × `effort`）跑 3 次，不单独做 warmup。失败的调用在该队列末尾补测 1 次，再失败则该次缺失。这几次构成该格子的最新 batch。补测不占用其他队列。
 
 同一队列里的顺序不保证缓存是热的。不把第一次另记为 warmup。
 
 ## 5. 指标
 
-一次调用从通道事件流里取数。对方账单上的输入 token 是事件流字段 `input_tokens` 或 `prompt_tokens`，不是本地 cl100k 计数。各家分词器不同，系统提示词也算在里面，所以它通常不等于切片的 200000。高于 200000 只说明对方数得更多，不说明吃进了额外正文，也不因此判为截断。
+一次调用从 harness 事件流里取数。对方账单上的输入 token 是事件流字段 `input_tokens` 或 `prompt_tokens`，不是本地 cl100k 计数。各家分词器不同，系统提示词也算在里面，所以它通常不等于切片的 200000。高于 200000 只说明对方数得更多，不说明吃进了额外正文，也不因此判为截断。
 
 记录三个时间量：
 
@@ -109,7 +109,7 @@ TTFT 含思考这一点，页面如果写出 TTFT，必须同时写明含思考�
 
 上站格子取有效次数的中位数。页面按端到端 TPS 从高到低排列。
 
-页面列：模型、通道、effort、端到端 TPS、生成 TPS、TTFT、输出 token、对方账单输入 token。标明场景是 200K。TTFT 写明含思考。写上「速度不是能力排名」，并链接到 `TuTouPower/agent_speed`。没有够格格子时是空表，不用旧数据填充。
+页面列：`model`、`effort`、`source`、`harness`、端到端 TPS、生成 TPS、TTFT、输出 token、对方账单输入 token。标明场景是 200K。TTFT 写明含思考。写上「速度不是能力排名」，并链接到 `TuTouPower/agent_speed`。没有够格格子时是空表，不用旧数据填充。
 
 对方账单输入 token 在不合格行里也要保存。页面只给上了站的行展示这一列。
 
@@ -121,7 +121,7 @@ TTFT 含思考这一点，页面如果写出 TTFT，必须同时写明含思考�
 
 每行字段：
 
-- 场景、通道、模型、effort、第几次、`batch_id`、开始时间
+- 场景、`model`、`effort`、`source`、`harness`、第几次、`batch_id`、开始时间
 - wall、TTFT、生成窗口、输出 token、对方账单输入 token
 - 端到端 TPS、生成 TPS、生成窗口来源
 - 切片 cl100k token 数
@@ -133,7 +133,7 @@ TTFT 含思考这一点，页面如果写出 TTFT，必须同时写明含思考�
 
 由 `results.jsonl` 重新生成，覆盖写。生成脚本在公开仓库。网站不重算。
 
-每个上站格子一行：场景、通道、模型、effort、有效次数、端到端 TPS 中位数、生成 TPS 中位数（可为空）、TTFT 中位数、输出 token 中位数、对方账单输入 token 中位数、`batch_id`。另有生成时间。
+每个上站格子一行：场景、`model`、`effort`、`source`、`harness`、有效次数、端到端 TPS 中位数、生成 TPS 中位数（可为空）、TTFT 中位数、输出 token 中位数、对方账单输入 token 中位数、`batch_id`。另有生成时间。
 
 行数等于当前上站格子数，不随历史变长。MVP 只有 200K 的行。
 
@@ -168,7 +168,7 @@ Cloudflare 令牌留在本机环境，不进公开仓库。不使用 R2。不让
 - 为这一份 JSON 使用 R2，或把 HTML 放进 R2 当网站托管。
 - 数据更新时构建站点仓库。
 - 全部调用严格串行，或全部并发。
-- 把 opencode 与官方直连算成同一队列，或把 opencode 上的不同厂商绑成一条。
+- 把官方直连与聚合网关算成同一条队列，或把同一 harness 上的不同 source 绑成一条。
 - 全局并发上限。
 - 单独的 warmup 轮次。
 - 公开模型正文、`events/`、内部私有项目实验材料。
@@ -186,8 +186,8 @@ Cloudflare 令牌留在本机环境，不进公开仓库。不使用 R2。不让
 
 - 公开仓库不含内部私有项目切片、旧跑分、模型正文、`events/`、密钥和本机绝对路径。
 - 切片可由脚本按 pin 的 commit 重建，10K 是 100K 的前缀，100K 是 200K 的前缀，cl100k 计数符合文件名中的档。
-- 任一通道的任务字节与公开任务文件一致。使用工具或读写文件的调用没有成绩。
-- 调度日志能看出队列键。同一队列没有时间重叠。不同队列可以重叠。DeepSeek 的 opencode 入口和官方入口可以重叠。
+- 任一 harness 的任务字节与公开任务文件一致。使用工具或读写文件的调用没有成绩。
+- 调度日志能看出队列键（source + harness）。同一队列没有时间重叠。不同队列可以重叠。DeepSeek 官方与 opencode-go 两条队列可以重叠。
 - 每个格子最多 3 次加 1 次补测。没有单独的 warmup 记录。
 - `results.jsonl` 在重跑后仍保留旧行。`latest.json` 只含最新 batch，且该 batch 至少 2 次有效。
 - 输出低于 500、账单输入低于切片 cl100k 一半的格子不在 `latest.json` 里，对应原始行仍在 `results.jsonl`。没有生成窗口的格子（codex）在表里，生成 TPS 列为空。
