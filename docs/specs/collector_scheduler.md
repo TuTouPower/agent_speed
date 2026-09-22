@@ -80,9 +80,9 @@
     - 约束：自动读取 `~/.kimi-code/config.toml` 中的全局 `[thinking] effort`，与待测网格不符时标记为 `skipped`；事件流中严禁出现工具调用（`used_tools: false`）。
     - 指标：从 session 落盘记录提取 `llmServerDecodeMs`。
 - **`antigravity` (`agy`)**：
-    - 参数：`agy -p "<prompt>\n\n<fixture>" --model <model> --effort <effort> --output-format stream-json`。
-    - 输入：任务文本与切片经 `-p` 命令行参数直传。
-    - 指标：首个可见 token（含 thinking 或 `text_delta`）计算 TTFT；末尾有效 `text_delta` 到达时刻减去 TTFT 计算生成窗口（`last_delta_minus_ttft`）；从 `usage` 提取输入与输出 token。
+    - 200K 多轮流水线注入：针对 `agy` 客户端单消息 150KB 硬截断限制，采用 4 轮会话分块累积机制（Turn 1~3 极速灌入切片仅回复 OK，Turn 4 灌入剩余切片并正式测速）。
+    - 测速基准：严格以第 4 轮的端到端耗时作为 Wall Time，账单输入累计吃满 34 万 Tokens，零工具调用。
+    - 指标：首个可见 token（含 thinking 或 `text_delta`）计算 TTFT；优先提取服务端上报的 `step_update.duration_seconds` 作为生成时间窗（`antigravity:step_duration_seconds`）；从 `result.usage` 提取最终输入与输出 token。
 
 ## 6. 结果持久化（`results.jsonl`）
 

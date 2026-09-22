@@ -292,6 +292,10 @@ def parse_antigravity_metrics(
     out_toks: int | None = None
     used_tools: bool = False
 
+    decode_window: float | None = None
+    source: str | None = None
+    srv_duration: float | None = None
+
     for t, line in lines:
         try:
             o = json.loads(line)
@@ -313,6 +317,12 @@ def parse_antigravity_metrics(
                 ttft = t
             last_delta_t = t
 
+        # 优先提取 step_update 里的精确 agent_response 生成耗时
+        if step_update.get("step_type") == "agent_response" and step_update.get("duration_seconds"):
+            srv_duration = step_update["duration_seconds"]
+        elif srv_duration is None and (step_update.get("duration_seconds") or result.get("duration_seconds")):
+            srv_duration = step_update.get("duration_seconds") or result.get("duration_seconds")
+
         # 优先从最终 result 事件中提取全量结算 usage，防止被中间增量 step 覆盖
         if evt == "result" and isinstance(result.get("usage"), dict):
             u = result["usage"]
@@ -331,9 +341,10 @@ def parse_antigravity_metrics(
             if u.get("output_tokens") is not None:
                 out_toks = u["output_tokens"]
 
-    decode_window: float | None = None
-    source: str | None = None
-    if ttft is not None and last_delta_t is not None and last_delta_t >= ttft:
+    if srv_duration is not None and srv_duration > 0:
+        decode_window = round(srv_duration, 3)
+        source = "antigravity:step_duration_seconds"
+    elif ttft is not None and last_delta_t is not None and last_delta_t >= ttft:
         decode_window = round(last_delta_t - ttft, 3)
         source = "antigravity:last_delta_minus_ttft"
 

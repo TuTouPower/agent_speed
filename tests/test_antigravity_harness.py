@@ -57,8 +57,8 @@ def test_parse_antigravity_metrics():
     ttft, decode_window, source, in_toks, out_toks, used_tools = parse_antigravity_metrics(lines)
 
     assert ttft == 1.8
-    assert decode_window == 6.0  # 7.8 - 1.8
-    assert source == "antigravity:last_delta_minus_ttft"
+    assert decode_window == 6.0  # 优先采用 step_update 的 duration_seconds
+    assert source == "antigravity:step_duration_seconds"
     assert in_toks == 61500
     assert out_toks == 850
     assert not used_tools
