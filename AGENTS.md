@@ -1,4 +1,4 @@
-主流 coding agent 与推理模型在真实负载下的速度基准评测系统。测量不同模型、通道、思考强度在长短 Prompt 及 300K 长上下文下的 TTFT 与解码吞吐（TPS）。
+主流 coding agent 与推理模型在真实负载下的速度基准评测系统。测量不同模型、API 来源（source）、运行框架（harness）与思考强度（effort）在 200K 长上下文下的 TTFT（含思考）与解码吞吐（端到端 TPS 与生成 TPS）。
 
 本项目使用模板仓 repo_template。此声明必须保留，消费仓不得删除。
 
@@ -20,10 +20,14 @@
 |`docs/archive/`|完结或终止的历史|镜像原路径；内部文件只准新增|
 |`schemas/`|跨服务接口契约|改契约走 task 流程|
 |`config/`|配置（默认 + 环境覆盖 +`.env.example`）|仅`.env.example` 入库；真值写本地 `.env`|
-|`src/` `tests/` `assets/`|源码、测试、静态源|仅在 task 执行期按 spec 修改；debug 复现不得写入|
-|`scripts/`|用户项目脚本|仅在 task 执行期按 spec 修改；debug 复现不得写入|
-|`fixtures/`|评测输入素材与切片元数据|只读夹具，改动按 task 流程|
-|`prompts/`|标准评测 prompt 集（短/中/长 3 档）|评测基线文件，改动按 task 流程|
+|`src/agent_speed/`|核心测速与调度驱动包（models/harness/metrics/scheduler/report）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`tests/`|项目单元测试与契约验证套件|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`scripts/`|项目构建与运行脚本（`build_django_corpus.py`、`run_bench.py`）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`report.py`|公开报告生成脚本（results.jsonl → latest.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`fixtures/`|评测输入素材与切片元数据（包含 django 切片、manifest、任务副本与 BSD 声明）|只读夹具，改动按 task 流程|
+|`prompts/`|公开评测任务 prompt（`task_200k.md`）|评测基线文件，改动按 task 流程|
+|`results.jsonl`|原始测速调用明细（只追加）|评测数据文件，不存模型正文|
+|`latest.json`|公开站上站聚合表（覆盖写）|上站数据文件，按端到端 TPS 降序|
 |`runs/`|测试运行生成数据与日志（已 gitignore）|本地调试与运行产物，不入库|
 |`.repo_template/`|模板工具链（skills、scripts、docs、hooks）|仅模板演进时修改；细目与写权见`.repo_template/docs/usage.md`|
 |`artifacts/` `data/` `.scratch/`|产物、运行数据、一次性草稿|运行与草稿；debug 复现和临时实验只写`.scratch/`（已 gitignore）；需保留的 spike 验证材料写 `docs/spikes/{sid}_{slug}/code/`|
