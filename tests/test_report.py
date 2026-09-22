@@ -132,3 +132,14 @@ def test_report_pipeline(tmp_path):
     assert by["model-e"]["valid_reps"] == 2
     assert by["model-e"]["gen_tps"] is None
     assert by["model-e"]["e2e_tps"] == 55.0
+
+    # wall medians (seconds, 3 dp) from same last-2 successes
+    # model-a last2 walls: 8.0, 12.0 -> 10.0
+    assert by["model-a"]["wall"] == 10.0
+    # model-b last2: 10.0 (old@08:01), 10.0 (new@11:00) -> 10.0
+    assert by["model-b"]["wall"] == 10.0
+    # model-c last2 (after short drop): 10.0, 12.0 -> 11.0
+    assert by["model-c"]["wall"] == 11.0
+    # model-e: 20.0, 16.0 -> 18.0
+    assert by["model-e"]["wall"] == 18.0
+    assert all("wall" in r for r in rows)
