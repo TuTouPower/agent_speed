@@ -246,3 +246,52 @@ def parse_codex_metrics(
             out_toks = int(m_out.group(1))
 
     return ttft, None, None, in_toks, out_toks
+
+
+def parse_antigravity_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None]:
+    """antigravity (agy stream-json) 指标解析。
+
+    - TTFT: 首个可见 token（含 thinking 或 text_delta）到达时刻
+    - 生成窗口: 最后一条 text_delta 到达时刻减去 TTFT
+    - 来源: antigravity:last_delta_minus_ttft
+    """
+    ttft: float | None = None
+    last_delta_t: float | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(o, dict):
+            continue
+
+        evt = o.get("event")
+        step_update = o.get("step_update") if isinstance(o.get("step_update"), dict) else {}
+        result = o.get("result") if isinstance(o.get("result"), dict) else {}
+
+        delta = step_update.get("text_delta")
+        if delta is not None and len(delta) > 0:
+            if ttft is None:
+                ttft = t
+            last_delta_t = t
+
+        # 从 step_update 或 result 中提取 usage
+        usage = step_update.get("usage") or result.get("usage")
+        if isinstance(usage, dict):
+            if usage.get("input_tokens") is not None:
+                in_toks = usage["input_tokens"]
+            if usage.get("output_tokens") is not None:
+                out_toks = usage["output_tokens"]
+
+    decode_window: float | None = None
+    source: str | None = None
+    if ttft is not None and last_delta_t is not None and last_delta_t >= ttft:
+        decode_window = round(last_delta_t - ttft, 3)
+        source = "antigravity:last_delta_minus_ttft"
+
+    return ttft, decode_window, source, in_toks, out_toks

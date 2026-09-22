@@ -83,8 +83,8 @@ def main(argv: list[str] | None = None) -> int:
     def run_single_cell(cell: GridCell, rep: int, batch_id: str) -> CallRecord:
         harness = get_harness(cell.harness)
         with tempfile.TemporaryDirectory(prefix="bench-call-") as tmpdir:
-            if cell.harness == "kimi":
-                # kimi 需要传入 fixture 文本直传 argv
+            if cell.harness in ("kimi", "antigravity", "agy"):
+                # kimi 与 antigravity 均支持通过 argv 直传文本
                 rec = harness.run(
                     cell=cell,
                     rep=rep,
