@@ -5,7 +5,7 @@
 ## 模块划分
 
 - `src/`：核心测速与分析工具链
-    - `agent_speed/`：评测驱动核心包，提供数据模型（models）、各 harness（opencode/grok/codex/kimi）适配器、指标计算（metrics）、按 source+harness 分队列调度器（scheduler）以及报告生成模块（report）。
+    - `agent_speed/`：评测驱动核心包，提供数据模型（models）、各 harness（opencode/grok/codex/kimi/antigravity）适配器、指标计算（metrics）、按 source+harness 分队列调度器（scheduler）以及报告生成模块（report）。
 - `report.py`：公开报告生成脚本，读 `results.jsonl` 按最新 batch、有效次数与账单输入过滤规则计算中位数并覆盖写 `latest.json`。
 - `scripts/`：项目构建与运行脚本。
     - `run_bench.py`：按 source+harness 分队列基准测速驱动入口。

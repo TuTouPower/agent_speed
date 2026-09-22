@@ -98,4 +98,21 @@ BENCH_MATRIX_200K = [
         harness="kimi",
         cli_model="kimi-code/k3",
     ),
+    # Antigravity (agy)
+    GridCell(
+        scenario="200k",
+        model="gemini-3.8-flash-high",
+        effort="high",
+        source="google",
+        harness="antigravity",
+        cli_model="gemini-3.8-flash-high",
+    ),
+    GridCell(
+        scenario="200k",
+        model="gemini-3.8-flash-low",
+        effort="low",
+        source="google",
+        harness="antigravity",
+        cli_model="gemini-3.8-flash-low",
+    ),
 ]

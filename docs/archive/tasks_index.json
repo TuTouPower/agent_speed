@@ -66,6 +66,22 @@
             "conflicts_with": "",
             "note": "",
             "dir": "docs/archive/tasks/t004_public_repo_release"
+        },
+        {
+            "tid": "t005",
+            "slug": "antigravity_harness",
+            "title": "新增 antigravity (agy) harness 适配与 200K 评测支持",
+            "status": "done",
+            "branch": "t005_antigravity_harness",
+            "worktree": "",
+            "review_level": "single",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "912db344fc55e1906ab388010038466bd3a8dc99",
+            "depends_on": "",
+            "conflicts_with": "",
+            "note": "",
+            "dir": "docs/archive/tasks/t005_antigravity_harness"
         }
     ]
 }
