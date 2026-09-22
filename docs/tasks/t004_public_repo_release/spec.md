@@ -65,7 +65,7 @@
 
 <!-- /规范 -->
 
-- GitHub 建仓权限：`UNVERIFIED-BLOCKING`，本地 `gh` 已登录 `TuTouPower`（repo scope），建仓时验证。
+- GitHub 建仓权限：已通过 `gh auth status` 核实本地已登录 `TuTouPower` 账号，拥有 repo 作用域权限。建仓时直接验证。
 
 ### 风险与回退
 

@@ -67,7 +67,7 @@
 
 <!-- /规范 -->
 
-- `django/django` 目录构成与哪些文件属“生成文件”：`UNVERIFIED-BLOCKING`，构建时按实际文件树确认，排除规则写入构建脚本并在测试中断言。
+- `django/django` 6.1.1 目录构成与排除规则：已通过浅克隆实际 tag 文件树核实。源码位于 `django/`，文档位于 `docs/`；排除 `tests/`、`js_tests/`、`scripts/`、`extras/`、所有 `migrations/`、所有 `locale/`、构建配置与二进制文件。规则直接由构建脚本和单元测试固化断言。
 
 ### 风险与回退
 

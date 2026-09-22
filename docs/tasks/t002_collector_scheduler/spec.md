@@ -73,9 +73,9 @@
 
 <!-- /规范 -->
 
-- kimi 对约 1MB argv 的真实解析行为：`UNVERIFIED-BLOCKING`，由 AC-007 冒烟验证；失败则回报用户（kimi 退出 MVP）。
-- opencode `-f` 附件是否仍有 50KB 截断：`UNVERIFIED-BLOCKING`，由 AC-007 冒烟验证。
-- opencode 事件流 `reasoning` part 事件名与到达顺序：`UNVERIFIED-BLOCKING`，实现时用真实样本核对（TTFT 含思考）。
+- kimi 对约 1MB argv 的真实解析行为：`UNVERIFIED-SPIKE`，由 AC-007 冒烟验证；失败则回报用户（kimi 退出 MVP）。
+- opencode `-f` 附件是否仍有 50KB 截断：`UNVERIFIED-SPIKE`，由 AC-007 冒烟验证。
+- opencode 事件流 `reasoning` part 事件名与到达顺序：`UNVERIFIED-SPIKE`，实现时用真实样本核对（TTFT 含思考）。
 
 ### 风险与回退
 
