@@ -52,17 +52,19 @@
 
 ## 4. 调度
 
-队列键是「source + harness」。
+队列划分按底层的独立配额与限流域（`queue`），全系统采用双层受控并发模型：
 
-- 同一队列内，不同模型、不同 effort、不同 rep 都串行。
-- 队列之间并行。不另设全局并发上限。
-- DeepSeek 官方（官方直连）与 opencode-go 的 DeepSeek 不是同一条队列，可以同时跑。
-- opencode 上 source 不同的模型可以同时跑：Muse、Gemini（`cpa/`）、MiMo、Step、opencode-go 的 DeepSeek 各一条。
-- Codex 上的 GPT 模型一条。Grok 模型一条。Kimi 模型一条。Antigravity 上的 Gemini 模型一条。
+- **单队列并发**：同一队列内最多 **2 并发**。
+- **全局并发上限**：全系统设置 **10 并发上限**。
+- **配额池隔离**：
+    - DeepSeek 官方（`deepseek-official`）与 opencode-go 网关（`opencode-go`）分属不同队列，完全并行同时跑。
+    - Gemini 的 CPA 来源（`cpa`）与 Antigravity 来源（`google-antigravity`）由于共用 Google 底层配额，显式划入同一队列 `google-gemini`，受单队列 2 并发限制，避免并发冲突。
+    - MiMo 官方（`mimo-official`）与 opencode-go 网关（`opencode-go`）分属不同队列，完全并行同时跑。
+    - Codex (`openai-codex`)、Grok (`xai-grok`)、Kimi (`moonshot-kimi`) 各一条独立队列。
 
 Kimi 没有命令行 effort 档位，effort 取全局 `~/.kimi-code/config.toml` 的实际值；请求的档与全局不符时跳过该组，不伪造标注。Kimi 的 200K 切片经 `-p` argv 直传，不借工具读文件。
 
-每个格子（场景 × `source` × `harness` × 模型 × `effort`）跑 3 次，不单独做 warmup。失败的调用在该队列末尾补测 1 次，再失败则该次缺失。这几次构成该格子的最新 batch。补测不占用其他队列。
+每个格子（场景 × `source` × `harness` × 模型 × `effort`）跑 3 次，不单独做 warmup。失败的调用在该队列末尾补测 1 次，再失败则该次缺失。这几次构成该格子的最新 batch。补测不占用其他队列。同一格子最多 4 次调用。
 
 同一队列里的顺序不保证缓存是热的。不把第一次另记为 warmup。
 

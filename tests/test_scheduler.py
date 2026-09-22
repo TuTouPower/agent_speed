@@ -1,22 +1,52 @@
+import threading
 import time
 import pytest
 from pathlib import Path
+
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.scheduler import QueueScheduler
+from agent_speed.config import load_benchmark_config
 
 
-class FakeHarness:
-    def __init__(self, failure_rounds=None):
-        # failure_rounds: dict mapping cell id to set of reps that fail
-        self.failure_rounds = failure_rounds or {}
+class ConcurrencyTrackerHarness:
+    """监测任意时刻并发调用数的 Fake Harness。"""
+
+    def __init__(self, failure_map=None, sleep_sec=0.08):
+        self.failure_map = failure_map or {}
+        self.sleep_sec = sleep_sec
+        self.lock = threading.Lock()
+
+        self.current_global_active = 0
+        self.max_global_active = 0
+
+        self.current_queue_active = {}
+        self.max_queue_active = {}
+
         self.calls = []
 
     def run_cell(self, cell: GridCell, rep: int, batch_id: str) -> CallRecord:
+        q_key = cell.queue_key
+
+        with self.lock:
+            self.current_global_active += 1
+            if self.current_global_active > self.max_global_active:
+                self.max_global_active = self.current_global_active
+
+            cur_q = self.current_queue_active.get(q_key, 0) + 1
+            self.current_queue_active[q_key] = cur_q
+            if cur_q > self.max_queue_active.get(q_key, 0):
+                self.max_queue_active[q_key] = cur_q
+
         t_start = time.monotonic()
-        time.sleep(0.05)  # 模拟耗时
+        time.sleep(self.sleep_sec)
         t_end = time.monotonic()
-        fails = self.failure_rounds.get(cell.cell_id, set())
-        is_fail = rep in fails
+
+        with self.lock:
+            self.current_global_active -= 1
+            self.current_queue_active[q_key] -= 1
+
+        is_fail = rep in self.failure_map.get(cell.cell_id, set())
+
         record = CallRecord(
             scenario=cell.scenario,
             model=cell.model,
@@ -25,7 +55,7 @@ class FakeHarness:
             harness=cell.harness,
             rep=rep,
             batch_id=batch_id,
-            start_time="2026-09-22T14:00:00+08:00",
+            start_time="2026-09-22T18:00:00+08:00",
             wall=round(t_end - t_start, 3),
             ttft=0.01,
             decode_window=0.04,
@@ -38,76 +68,94 @@ class FakeHarness:
             status="success" if not is_fail else "failed",
             error_summary=None if not is_fail else "simulated failure",
         )
-        self.calls.append({
-            "queue_key": cell.queue_key,
-            "cell_id": cell.cell_id,
-            "rep": rep,
-            "batch_id": batch_id,
-            "start": t_start,
-            "end": t_end,
-            "record": record,
-        })
+
+        with self.lock:
+            self.calls.append({
+                "queue_key": q_key,
+                "cell_id": cell.cell_id,
+                "rep": rep,
+                "batch_id": batch_id,
+                "start": t_start,
+                "end": t_end,
+                "record": record,
+            })
         return record
 
 
-def test_scheduler_queue_parallelism_and_serialization():
-    """AC-001: source+harness 队列键，同队列串行无重叠，不同队列并行有重叠"""
-    # 2 个队列：
-    # Q1: opencode-go:opencode (2 个 cell)
-    # Q2: official:opencode (1 个 cell)
-    cells = [
-        GridCell("200k", "deepseek-v4.1", "high", "opencode-go", "opencode"),
-        GridCell("200k", "deepseek-v4.1", "max", "opencode-go", "opencode"),
-        GridCell("200k", "deepseek-flash", "high", "official", "opencode"),
-    ]
+def test_load_benchmark_config_file():
+    """AC-001: 校验 config/benchmark.json 主配置加载与字段完整性"""
+    cfg = load_benchmark_config()
+    assert cfg.global_max_concurrency == 10
+    assert cfg.per_queue_concurrency == 2
+    assert len(cfg.cells) >= 10
 
-    harness = FakeHarness()
-    scheduler = QueueScheduler(runner=harness.run_cell)
-    records, logs = scheduler.run_all(cells)
-
-    # 验证调度日志含队列键
-    assert any("queue=opencode-go:opencode" in log for log in logs)
-    assert any("queue=official:opencode" in log for log in logs)
-
-    # 验证同一队列内无时间重叠
-    q1_calls = [c for c in harness.calls if c["queue_key"] == "opencode-go:opencode"]
-    for i in range(len(q1_calls) - 1):
-        # 串行：前一个结束时间 <= 后一个开始时间 (允许极小时间片漂移)
-        assert q1_calls[i]["end"] <= q1_calls[i + 1]["start"] + 0.005, "Same queue calls must be serialized"
-
-    # 验证不同队列间发生并行（存在重叠区间）
-    q2_calls = [c for c in harness.calls if c["queue_key"] == "official:opencode"]
-    overlap = False
-    for c1 in q1_calls:
-        for c2 in q2_calls:
-            # 判断时间段 [start, end] 是否重叠
-            if max(c1["start"], c2["start"]) < min(c1["end"], c2["end"]):
-                overlap = True
-                break
-        if overlap:
-            break
-    assert overlap, "Different queues must run concurrently"
+    # 验证模型名解耦与渠道正名 (AC-002)
+    for c in cfg.cells:
+        assert c.source != "official", f"Forbidden raw 'official' source: {c.model}"
+        assert c.queue is not None, f"Missing explicit queue for {c.model}"
+        assert c.resolved_cli_model is not None
 
 
-def test_scheduler_batch_and_retry():
-    """AC-002: 每格 3 次同一 batch_id，失败在末尾补测 1 次，无 warmup，最多 4 次"""
-    cell = GridCell("200k", "test-model", "high", "test-source", "test-harness")
-    # 让 rep=2 失败
-    harness = FakeHarness(failure_rounds={cell.cell_id: {2}})
-    scheduler = QueueScheduler(runner=harness.run_cell)
-    records, logs = scheduler.run_all([cell])
+def test_scheduler_two_tier_concurrency_limits():
+    """AC-003: 双层并发受控——全局 <= 10，单队列 <= 2，且达到单队列并发"""
+    # 构造 6 个独立队列，每队列 3 个 cell，每 cell 跑 3 次（共 54 个任务）
+    cells = []
+    for q_idx in range(6):
+        q_name = f"queue_{q_idx}"
+        for c_idx in range(3):
+            cells.append(
+                GridCell(
+                    scenario="200k",
+                    model=f"model_{q_idx}_{c_idx}",
+                    effort="high",
+                    source=f"source_{q_idx}",
+                    harness="opencode",
+                    queue=q_name,
+                )
+            )
 
-    cell_calls = [c for c in harness.calls if c["cell_id"] == cell.cell_id]
-    # 总共 3 + 1 = 4 次
+    tracker = ConcurrencyTrackerHarness(sleep_sec=0.04)
+    scheduler = QueueScheduler(
+        runner=tracker.run_cell,
+        global_max_workers=10,
+        per_queue_concurrency=2,
+    )
+    records, logs = scheduler.run_all(cells, reps=2)
+
+    # 1. 验证全局并发峰值不超过 10
+    assert tracker.max_global_active <= 10, f"Global concurrency exceeded 10: {tracker.max_global_active}"
+    assert tracker.max_global_active > 2, "Global concurrency should be higher than single queue"
+
+    # 2. 验证任意单队列并发峰值不超过 2
+    for q_name, max_q in tracker.max_queue_active.items():
+        assert max_q <= 2, f"Queue {q_name} exceeded 2 concurrency: {max_q}"
+        assert max_q == 2, f"Queue {q_name} should reach 2 concurrency: {max_q}"
+
+
+def test_gemini_shared_queue_and_deepseek_parallelism():
+    """AC-004: Gemini CPA 与 Antigravity 共享 google-gemini 队列（<=2并发）；DeepSeek 官方与网关不同队"""
+    cfg = load_benchmark_config()
+
+    gemini_cells = [c for c in cfg.cells if "gemini" in c.model]
+    assert len(gemini_cells) >= 2
+    for c in gemini_cells:
+        assert c.queue_key == "google-gemini", f"Gemini cell {c.cli_model} should be in google-gemini queue"
+
+    ds_off = next(c for c in cfg.cells if c.source == "deepseek-official")
+    ds_gw = next(c for c in cfg.cells if c.source == "opencode-go" and "deepseek" in c.model)
+    assert ds_off.queue_key != ds_gw.queue_key, "DeepSeek official and gateway must have different queues"
+
+
+def test_scheduler_batch_id_and_retry():
+    """验证同一网格 3+1 batch 与补测依然正常工作"""
+    cell = GridCell("200k", "test-model", "high", "src", "opencode", queue="q1")
+    tracker = ConcurrencyTrackerHarness(failure_map={cell.cell_id: {2}}, sleep_sec=0.01)
+    scheduler = QueueScheduler(runner=tracker.run_cell, global_max_workers=10, per_queue_concurrency=2)
+    records, logs = scheduler.run_all([cell], reps=3)
+
+    cell_calls = [c for c in tracker.calls if c["cell_id"] == cell.cell_id]
     assert len(cell_calls) == 4
-    reps = [c["rep"] for c in cell_calls]
-    assert reps == [1, 2, 3, 4]
-
-    # 同一 batch_id
-    batch_ids = {c["batch_id"] for c in cell_calls}
-    assert len(batch_ids) == 1
-
-    # rep 4 在末尾执行
+    assert sorted([c["rep"] for c in cell_calls]) == [1, 2, 3, 4]
+    assert len({c["batch_id"] for c in cell_calls}) == 1
+    # 补测必须发生在末尾
     assert cell_calls[3]["rep"] == 4
-    # 最多 4 次
-    assert len(records) == 4

@@ -6,10 +6,10 @@
 |---|---|---|
 |比较单位|Comparison Unit|基准比较单位为「`model` × `effort` × `source` × `harness` × `scenario`」。|
 |评测场景|Scenario|评测输入上下文与任务规模。MVP 版本为 200K 的 prompt，后续还会支持一句话、10K、100K prompt。|
-|服务提供方|Source|模型服务提供方，区分官方直连（如 official）或聚合网关（如 opencode-go、cpa 等）。|
+|服务提供方|Source|模型服务提供方渠道（如 `deepseek-official`、`opencode-go`、`cpa`、`google-antigravity` 等，非裸写 `official`）。|
 |运行框架|Harness|调用驱动框架（opencode、grok、codex、kimi、antigravity）。|
-|思考强度|Reasoning Effort / Variant|模型的思考档位（如 low、high、xhigh、max 等）。按 CLI 原文显示，不做别名归一。|
-|队列键|Queue Key|以「`source + harness`」为队列键。同队列严格串行，不同队列全并行。|
+|思考强度|Reasoning Effort / Variant|模型的思考档位（如 low、high、xhigh、max 等）。按 CLI 原文显示，不支持者为 null。|
+|队列键|Queue Key|基于物理配额限流域划分的并发队列键（`queue`）。单队列最多 2 并发，全系统设 10 并发上限。|
 |批次机制|3+1 Batch|每个格子跑 3 次调用归属同一 `batch_id`；失败调用在队列末尾补测 1 次，同格最多 4 次，无 warmup。|
 |端到端耗时|Wall Time|进程启动至退出的完整物理端到端时间（秒）。|
 |首字延迟|TTFT (Time To First Token)|首个可见 token（含思考推理或正文）到达时刻（秒）。|

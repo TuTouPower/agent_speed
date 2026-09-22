@@ -9,20 +9,24 @@
 - **基准比较单位**：
     基准比较单位为五元组：「`model` × `effort` × `source` × `harness` × `scenario`」。
     - `scenario`：评测场景（MVP 阶段固定为 `200k`）。
-    - `source`：模型服务提供方，区分官方直连（如 `official`、`moonshot`、`openai`、`google`）或聚合网关（如 `opencode-go`、`cpa`）。
+    - `source`：模型服务提供方渠道（如 `deepseek-official`、`mimo-official`、`google-antigravity`、`cpa`、`opencode-go`、`openai`、`xai`、`moonshot`），严禁裸写 `official`。
     - `harness`：评测运行驱动框架（如 `opencode`、`grok`、`codex`、`kimi`、`antigravity`）。
-    - `model`：被测模型标识（按 CLI/API 原文，不做别名归一）。
-    - `effort`：模型思考强度或变体档位（按 CLI 原文显示，不做别名归一）。
+    - `model`：客观标准模型标识（如 `deepseek-v4.1-flash`、`gemini-3.8-flash`）。
+    - `cli_model`：CLI 客户端入参别名（如 `ds-off/deepseek-flash`、`cpa/gemini-3.8-flash`）。
+    - `effort`：模型思考强度或变体档位（如 `high`、`max`，不支持者为 `null`）。
 - **网格键（Grid Key）**：
     每个评测单元的唯一标识符格式为 `{scenario}:{source}:{harness}:{model}:{effort}`。
 
 ## 3. 队列调度与并发模型
 
-- **队列划分键（Queue Key）**：
-    以「`source + harness`」为队列键（如 `cpa+opencode`、`moonshot+kimi`）。
-- **并发与隔离规则**：
-    - **同队列严格串行**：同一队列内的多次调用严格按序串行执行，禁止时间重叠，避免单一服务商或本地 CLI 实例产生并发干扰。
-    - **跨队列全量并行**：不同队列之间通过线程/协程池全并发执行，系统不设全局并发调用上限。
+- **物理队列划分（Queue Key）**：
+    每个网格在配置中显式绑定物理限流域 `queue`（如 `deepseek-official`、`opencode-go`、`google-gemini`、`mimo-official`）。
+- **双层受控并发规则**：
+    - **单队列并发上限**：每个队列内部最多允许 **2 并发** 运行，避免单一底层服务商账号或本地实例产生排队抖动。
+    - **全局并发上限**：全系统设置 **10 并发** 上限，防止进程过多消耗本机物理资源或触发网关总控限流。
+- **配额池隔离**：
+    - Gemini CPA 渠道与 Antigravity 渠道共享 `google-gemini` 队列，受单队列 2 并发限制。
+    - 官方直连（如 `deepseek-official`、`mimo-official`）与聚合代理（`opencode-go`）分属不同队列，完全并行执行。
 - **3+1 Batch 机制**：
     - 每个网格单元计划执行 3 次基准调用，全部分配并标记同一个唯一的 `batch_id`。
     - 不设置独立的 warmup 预热轮次。

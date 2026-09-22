@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """run_bench.py — 矩阵队列测速驱动程序。
 
-按 source+harness 分队列调度：
-- 同一队列内串行，跨队列并行，无全局上限；
+按物理队列 (queue) 双层受控并发调度：
+- 默认加载 config/benchmark.json；
+- 单队列最多 2 并发，全局受控最大 10 并发；
 - 每格 3 次属于同一 batch_id；失败在队列末尾补测 1 次；
 - 指标实时写入 results.jsonl（追加写入）。
 """
@@ -20,7 +21,7 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from agent_speed.matrix import BENCH_MATRIX_200K
+from agent_speed.config import load_benchmark_config
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.harness import get_harness
 from agent_speed.scheduler import QueueScheduler
@@ -28,25 +29,28 @@ from agent_speed.collector import append_result_record
 
 
 def main(argv: list[str] | None = None) -> int:
-    repo_root = Path(__file__).resolve().parent.parent
-    default_prompt = repo_root / "prompts/task_200k.md"
-    default_fixture = repo_root / "fixtures/django_200k.txt"
-    default_out = repo_root / "results.jsonl"
+    default_config = REPO_ROOT / "config/benchmark.json"
 
-    ap = argparse.ArgumentParser(description="按 source+harness 分队列基准测速驱动")
-    ap.add_argument("--prompt", default=str(default_prompt), help="任务 prompt 文件")
-    ap.add_argument("--fixture", default=str(default_fixture), help="代码切片文件")
-    ap.add_argument("--out", default=str(default_out), help="结果输出 results.jsonl 路径")
+    ap = argparse.ArgumentParser(description="按 queue 分队列双层并发基准测速驱动")
+    ap.add_argument("--config", default=str(default_config), help="集中配置文件路径")
+    ap.add_argument("--prompt", help="任务 prompt 文件（默认从配置读取）")
+    ap.add_argument("--fixture", help="代码切片文件（默认从配置读取）")
+    ap.add_argument("--out", help="结果输出 results.jsonl 路径（默认从配置读取）")
     ap.add_argument("--sources", help="以逗号分隔的 source 过滤白名单")
     ap.add_argument("--harnesses", help="以逗号分隔的 harness 过滤白名单")
     ap.add_argument("--models", help="以逗号分隔的 model 过滤白名单")
-    ap.add_argument("--reps", type=int, default=3, help="每格执行次数（默认 3）")
-    ap.add_argument("--timeout", type=int, default=300, help="单次调用超时（秒）")
+    ap.add_argument("--reps", type=int, help="每格执行次数（默认从配置读取）")
+    ap.add_argument("--timeout", type=int, help="单次调用超时（秒，默认从配置读取）")
     args = ap.parse_args(argv)
 
-    prompt_path = Path(args.prompt)
-    fixture_path = Path(args.fixture)
-    out_path = Path(args.out)
+    bench_cfg = load_benchmark_config(args.config)
+    defaults = bench_cfg.defaults
+
+    prompt_path = Path(args.prompt or (REPO_ROOT / defaults.get("prompt_file", "prompts/task_200k.md")))
+    fixture_path = Path(args.fixture or (REPO_ROOT / defaults.get("fixture_file", "fixtures/django_200k.txt")))
+    out_path = Path(args.out or (REPO_ROOT / defaults.get("results_file", "results.jsonl")))
+    reps = args.reps or defaults.get("reps", 3)
+    timeout_sec = args.timeout or defaults.get("timeout_sec", 300)
 
     if not prompt_path.exists():
         sys.exit(f"Prompt file not found: {prompt_path}")
@@ -57,7 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     fixture_text = fixture_path.read_text(encoding="utf-8")
 
     # 筛选待执行 cells
-    cells = list(BENCH_MATRIX_200K)
+    cells = list(bench_cfg.cells)
     if args.sources:
         src_set = set(args.sources.split(","))
         cells = [c for c in cells if c.source in src_set]
@@ -72,6 +76,7 @@ def main(argv: list[str] | None = None) -> int:
         print("No cells to run after filtering.")
         return 0
 
+    print(f"Loaded config: {args.config} (global_max={bench_cfg.global_max_concurrency}, per_queue={bench_cfg.per_queue_concurrency})")
     print(f"Selected {len(cells)} cells across queues:")
     queues = {}
     for c in cells:
@@ -92,7 +97,7 @@ def main(argv: list[str] | None = None) -> int:
                     prompt=prompt_text,
                     fixture_text=fixture_text,
                     cwd=tmpdir,
-                    timeout=args.timeout,
+                    timeout=timeout_sec,
                 )
             else:
                 rec = harness.run(
@@ -102,15 +107,19 @@ def main(argv: list[str] | None = None) -> int:
                     prompt=prompt_text,
                     fixture_path=fixture_path,
                     cwd=tmpdir,
-                    timeout=args.timeout,
+                    timeout=timeout_sec,
                 )
 
         # 实时追加写入 results.jsonl
         append_result_record(out_path, rec)
         return rec
 
-    scheduler = QueueScheduler(runner=run_single_cell)
-    records, logs = scheduler.run_all(cells, reps=args.reps)
+    scheduler = QueueScheduler(
+        runner=run_single_cell,
+        global_max_workers=bench_cfg.global_max_concurrency,
+        per_queue_concurrency=bench_cfg.per_queue_concurrency,
+    )
+    records, logs = scheduler.run_all(cells, reps=reps)
 
     success_cnt = sum(1 for r in records if r.status == "success")
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
