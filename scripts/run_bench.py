@@ -27,6 +27,7 @@ from agent_speed.harness import get_harness
 from agent_speed.scheduler import QueueScheduler
 from agent_speed.collector import append_result_record
 from agent_speed.report import generate_latest_json
+from agent_speed.board_preview import refresh_board_preview
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -122,6 +123,9 @@ def main(argv: list[str] | None = None) -> int:
     latest_path = REPO_ROOT / "data" / "latest.json"
     rows = generate_latest_json(out_path, latest_path)
     print(f"Auto-generated data/latest.json ({len(rows)} models on leaderboard)")
+    preview = refresh_board_preview(latest=latest_path)
+    if preview is not None:
+        print(f"Updated board preview: {preview}")
     return 0
 
 

@@ -2,6 +2,8 @@
 
 **公开榜单**：https://agent-speed.ooll.lol
 
+![Agent Speed 公开榜单预览](docs/board-preview.png)
+
 主流 coding agent 与推理模型在真实长负载下的速度基准评测系统。测量不同模型、API 来源（source）、运行框架（harness）与思考强度（effort）在 200K 超长上下文下的首字延迟（TTFT，含思考）与解码吞吐（端到端 TPS 与生成 TPS）。
 
 > **说明**：本项目评测的是生成速度与吞吐，**速度不是能力排名**，不评估模型回答质量。
@@ -103,6 +105,7 @@ pytest tests -v
 ## 公开榜单网站
 
 - **线上地址**：https://agent-speed.ooll.lol
+- **README 预览图**：`docs/board-preview.png`（`report.py` / `run_bench.py` 更新 `data/latest.json` 后会尽量自动重截；也可手动 `python3 scripts/screenshot_board.py`）
 - 本仓库只负责评测与数据（`data/results.jsonl`、`data/latest.json`）。**静态公开榜单不在本仓**：站点与 Cloudflare Pages 部署维护在 [`TuTouPower/great_websites`](https://github.com/TuTouPower/great_websites) 的 `systems/agent_speed/web/`。
 
 刷新上站数据后，将本仓 `data/latest.json` 复制到 great_websites 对应目录并按其 README 部署（或运行那边的 `scripts/deploy_pages.sh`）。

@@ -17,6 +17,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 from agent_speed.report import generate_latest_json
+from agent_speed.board_preview import refresh_board_preview
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -30,6 +31,9 @@ def main(argv: list[str] | None = None) -> int:
 
     rows = generate_latest_json(results_file, out_file)
     print(f"Generated {len(rows)} rows to {out_file}")
+    preview = refresh_board_preview(latest=out_file)
+    if preview is not None:
+        print(f"Updated board preview: {preview}")
     return 0
 
 
