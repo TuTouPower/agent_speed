@@ -1,0 +1,42 @@
+{
+  "tid": "t006",
+  "attempt": 1,
+  "execution_id": "57b99092403549edbe73aadcda48c450",
+  "status": "done",
+  "branch": "t006_queue_concurrency_config",
+  "base_sha": "b5df8cdd452136d298304d9f12b2296820fbd36c",
+  "tests": "132 contract passed, 22 agent_speed tests passed",
+  "blackbox": "无",
+  "review": "Round 1 PASS (full)",
+  "ac_evidence": {
+    "AC-001": [
+      "config/benchmark.json:1-125",
+      "src/agent_speed/config.py:1-48",
+      "tests/test_scheduler.py:84-95"
+    ],
+    "AC-002": [
+      "src/agent_speed/models.py:8-41",
+      "config/benchmark.json:14-124",
+      "tests/test_scheduler.py:90-95"
+    ],
+    "AC-003": [
+      "src/agent_speed/scheduler.py:20-117",
+      "tests/test_scheduler.py:98-132"
+    ],
+    "AC-004": [
+      "config/benchmark.json:30-49",
+      "tests/test_scheduler.py:135-146"
+    ],
+    "AC-005": [
+      "scripts/run_bench.py:30-112"
+    ],
+    "AC-006": [
+      "docs/plan.md:52-65",
+      "docs/specs/collector_scheduler.md:21-33",
+      "docs/blueprint/architecture.md:3-13",
+      "docs/blueprint/domain.md:7-13"
+    ]
+  },
+  "pending": [],
+  "findings": []
+}

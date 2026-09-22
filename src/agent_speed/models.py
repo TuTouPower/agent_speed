@@ -9,23 +9,38 @@ from typing import Any
 class GridCell:
     scenario: str
     model: str
-    effort: str
+    effort: str | None
     source: str
     harness: str
     cli_model: str | None = None
+    queue: str | None = None
     cl100k_tokens: int = 200000
 
     @property
     def queue_key(self) -> str:
-        return f"{self.source}:{self.harness}"
+        return self.queue if self.queue else f"{self.source}:{self.harness}"
 
     @property
     def cell_id(self) -> str:
-        return f"{self.scenario}:{self.source}:{self.harness}:{self.model}:{self.effort}"
+        effort_str = self.effort if self.effort else "none"
+        return f"{self.scenario}:{self.source}:{self.harness}:{self.model}:{effort_str}"
 
     @property
     def resolved_cli_model(self) -> str:
         return self.cli_model if self.cli_model else self.model
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any], default_scenario: str = "200k") -> GridCell:
+        return cls(
+            scenario=data.get("scenario", default_scenario),
+            model=data["model"],
+            effort=data.get("effort"),
+            source=data["source"],
+            harness=data["harness"],
+            cli_model=data.get("cli_model"),
+            queue=data.get("queue"),
+            cl100k_tokens=data.get("cl100k_tokens", 200000),
+        )
 
 
 @dataclass
