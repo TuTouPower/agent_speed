@@ -7,7 +7,7 @@ from agent_speed.models import CallRecord
 
 
 def append_result_record(file_path: Path | str, record: CallRecord) -> None:
-    """AC-006: results.jsonl 每次调用一行、只追加；字段全集符合 §7.1；不含模型正文、密钥、本机绝对路径。"""
+    """AC-006: data/results.jsonl 每次调用一行、只追加；字段全集符合 §7.1；不含模型正文、密钥、本机绝对路径。"""
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 

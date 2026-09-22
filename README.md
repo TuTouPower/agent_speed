@@ -39,8 +39,8 @@
 
 ## 数据产物
 
-- **`results.jsonl`**：原始调用明细账本。每次调用追加一行，包含完整的 timing、token usage、队列键与批次 ID；绝不保存模型回答正文，不泄露任何本地私有路径与凭据。
-- **`latest.json`**：上站聚合汇总表。仅读取最新一个 `batch_id`，严格执行上站门槛（最新 batch 有效次数 ≥ 2、账单输入 token ≥ 切片 cl100k 的一半、单次输出 token ≥ 500）；各项中位数仅由有效次数聚合计算，按端到端 TPS 降序输出。
+- **`data/results.jsonl`**：原始调用明细账本。每次调用追加一行，包含完整的 timing、token usage、队列键与批次 ID；绝不保存模型回答正文，不泄露任何本地私有路径与凭据。
+- **`data/latest.json`**：上站聚合汇总表。仅读取最新一个 `batch_id`，严格执行上站门槛（最新 batch 有效次数 ≥ 2、账单输入 token ≥ 切片 cl100k 的一半、单次输出 token ≥ 500）；各项中位数仅由有效次数聚合计算，按端到端 TPS 降序输出。
 
 ## 快速上手
 
@@ -62,7 +62,7 @@ python3 scripts/build_django_corpus.py
 
 ### 3. 运行基准测速
 
-按 source+harness 自动分队列并发执行评测并实时写入 `results.jsonl`：
+按 source+harness 自动分队列并发执行评测并实时写入 `data/results.jsonl`：
 
 ```bash
 # 全矩阵运行
@@ -74,7 +74,7 @@ python3 scripts/run_bench.py --harnesses opencode --models cpa/gemini-3.8-flash
 
 ### 4. 生成上站汇总报告
 
-由 `results.jsonl` 重新生成 `latest.json`：
+由 `data/results.jsonl` 重新生成 `data/latest.json`：
 
 ```bash
 python3 report.py
@@ -98,14 +98,9 @@ pytest tests -v
     - 上站报告规范：[`docs/specs/latest_json_report.md`](docs/specs/latest_json_report.md)
     - 公开仓库规范：[`docs/specs/public_repo_release.md`](docs/specs/public_repo_release.md)
 
-## 公开榜单自动部署（本地）
+## 公开榜单网站
 
-静态站在 `web/`，数据在仓库根目录 `latest.json`。Cloudflare Pages 项目默认 `agent-speed`。
+本仓库只负责评测与数据（`data/results.jsonl`、`data/latest.json`）。**静态公开榜单不在本仓**：站点与 Cloudflare Pages 部署维护在 [`TuTouPower/great_websites`](https://github.com/TuTouPower/great_websites) 的 `systems/agent_speed/`。
 
-1. 复制 `.env.example` 为 `.env`，填入 Cloudflare 凭据（`.env` 已在 `.gitignore`，不会进仓库）。
-2. 一次性安装 hook：`./scripts/install_git_hooks.sh`
-3. 之后每次 `git push`：若本次推送包含对 `latest.json` 的变更，会先执行 `scripts/deploy_pages.sh`，成功后再推送；失败则中止 push。
-4. 也可手动部署：`./scripts/deploy_pages.sh`
-
-凭据支持 `CLOUDFLARE_API_TOKEN`（推荐，权限收窄到 Pages），或 `CLOUDFLARE_API_KEY` + `CLOUDFLARE_EMAIL`；另需 `CLOUDFLARE_ACCOUNT_ID`。
+刷新上站数据后，将本仓 `data/latest.json` 复制到 great_websites 对应目录并按其 README 部署（或运行那边的 `scripts/deploy_pages.sh`）。
 

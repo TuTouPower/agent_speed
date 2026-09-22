@@ -5,7 +5,7 @@
 - 默认加载 config/benchmark.json；
 - 单队列最多 2 并发，全局受控最大 10 并发；
 - 每格 3 次属于同一 batch_id；失败在队列末尾补测 1 次；
-- 指标实时写入 results.jsonl（追加写入）。
+- 指标实时写入 data/results.jsonl（追加写入）。
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
 
     prompt_path = Path(args.prompt or (REPO_ROOT / defaults.get("prompt_file", "prompts/task_200k.md")))
     fixture_path = Path(args.fixture or (REPO_ROOT / defaults.get("fixture_file", "fixtures/django_200k.txt")))
-    out_path = Path(args.out or (REPO_ROOT / defaults.get("results_file", "results.jsonl")))
+    out_path = Path(args.out or (REPO_ROOT / defaults.get("results_file", "data/results.jsonl")))
     reps = args.reps or defaults.get("reps", 3)
     timeout_sec = args.timeout or defaults.get("timeout_sec", 300)
 
@@ -104,7 +104,7 @@ def main(argv: list[str] | None = None) -> int:
                 timeout=timeout_sec,
             )
 
-        # 实时追加写入 results.jsonl
+        # 实时追加写入 data/results.jsonl
         append_result_record(out_path, rec)
         return rec
 
@@ -119,9 +119,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
 
     # 测速完成后自动刷新 latest.json 报告
-    latest_path = REPO_ROOT / "latest.json"
+    latest_path = REPO_ROOT / "data" / "latest.json"
     rows = generate_latest_json(out_path, latest_path)
-    print(f"Auto-generated latest.json ({len(rows)} models on leaderboard)")
+    print(f"Auto-generated data/latest.json ({len(rows)} models on leaderboard)")
     return 0
 
 

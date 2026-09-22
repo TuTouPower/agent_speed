@@ -40,7 +40,7 @@ def generate_latest_json(
     results_jsonl: Path | str,
     output_json: Path | str,
 ) -> list[dict[str, Any]]:
-    """读 results.jsonl 重新生成 latest.json。
+    """读 data/results.jsonl 重新生成 data/latest.json。
 
     - 每个格子跨全部 batch 收集有效成功调用；
     - 按 start_time 取最近 2 次有效成功；有效次数 < 2 不上站；
@@ -49,7 +49,7 @@ def generate_latest_json(
     - 对方账单输入 token < 切片 cl100k 一半的格子不上站；
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
     - 中位数由最近 2 次有效成功计算（含 wall 秒，三位小数）；
-    - 按端到端 TPS 降序覆盖写 latest.json。
+    - 按端到端 TPS 降序覆盖写 data/latest.json。
     """
     jsonl_path = Path(results_jsonl)
     out_path = Path(output_json)

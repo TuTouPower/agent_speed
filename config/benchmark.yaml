@@ -9,7 +9,7 @@ defaults:
   timeout_sec: 300
   prompt_file: "prompts/task_200k.md"
   fixture_file: "fixtures/django_200k.txt"
-  results_file: "results.jsonl"
+  results_file: "data/results.jsonl"
 
 cells:
   - model: "deepseek-v4.1-flash"

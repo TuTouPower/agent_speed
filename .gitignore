@@ -1,5 +1,8 @@
 /artifacts/
-/data/
+/data/*
+!/data/results.jsonl
+!/data/latest.json
+!/data/.gitkeep
 .scratch/
 node_modules/
 *.log

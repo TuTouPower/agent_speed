@@ -84,11 +84,11 @@
     - 测速基准：严格以第 4 轮的端到端耗时作为 Wall Time，账单输入累计吃满 34 万 Tokens，零工具调用。
     - 指标：首个可见 token（含 thinking 或 `text_delta`）计算 TTFT；优先提取服务端上报的 `step_update.duration_seconds` 作为生成时间窗（`antigravity:step_duration_seconds`）；从 `result.usage` 提取最终输入与输出 token。
 
-## 6. 结果持久化（`results.jsonl`）
+## 6. 结果持久化（`data/results.jsonl`）
 
-- **写入语义**：单次调用对应一行 JSON，以线程安全的原子追加模式写入 `results.jsonl`。
+- **写入语义**：单次调用对应一行 JSON，以线程安全的原子追加模式写入 `data/results.jsonl`。
 - **字段规范（Schema）**：
     必须完整包含以下 20 个字段：
     `scenario`, `model`, `effort`, `source`, `harness`, `rep`, `batch_id`, `start_time`, `wall`, `ttft`, `decode_window`, `out_tokens`, `in_tokens`, `e2e_tps`, `gen_tps`, `decode_window_source`, `cl100k_tokens`, `status`, `used_tools`, `exclude_reason`, `error_summary`。
 - **敏感信息治理**：
-    严禁将模型生成的完整文本、中间调试事件流、API 密钥以及开发者本机绝对路径落入 `results.jsonl`。
+    严禁将模型生成的完整文本、中间调试事件流、API 密钥以及开发者本机绝对路径落入 `data/results.jsonl`。

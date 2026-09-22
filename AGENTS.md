@@ -23,14 +23,14 @@
 |`src/agent_speed/`|核心测速与调度驱动包（models/harness/metrics/scheduler/report）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`tests/`|项目单元测试与契约验证套件|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`scripts/`|项目构建与运行脚本（`build_django_corpus.py`、`run_bench.py`）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
-|`report.py`|公开报告生成脚本（results.jsonl → latest.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`report.py`|公开报告生成脚本（data/results.jsonl → data/latest.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`fixtures/`|评测输入素材与切片元数据（包含 django 切片、manifest、任务副本与 BSD 声明）|只读夹具，改动按 task 流程|
 |`prompts/`|公开评测任务 prompt（`task_200k.md`）|评测基线文件，改动按 task 流程|
-|`results.jsonl`|原始测速调用明细（只追加）|评测数据文件，不存模型正文|
-|`latest.json`|公开站上站聚合表（覆盖写）|上站数据文件，按端到端 TPS 降序|
+|`data/results.jsonl`|原始测速调用明细（只追加）|公开跟踪的评测数据文件，不存模型正文|
+|`data/latest.json`|公开站上站聚合表（覆盖写）|公开跟踪的上站数据文件，按端到端 TPS 降序|
 |`runs/`|测试运行生成数据与日志（已 gitignore）|本地调试与运行产物，不入库|
 |`.repo_template/`|模板工具链（skills、scripts、docs、hooks）|仅模板演进时修改；细目与写权见`.repo_template/docs/usage.md`|
-|`artifacts/` `data/` `.scratch/`|产物、运行数据、一次性草稿|运行与草稿；debug 复现和临时实验只写`.scratch/`（已 gitignore）；需保留的 spike 验证材料写 `docs/spikes/{sid}_{slug}/code/`|
+|`artifacts/` `.scratch/`|产物与一次性草稿|运行与草稿；debug 复现和临时实验只写`.scratch/`（已 gitignore）；需保留的 spike 验证材料写 `docs/spikes/{sid}_{slug}/code/`。`data/` 下仅跟踪 `results.jsonl` / `latest.json` / `.gitkeep`，其余 runtime 忽略|
 
 ## 开发原则
 

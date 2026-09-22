@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""report.py — 从 results.jsonl 生成 latest.json。
+"""report.py — 从 data/results.jsonl 生成 data/latest.json。
 
 用法：
-  python3 report.py [--results results.jsonl] [--out latest.json]
+  python3 report.py [--results data/results.jsonl] [--out data/latest.json]
 """
 
 from __future__ import annotations
@@ -21,8 +21,8 @@ from agent_speed.report import generate_latest_json
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="生成 latest.json")
-    ap.add_argument("--results", default=str(REPO_ROOT / "results.jsonl"), help="输入 results.jsonl 路径")
-    ap.add_argument("--out", default=str(REPO_ROOT / "latest.json"), help="输出 latest.json 路径")
+    ap.add_argument("--results", default=str(REPO_ROOT / "data" / "results.jsonl"), help="输入 results.jsonl 路径")
+    ap.add_argument("--out", default=str(REPO_ROOT / "data" / "latest.json"), help="输出 latest.json 路径")
     args = ap.parse_args(argv)
 
     results_file = Path(args.results)
