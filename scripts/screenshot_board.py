@@ -29,7 +29,7 @@ from PIL import Image, ImageChops
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview.png"
-DEFAULT_URL = "https://agent-speed.ooll.lol/"
+DEFAULT_URL = "https://agent-speed.ooll.lol/?theme=dark"
 DEFAULT_LATEST = REPO_ROOT / "data" / "latest.json"
 
 CHROME_CANDIDATES = [
@@ -133,6 +133,14 @@ def serve_and_shot(
         if latest and latest.is_file():
             shutil.copy2(latest, tmp_dir / "latest.json")
 
+        index = tmp_dir / "index.html"
+        if index.is_file():
+            html = index.read_text(encoding="utf-8")
+            boot = '<script>try{localStorage.setItem("agent-speed-theme","dark");}catch(e){}document.documentElement.setAttribute("data-theme","dark");</script>'
+            if "agent-speed-theme" not in html[:800]:
+                html = html.replace("<head>", "<head>" + boot, 1)
+                index.write_text(html, encoding="utf-8")
+
         class Handler(http.server.SimpleHTTPRequestHandler):
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, directory=str(tmp_dir), **kwargs)
@@ -171,6 +179,11 @@ def shot_url(
     scale: int,
     budget_ms: int,
 ) -> Path:
+    from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+    parts = urlparse(url)
+    q = dict(parse_qsl(parts.query, keep_blank_values=True))
+    q.setdefault("theme", "dark")
+    url = urlunparse(parts._replace(query=urlencode(q)))
     with tempfile.TemporaryDirectory(prefix="agent-speed-shot-") as tmp:
         raw = Path(tmp) / "raw.png"
         chrome_screenshot(chrome_bin, url, raw, width, height, scale, budget_ms)
