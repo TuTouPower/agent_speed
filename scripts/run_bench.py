@@ -26,6 +26,7 @@ from agent_speed.models import GridCell, CallRecord
 from agent_speed.harness import get_harness
 from agent_speed.scheduler import QueueScheduler
 from agent_speed.collector import append_result_record
+from agent_speed.report import generate_latest_json
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -116,6 +117,11 @@ def main(argv: list[str] | None = None) -> int:
 
     success_cnt = sum(1 for r in records if r.status == "success")
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
+
+    # 测速完成后自动刷新 latest.json 报告
+    latest_path = repo_root / "latest.json"
+    rows = generate_latest_json(out_path, latest_path)
+    print(f"Auto-generated latest.json ({len(rows)} models on leaderboard)")
     return 0
 
 
