@@ -48,7 +48,7 @@ def generate_latest_json(
     - 输出 token < 500 或失败的调用无效；
     - 对方账单输入 token < 切片 cl100k 一半的格子不上站；
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
-    - 中位数由最近 2 次有效成功计算；
+    - 中位数由最近 2 次有效成功计算（含 wall 秒，三位小数）；
     - 按端到端 TPS 降序覆盖写 latest.json。
     """
     jsonl_path = Path(results_jsonl)
@@ -115,6 +115,9 @@ def generate_latest_json(
 
         in_toks_res = round(float(in_toks_median), 1) if in_toks_list else None
 
+        wall_list = [r["wall"] for r in used if r.get("wall") is not None]
+        wall_median = round(float(statistics.median(wall_list)), 3) if wall_list else None
+
         # batch_id：最近一次成功所属 batch（兼容字段；页面可不展示）
         latest_batch_id = used[-1].get("batch_id")
 
@@ -128,6 +131,7 @@ def generate_latest_json(
             "e2e_tps": e2e_median,
             "gen_tps": gen_median,
             "ttft": ttft_median,
+            "wall": wall_median,
             "out_tokens": out_toks_median,
             "in_tokens": in_toks_res,
             "batch_id": latest_batch_id,
