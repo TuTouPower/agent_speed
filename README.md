@@ -97,3 +97,15 @@ pytest tests -v
     - 调度采集规范：[`docs/specs/collector_scheduler.md`](docs/specs/collector_scheduler.md)
     - 上站报告规范：[`docs/specs/latest_json_report.md`](docs/specs/latest_json_report.md)
     - 公开仓库规范：[`docs/specs/public_repo_release.md`](docs/specs/public_repo_release.md)
+
+## 公开榜单自动部署（本地）
+
+静态站在 `web/`，数据在仓库根目录 `latest.json`。Cloudflare Pages 项目默认 `agent-speed`。
+
+1. 复制 `.env.example` 为 `.env`，填入 Cloudflare 凭据（`.env` 已在 `.gitignore`，不会进仓库）。
+2. 一次性安装 hook：`./scripts/install_git_hooks.sh`
+3. 之后每次 `git push`：若本次推送包含对 `latest.json` 的变更，会先执行 `scripts/deploy_pages.sh`，成功后再推送；失败则中止 push。
+4. 也可手动部署：`./scripts/deploy_pages.sh`
+
+凭据支持 `CLOUDFLARE_API_TOKEN`（推荐，权限收窄到 Pages），或 `CLOUDFLARE_API_KEY` + `CLOUDFLARE_EMAIL`；另需 `CLOUDFLARE_ACCOUNT_ID`。
+
