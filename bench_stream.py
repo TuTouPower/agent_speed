@@ -188,7 +188,7 @@ def main(argv: list[str]) -> int:
     ap = argparse.ArgumentParser(description="流式重测 wall/TTFT/token/token-s")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--groups", default="")
-    ap.add_argument("--tiers", default="short,medium,long")
+    ap.add_argument("--tiers", default="long")
     ap.add_argument("--reps", type=int, default=3)
     ap.add_argument("--timeout-sec", type=int, default=600)
     ap.add_argument("--workers", type=int, default=0)

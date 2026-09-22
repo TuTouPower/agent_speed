@@ -50,12 +50,23 @@ MATRIX = [
     {"id": "gm-high", "channel": "opencode", "model": "cpa/gemini-3.8-flash", "effort": "high"},
     {"id": "g45-high", "channel": "grok", "model": "grok-4.5", "effort": "high"},
     {"id": "g46-xhigh", "channel": "grok", "model": "grok-4.6", "effort": "xhigh"},
+    {"id": "g47-xhigh", "channel": "grok", "model": "grok-4.7", "effort": "xhigh"},
+    {"id": "g47f-high", "channel": "grok", "model": "grok-4.7-build-fast", "effort": "high"},
+    {"id": "g47f-xhigh", "channel": "grok", "model": "grok-4.7-build-fast", "effort": "xhigh"},
     {"id": "luna-high", "channel": "codex", "model": "gpt-5.6-luna", "effort": "high"},
     {"id": "luna-max", "channel": "codex", "model": "gpt-5.6-luna", "effort": "max"},
     {"id": "astra-high", "channel": "codex", "model": "gpt-6-astra", "effort": "high"},
     # 官方直连（key/URL 经 OPENCODE_CONFIG 临时配置，不进仓库，见 README）
     {"id": "dsoff-high", "channel": "opencode", "model": "ds-off/deepseek-flash", "effort": "high"},
     {"id": "dsoff-max", "channel": "opencode", "model": "ds-off/deepseek-flash", "effort": "max"},
+    # kimi 经工具读文件（argv 塞不下 1MB；effort 取全局 [thinking] 配置，见 bench_ctx 校验）
+    {"id": "k3-high", "channel": "kimi", "model": "kimi-code/k3", "effort": "high"},
+    {"id": "k3-max", "channel": "kimi", "model": "kimi-code/k3", "effort": "max"},
+    {"id": "k28-high", "channel": "kimi", "model": "kimi-code/kimi-for-coding", "effort": "high"},
+    {"id": "k28-max", "channel": "kimi", "model": "kimi-code/kimi-for-coding", "effort": "max"},
+    # mimo (opencode-go)
+    {"id": "mf-high", "channel": "opencode", "model": "opencode-go/mimo-v2.6-flash", "effort": "high"},
+    {"id": "mp-high", "channel": "opencode", "model": "opencode-go/mimo-v2.6-pro", "effort": "high"},
 ]
 
 TIERS = {
@@ -268,7 +279,7 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--smoke", action="store_true", help="第 1 组 x short x 1 次冒烟")
     ap.add_argument("--list", action="store_true", help="打印矩阵")
     ap.add_argument("--groups", default="", help="逗号分隔的 group id 子集")
-    ap.add_argument("--tiers", default="short,medium,long", help="档位子集")
+    ap.add_argument("--tiers", default="long", help="档位子集（short/medium 已默认关闭，默认仅 long）")
     ap.add_argument("--reps", type=int, default=3)
     ap.add_argument("--timeout-sec", type=int, default=600)
     ap.add_argument("--gap-sec", type=float, default=5.0, help="仅串行模式有效")
