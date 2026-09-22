@@ -36,6 +36,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parent if (HERE.parent / "prompts").exists() else HERE
 sys.path.insert(0, str(HERE))
 from bench_speed import MATRIX, TIERS, load_prompt, find_bin  # noqa: E402
 
@@ -220,7 +221,7 @@ def main(argv: list[str]) -> int:
         return 0
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    run_dir = Path(args.out).resolve() if args.out else (HERE / "runs" / f"stream-{stamp}")
+    run_dir = Path(args.out).resolve() if args.out else (REPO_ROOT / "runs" / f"stream-{stamp}")
     events_dir = run_dir / "events"
     events_dir.mkdir(parents=True, exist_ok=True)
     work_root = run_dir / "work"

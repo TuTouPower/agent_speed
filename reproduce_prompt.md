@@ -21,14 +21,14 @@
 共同纪律：每个任务建一个空目录当 cwd、只读运行、timeout 600s；stdout 必须 pipe 逐行读，每行记 `(monotonic - t0, 原文)`，wall 取进程退出时刻；stderr 重定向到文件只留尾 500 字。
 
 - opencode：
-  `opencode run --format json --dir <cwd> --variant <effort> -m <model> "<prompt>"`
-  stdout 是 JSONL。TTFT = 首个 `{"type":"text"}` 行到达时刻。正文 = 所有 `type=text` 的 `part.text` 拼接。token = `type=step-finish` 的 `part.tokens.{input,output,reasoning}` + `part.cost`。srv 窗口 = 同类 text 事件 `part.time.end - part.time.start`（毫秒转秒），tps_srv = `output / srv窗口`。
+    `opencode run --format json --dir <cwd> --variant <effort> -m <model> "<prompt>"`
+    stdout 是 JSONL。TTFT = 首个 `{"type":"text"}` 行到达时刻。正文 = 所有 `type=text` 的 `part.text` 拼接。token = `type=step-finish` 的 `part.tokens.{input,output,reasoning}` + `part.cost`。srv 窗口 = 同类 text 事件 `part.time.end - part.time.start`（毫秒转秒），tps_srv = `output / srv窗口`。
 - grok：先把 prompt 写文件 `prompt.md`，然后
-  `grok --output-format streaming-messages-json --include-partial-messages -m <model> --effort <effort> --always-approve --cwd <cwd> --prompt-file prompt.md`
-  TTFT = 首个 `stream_event/content_block_delta/text_delta` 到达时刻，尾时刻 = 末个 text_delta。正文 = 全量 `result` 字段（无则拼 deltas）。token = `message_delta.usage.{output_tokens,input_tokens}`（终值以 `result.usage` 为准）。tps_stream = `output / (尾-首)`，tps_srv = `output / (result.duration_api_ms/1000)`。
+    `grok --output-format streaming-messages-json --include-partial-messages -m <model> --effort <effort> --always-approve --cwd <cwd> --prompt-file prompt.md`
+    TTFT = 首个 `stream_event/content_block_delta/text_delta` 到达时刻，尾时刻 = 末个 text_delta。正文 = 全量 `result` 字段（无则拼 deltas）。token = `message_delta.usage.{output_tokens,input_tokens}`（终值以 `result.usage` 为准）。tps_stream = `output / (尾-首)`，tps_srv = `output / (result.duration_api_ms/1000)`。
 - codex：prompt 走 stdin 管道：
-  `codex exec --json --skip-git-repo-check --sandbox read-only -C <cwd> -c 'model_reasoning_effort="<effort>"' -m <model> -`
-  TTFT = 首个 `item.completed`（带 text）到达时刻。正文 = 该 text。token = `turn.completed.usage.{output_tokens,input_tokens,reasoning_output_tokens}`。无服务端窗口，tps 只能 `output / wall`，记 `e2e*`。
+    `codex exec --json --skip-git-repo-check --sandbox read-only -C <cwd> -c 'model_reasoning_effort="<effort>"' -m <model> -`
+    TTFT = 首个 `item.completed`（带 text）到达时刻。正文 = 该 text。token = `turn.completed.usage.{output_tokens,input_tokens,reasoning_output_tokens}`。无服务端窗口，tps 只能 `output / wall`，记 `e2e*`。
 
 token 通用兜底（事件字段缺失时）：对每行原文正则 `"output_tokens|completion_tokens":(\d+)`、`"input_tokens|prompt_tokens":(\d+)`、`"reasoning_tokens":(\d+)`，最后一次命中为准。chars/s 恒可算（`len(正文)/wall`）。
 

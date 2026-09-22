@@ -10,15 +10,15 @@
 
 ### 矩阵
 
-| id | 通道 | `-m` | 强度 | 透传 |
-|----|------|------|------|------|
-| ds-high / ds-max | opencode | `opencode-go/deepseek-v4.1-flash` | high / max | `--variant` |
-| mu-high / mu-xhigh | opencode | `opencode-go/muse-spark-1.3-contributor` | high / xhigh | `--variant` |
-| gm-high | opencode | `cpa/gemini-3.8-flash` | high | `--variant` |
-| g45-high | grok | `grok-4.5` | high | `--effort`（直调二进制） |
-| g46-xhigh | grok | `grok-4.6` | xhigh | `--effort`（直调二进制） |
-| luna-high / luna-max | codex | `gpt-5.6-luna` | high / max | `-c model_reasoning_effort`（直调，直传 max） |
-| astra-high | codex | `gpt-6-astra` | high | `-c model_reasoning_effort`（直调） |
+|id|通道|`-m`|强度|透传|
+|---|---|---|---|---|
+|ds-high / ds-max|opencode|`opencode-go/deepseek-v4.1-flash`|high / max|`--variant`|
+|mu-high / mu-xhigh|opencode|`opencode-go/muse-spark-1.3-contributor`|high / xhigh|`--variant`|
+|gm-high|opencode|`cpa/gemini-3.8-flash`|high|`--variant`|
+|g45-high|grok|`grok-4.5`|high|`--effort`（直调二进制）|
+|g46-xhigh|grok|`grok-4.6`|xhigh|`--effort`（直调二进制）|
+|luna-high / luna-max|codex|`gpt-5.6-luna`|high / max|`-c model_reasoning_effort`（直调，直传 max）|
+|astra-high|codex|`gpt-6-astra`|high|`-c model_reasoning_effort`（直调）|
 
 ### 与 call_agents 的偏离（有意）
 
@@ -36,15 +36,18 @@ OPENCODE_CONFIG=/tmp/oc_ds.jsonc python3 bench_stream.py --only "dsoff-high:shor
 ### 用法
 
 ```bash
-cd 本地私有目录
-python3 bench_speed.py --list                                  # 看矩阵
-python3 bench_speed.py --dry-run                               # 打印 90 个任务，不调用
-python3 bench_speed.py --step0                                 # 每组 1 次最小 prompt，连通性验收
-python3 bench_speed.py --smoke                                 # 第 1 组 x short x 1 次冒烟
-nohup python3 bench_speed.py > runs/manual_$(date +%m%d-%H%M).log 2>&1 &   # 全量后台跑（默认 90 并发）
-python3 bench_speed.py --workers 1                                   # 严格串行
-python3 bench_speed.py --workers 10                                  # 限 10 并发
-python3 bench_speed.py --groups ds-high,gm-high --tiers short --reps 2     # 子集
+python3 src/bench_speed.py --list                                  # 看矩阵
+python3 src/bench_speed.py --dry-run                               # 打印任务列表，不调用
+python3 src/bench_speed.py --step0                                 # 每组 1 次最小 prompt，连通性验收
+python3 src/bench_speed.py --smoke                                 # 第 1 组 x short x 1 次冒烟
+nohup python3 src/bench_speed.py > runs/manual_$(date +%m%d-%H%M).log 2>&1 &   # 全量后台跑
+python3 src/bench_speed.py --workers 1                             # 严格串行
+python3 src/bench_speed.py --workers 10                            # 限 10 并发
+python3 src/bench_speed.py --groups ds-high,gm-high --tiers short --reps 2     # 子集
+
+# 300K 超长上下文基准
+python3 src/bench_ctx.py --dry-run
+python3 src/bench_ctx.py --mimo                                    # 测试 mimo 2.6
 ```
 
 ### 方法
@@ -59,3 +62,18 @@ python3 bench_speed.py --groups ds-high,gm-high --tiers short --reps 2     # 子
 
 - `opencode-go/muse` 的 `xhigh` variant 若被服务端忽略（等价默认），step0 文本长度会暴露，届时在 summary 标注，不重跑。
 - `agents_lib.run_grok` 缺 effort 透传：上游补齐后可切回 `call_agents.py` 统一调用。
+
+## 入口
+
+- Agent 规则：[`AGENTS.md`](AGENTS.md)
+- 模板用法（消费仓 agent）：[`.repo_template/docs/usage.md`](.repo_template/docs/usage.md)
+- 项目约定：[`docs/blueprint/conventions.md`](docs/blueprint/conventions.md)
+- 测试方法：[`docs/blueprint/testing.md`](docs/blueprint/testing.md)
+- 需求契约（待实现公开站）：[`docs/specs/public_site_spec.md`](docs/specs/public_site_spec.md)
+
+```bash
+python3 .repo_template/scripts/task.py --help
+python3 .repo_template/scripts/pending.py --help
+python3 .repo_template/scripts/findings.py --help
+python3 .repo_template/scripts/spikes.py --help
+```

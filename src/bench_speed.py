@@ -40,7 +40,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PROMPTS_DIR = HERE / "prompts"
+REPO_ROOT = HERE.parent if (HERE.parent / "prompts").exists() else HERE
+PROMPTS_DIR = REPO_ROOT / "prompts"
 
 MATRIX = [
     {"id": "ds-high", "channel": "opencode", "model": "opencode-go/deepseek-v4.1-flash", "effort": "high"},
@@ -324,7 +325,7 @@ def main(argv: list[str]) -> int:
         return 0
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    run_dir = Path(args.out) if args.out else (HERE / "runs" / stamp)
+    run_dir = Path(args.out) if args.out else (REPO_ROOT / "runs" / stamp)
     work_root = run_dir / "work"
     work_root.mkdir(parents=True, exist_ok=True)
 

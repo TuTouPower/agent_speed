@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+REPO_ROOT = HERE.parent if (HERE.parent / "fixtures").exists() else HERE
 sys.path.insert(0, str(HERE))
 from bench_speed import MATRIX, find_bin  # noqa: E402
 from bench_stream import run_stream  # noqa: E402
@@ -185,9 +186,9 @@ ALIAS_MAP: dict[str, list[str]] = {
 
 
 def main(argv: list[str]) -> int:
-    default_fixture = HERE / "fixtures" / "input_300k.txt"
-    default_task = HERE / "fixtures" / "task_ctx.md"
-    default_chunks = HERE / "fixtures" / "chunks_300k"
+    default_fixture = REPO_ROOT / "fixtures" / "input_300k.txt"
+    default_task = REPO_ROOT / "fixtures" / "task_ctx.md"
+    default_chunks = REPO_ROOT / "fixtures" / "chunks_300k"
 
     ap = argparse.ArgumentParser(description="长输入档基准")
     ap.add_argument("--fixture", default=str(default_fixture),
@@ -249,7 +250,7 @@ def main(argv: list[str]) -> int:
         return 0
 
     stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    run_dir = Path(args.out).resolve() if args.out else (HERE / "runs" / f"ctx-{stamp}")
+    run_dir = Path(args.out).resolve() if args.out else (REPO_ROOT / "runs" / f"ctx-{stamp}")
     events_dir = run_dir / "events"
     events_dir.mkdir(parents=True, exist_ok=True)
     work_root = run_dir / "work"
