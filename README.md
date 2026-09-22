@@ -87,3 +87,12 @@ python3 report.py
 pytest .repo_template/tests -q -m contract
 pytest tests -v
 ```
+
+## 维护与运维指南
+
+- **日常操作指南**：单模型增量重测、新模型热插拔接入、白名单过滤参数组合与故障排查详见 [`docs/guides/benchmark_operations.md`](docs/guides/benchmark_operations.md)。
+- **核心契约规范**：
+    - 语料切片规范：[`docs/specs/corpus_django_200k.md`](docs/specs/corpus_django_200k.md)
+    - 调度采集规范：[`docs/specs/collector_scheduler.md`](docs/specs/collector_scheduler.md)
+    - 上站报告规范：[`docs/specs/latest_json_report.md`](docs/specs/latest_json_report.md)
+    - 公开仓库规范：[`docs/specs/public_repo_release.md`](docs/specs/public_repo_release.md)

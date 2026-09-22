@@ -18,6 +18,6 @@
 - `latest.json`：公开展示站聚合汇总表（覆盖写）。
 - `tests/`：自动化测试套件。
 - `docs/`：项目规范与知识库。
-    - `docs/plan.md`：评测系统产品规划与整体方案。
     - `docs/specs/`：生效需求级规范（语料、调度、上站报告、发布）。
+    - `docs/guides/`：实操运维指南（单模型重测、新模型热插拔、批量测试）。
 - `.repo_template/`：标准 Agent 开发工具链（task / pending / findings / spikes 状态机与工作流）。
