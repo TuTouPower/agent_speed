@@ -67,6 +67,8 @@ MATRIX = [
     # mimo (opencode-go)
     {"id": "mf-high", "channel": "opencode", "model": "opencode-go/mimo-v2.6-flash", "effort": "high"},
     {"id": "mp-high", "channel": "opencode", "model": "opencode-go/mimo-v2.6-pro", "effort": "high"},
+    # stepfun (阶跃星辰)
+    {"id": "step5-high", "channel": "opencode", "model": "stepfun/step-5-preview", "effort": "high"},
 ]
 
 TIERS = {

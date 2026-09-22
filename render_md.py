@@ -94,6 +94,8 @@ def parse_markdown_to_html(md_text: str) -> str:
                             badge_cls = "badge-cyan"
                         elif "kimi" in c_low:
                             badge_cls = "badge-green"
+                        elif "step" in c_low or "阶跃" in c_low:
+                            badge_cls = "badge-orange"
                         elif "codex" in c_low:
                             badge_cls = "badge-gray"
                         val = f"<span class=\"badge {badge_cls}\">{c}</span>"
@@ -334,6 +336,7 @@ tr:nth-child(even) {
 .badge-purple { background: rgba(187, 128, 255, 0.15); color: #bc8cff; border: 1px solid rgba(187, 128, 255, 0.3); }
 .badge-cyan { background: rgba(57, 197, 207, 0.15); color: #39c5cf; border: 1px solid rgba(57, 197, 207, 0.3); }
 .badge-green { background: rgba(63, 185, 80, 0.15); color: #3fb950; border: 1px solid rgba(63, 185, 80, 0.3); }
+.badge-orange { background: rgba(240, 136, 62, 0.15); color: #f0883e; border: 1px solid rgba(240, 136, 62, 0.3); }
 .badge-gray { background: rgba(139, 148, 158, 0.15); color: #8b949e; border: 1px solid rgba(139, 148, 158, 0.3); }
 .badge-default { background: rgba(255, 255, 255, 0.08); color: #c9d1d9; }
 

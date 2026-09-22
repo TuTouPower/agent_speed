@@ -177,6 +177,10 @@ ALIAS_MAP: dict[str, list[str]] = {
     "g47f": ["g47f-high", "g47f-xhigh"],
     "g47-fast": ["g47f-high", "g47f-xhigh"],
     "fast": ["g47f-high", "g47f-xhigh"],
+    "stepfun": ["step5-high"],
+    "step-5": ["step5-high"],
+    "step5": ["step5-high"],
+    "step-5-preview": ["step5-high"],
 }
 
 
