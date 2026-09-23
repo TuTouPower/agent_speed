@@ -163,11 +163,12 @@ def test_config_contains_mimo_code_cells():
     from agent_speed.config import load_benchmark_config
     cfg = load_benchmark_config()
     mimo_cells = [c for c in cfg.cells if c.harness == "mimo-code"]
-    assert len(mimo_cells) == 2
+    assert len(mimo_cells) == 3
 
     by_model = {c.model: c for c in mimo_cells}
     assert by_model["mimo-v2.6-flash"].resolved_cli_model == "xiaomi/mimo-v2.6-flash"
     assert by_model["mimo-v2.6-pro"].resolved_cli_model == "xiaomi/mimo-v2.6-pro"
+    assert by_model["mimo-v2.6-pro-ultraspeed"].resolved_cli_model == "xiaomi/mimo-v2.6-pro-ultraspeed"
 
     for c in mimo_cells:
         assert c.queue is not None
