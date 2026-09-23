@@ -420,3 +420,69 @@ def parse_antigravity_metrics(
         source = "antigravity:last_delta_minus_ttft"
 
     return ttft, decode_window, source, in_toks, out_toks, used_tools
+
+
+def parse_mcode_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
+    """minimax-code (mcode exec --output-format stream-json) 指标解析。
+
+    - TTFT: 首个 contentDelta 到达时刻（含 reasoning）
+    - 生成窗口: 首个 agent_message 增量到末个 agent_message 增量
+    - 来源: mcode:message_window
+    - usage 取 turn.completed / exec.completed 的 inputTokens / outputTokens
+    - used_tools: item.type 含 tool 标记
+    """
+    ttft: float | None = None
+    first_msg_t: float | None = None
+    last_msg_t: float | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+    used_tools: bool = False
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(o, dict):
+            continue
+
+        item = o.get("item") if isinstance(o.get("item"), dict) else {}
+        itype = item.get("type") if isinstance(item.get("type"), str) else ""
+        delta = item.get("contentDelta") if isinstance(item.get("contentDelta"), str) else ""
+
+        if "tool" in itype:
+            used_tools = True
+
+        if delta:
+            if ttft is None:
+                ttft = t
+            if itype == "agent_message":
+                if first_msg_t is None:
+                    first_msg_t = t
+                last_msg_t = t
+
+        usage = o.get("usage")
+        if isinstance(usage, dict):
+            if usage.get("inputTokens") is not None:
+                in_toks = usage["inputTokens"]
+            if usage.get("outputTokens") is not None:
+                out_toks = usage["outputTokens"]
+
+    decode_window: float | None = None
+    source: str | None = None
+    if first_msg_t is not None and last_msg_t is not None and last_msg_t >= first_msg_t:
+        decode_window = round(last_msg_t - first_msg_t, 3)
+        source = "mcode:message_window"
+
+    if in_toks is None or out_toks is None:
+        for _, line in lines:
+            m_in = RE_IN.search(line)
+            if m_in and in_toks is None:
+                in_toks = int(m_in.group(1))
+            m_out = RE_OUT.search(line)
+            if m_out and out_toks is None:
+                out_toks = int(m_out.group(1))
+
+    return ttft, decode_window, source, in_toks, out_toks, used_tools
