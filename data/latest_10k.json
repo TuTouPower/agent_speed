@@ -1,6 +1,86 @@
 [
   {
     "scenario": "10k",
+    "model": "mimo-v2.6-pro-ultraspeed",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 2,
+    "e2e_tps": 249.24,
+    "gen_tps": 341.84,
+    "ttft": 18.968,
+    "wall": 19.027,
+    "out_tokens": 4778.0,
+    "in_tokens": 41112.0,
+    "batch_id": "e780316478e3",
+    "sample_times": [
+      "2026-09-23T11:41:50.279997+08:00",
+      "2026-09-23T11:42:05.885599+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "deepseek-v4.1-flash",
+    "effort": "high",
+    "source": "deepseek-official",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 146.98,
+    "gen_tps": 222.91,
+    "ttft": 37.248,
+    "wall": 37.437,
+    "out_tokens": 5493.0,
+    "in_tokens": 14094.0,
+    "batch_id": "367ef29ff99e",
+    "sample_times": [
+      "2026-09-23T11:00:39.536761+08:00",
+      "2026-09-23T11:01:16.092072+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "deepseek-v4.1-flash",
+    "effort": "high",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 124.03,
+    "gen_tps": 216.39,
+    "ttft": 30.494,
+    "wall": 30.755,
+    "out_tokens": 3817.5,
+    "in_tokens": 22378.0,
+    "batch_id": "6c2d2183d1fb",
+    "sample_times": [
+      "2026-09-23T11:00:39.535918+08:00",
+      "2026-09-23T11:01:08.866969+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "grok-4.7-fast",
+    "effort": "high",
+    "source": "grok-build",
+    "harness": "grok-build",
+    "valid_reps": 2,
+    "e2e_tps": 95.59,
+    "gen_tps": 99.73,
+    "ttft": 3.632,
+    "wall": 240.065,
+    "out_tokens": 22586.5,
+    "in_tokens": 55879.0,
+    "batch_id": "7e88ac71163d",
+    "sample_times": [
+      "2026-09-23T11:09:50.149659+08:00",
+      "2026-09-23T11:12:28.053785+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
     "model": "MiniMax-M3",
     "effort": null,
     "source": "minimax-official",
@@ -17,7 +97,87 @@
       "2026-09-23T10:02:58.757587+08:00",
       "2026-09-23T10:03:31.200162+08:00"
     ],
-    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "grok-4.7",
+    "effort": "high",
+    "source": "grok-build",
+    "harness": "grok-build",
+    "valid_reps": 2,
+    "e2e_tps": 57.58,
+    "gen_tps": 59.79,
+    "ttft": 4.515,
+    "wall": 290.661,
+    "out_tokens": 16716.5,
+    "in_tokens": 89717.5,
+    "batch_id": "cda89b1dc111",
+    "sample_times": [
+      "2026-09-23T11:16:53.401064+08:00",
+      "2026-09-23T11:16:53.401125+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-luna",
+    "effort": "max",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 2,
+    "e2e_tps": 48.31,
+    "gen_tps": null,
+    "ttft": 101.236,
+    "wall": 109.649,
+    "out_tokens": 5299.5,
+    "in_tokens": 27800.5,
+    "batch_id": "26398426f526",
+    "sample_times": [
+      "2026-09-23T11:34:04.126040+08:00",
+      "2026-09-23T11:35:56.236755+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "muse-spark-1.3-contributor",
+    "effort": "high",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 45.98,
+    "gen_tps": 61.22,
+    "ttft": 71.46,
+    "wall": 71.716,
+    "out_tokens": 3014.5,
+    "in_tokens": 21034.5,
+    "batch_id": "18d01b4216a0",
+    "sample_times": [
+      "2026-09-23T11:04:56.977644+08:00",
+      "2026-09-23T11:06:15.213629+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-luna",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 2,
+    "e2e_tps": 44.86,
+    "gen_tps": null,
+    "ttft": 67.008,
+    "wall": 75.114,
+    "out_tokens": 3368.0,
+    "in_tokens": 27804.5,
+    "batch_id": "a65952db9c0f",
+    "sample_times": [
+      "2026-09-23T11:31:30.895180+08:00",
+      "2026-09-23T11:32:52.286229+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
   },
   {
     "scenario": "10k",
@@ -37,7 +197,87 @@
       "2026-09-23T10:05:14.114915+08:00",
       "2026-09-23T10:06:40.610344+08:00"
     ],
-    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-flash",
+    "effort": null,
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 33.13,
+    "gen_tps": 43.2,
+    "ttft": 154.969,
+    "wall": 155.229,
+    "out_tokens": 5047.0,
+    "in_tokens": 13023.5,
+    "batch_id": "5602e0bf2c67",
+    "sample_times": [
+      "2026-09-23T11:01:41.050520+08:00",
+      "2026-09-23T11:02:41.895052+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-sol",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 2,
+    "e2e_tps": 32.46,
+    "gen_tps": null,
+    "ttft": 61.837,
+    "wall": 68.448,
+    "out_tokens": 2232.0,
+    "in_tokens": 27931.0,
+    "batch_id": "6022595491f9",
+    "sample_times": [
+      "2026-09-23T11:37:43.430081+08:00",
+      "2026-09-23T11:38:47.487886+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 2,
+    "e2e_tps": 30.33,
+    "gen_tps": null,
+    "ttft": 162.049,
+    "wall": 169.389,
+    "out_tokens": 5137.0,
+    "in_tokens": 28430.5,
+    "batch_id": "32c0649da7f9",
+    "sample_times": [
+      "2026-09-23T11:25:52.109153+08:00",
+      "2026-09-23T11:28:43.680629+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "muse-spark-1.3-contributor",
+    "effort": "xhigh",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 28.42,
+    "gen_tps": 47.83,
+    "ttft": 85.777,
+    "wall": 86.041,
+    "out_tokens": 2406.0,
+    "in_tokens": 10472.0,
+    "batch_id": "422ae186478a",
+    "sample_times": [
+      "2026-09-23T11:07:04.599372+08:00",
+      "2026-09-23T11:08:09.624048+08:00"
+    ],
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
   },
   {
     "scenario": "10k",
@@ -57,6 +297,6 @@
       "2026-09-23T10:08:03.090618+08:00",
       "2026-09-23T10:11:05.469894+08:00"
     ],
-    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+    "generated_at": "2026-09-23T11:43:26.610365+08:00"
   }
 ]
