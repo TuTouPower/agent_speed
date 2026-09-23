@@ -40,14 +40,7 @@ cells:
     effort: "high"
     queue: "antigravity"
 
-  # MiMo 不支持设置思考强度（只支持 auto），effort 设为 null，CLI 不传 --variant
-  - model: "mimo-v2.6-pro"
-    alias: "opencode-go/mimo-v2.6-pro"
-    source: "opencode-go"
-    harness: "opencode"
-    effort: null
-    queue: "opencode-go"
-
+  # MiMo 通过 OpenCode 调用的话不支持设置思考强度（只支持 auto），effort 设为 null，CLI 不传 --variant
   - model: "mimo-v2.6-flash"
     alias: "opencode-go/mimo-v2.6-flash"
     source: "opencode-go"
@@ -55,8 +48,7 @@ cells:
     effort: null
     queue: "opencode-go"
 
-  # MiMo 官方直连经 mimo-code CLI（xiaomi provider，需本机 ~/.local/share/mimocode/auth.json 有 key）
-  # mimo-code 支持 --variant 设置思考强度，与 opencode 调小米只走 auto 不同
+  # MiMo 官方直连经 mimo-code CLI，支持 --variant 设置思考强度，与 opencode 调小米只走 auto 不同
   - model: "mimo-v2.6-flash"
     alias: "xiaomi/mimo-v2.6-flash"
     source: "mimo-official"
@@ -105,18 +97,6 @@ cells:
     harness: "grok-build"
     effort: "high"
     queue: "grok-build"
-
-  - model: "gpt-5.6-luna"
-    source: "codex"
-    harness: "codex"
-    effort: "high"
-    queue: "codex"
-
-  - model: "gpt-5.6-luna"
-    source: "codex"
-    harness: "codex"
-    effort: "max"
-    queue: "codex"
 
   - model: "gpt-6-astra"
     source: "codex"
