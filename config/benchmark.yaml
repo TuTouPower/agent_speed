@@ -55,6 +55,22 @@ cells:
     effort: null
     queue: "opencode-go"
 
+  # MiMo 官方直连经 mimo-code CLI（xiaomi provider，需本机 ~/.local/share/mimocode/auth.json 有 key）
+  # mimo-code 支持 --variant 设置思考强度，与 opencode 调小米只走 auto 不同
+  - model: "mimo-v2.6-flash"
+    alias: "xiaomi/mimo-v2.6-flash"
+    source: "mimo-official"
+    harness: "mimo-code"
+    effort: "high"
+    queue: "mimo-official"
+
+  - model: "mimo-v2.6-pro"
+    alias: "xiaomi/mimo-v2.6-pro"
+    source: "mimo-official"
+    harness: "mimo-code"
+    effort: "high"
+    queue: "mimo-official"
+
   # MiniMax-M3 仅支持自适应思考（adaptive/enabled/disabled），不支持细分思考强度，effort 设为 null，CLI 不传 --variant
   - model: "MiniMax-M3"
     alias: "minimax-official/MiniMax-M3"

@@ -100,8 +100,9 @@ def test_load_benchmark_config_file():
     assert ds_off.alias == "deepseek-official/deepseek-flash"
     assert ds_off.resolved_cli_model == "deepseek-official/deepseek-flash"
 
-    # 验证 MiMo 特殊处理：effort 为 None
-    mimo_cells = [c for c in cfg.cells if "mimo" in c.model]
+    # 验证 MiMo 特殊处理：经 opencode 调小米只走 auto，effort 为 None；
+    # mimo-code harness 支持 --variant，不受此限（已实测 xiaomi 接受 high）
+    mimo_cells = [c for c in cfg.cells if "mimo" in c.model and c.harness == "opencode"]
     assert bool(mimo_cells)
     for m in mimo_cells:
         assert m.effort is None

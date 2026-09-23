@@ -93,6 +93,20 @@ def parse_opencode_metrics(
     return ttft, decode_window, source, in_toks, out_toks, used_tools
 
 
+def parse_mimo_metrics(
+    lines: list[tuple[float, str]],
+) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
+    """mimo (mimo-code CLI) 指标解析。
+
+    mimo 系 opencode fork，`mimo run --format json` 事件协议与 opencode 一致，
+    直接复用 parse_opencode_metrics，仅把窗口来源标签换成 mimo 前缀。
+    """
+    ttft, decode_window, source, in_toks, out_toks, used_tools = parse_opencode_metrics(lines)
+    if source == "opencode:text_part_time":
+        source = "mimo:text_part_time"
+    return ttft, decode_window, source, in_toks, out_toks, used_tools
+
+
 def parse_grok_metrics(
     lines: list[tuple[float, str]],
 ) -> tuple[float | None, float | None, str | None, int | None, int | None, bool]:
