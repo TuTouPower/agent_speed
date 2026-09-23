@@ -78,11 +78,19 @@ def _required_half(used: list[dict[str, Any]], scenario: str) -> float | None:
 BOARD_SCENARIOS: tuple[str, ...] = ("200k", "10k", "sentence")
 
 
+def matrix_allow_set(cells: list | None) -> set[tuple] | None:
+    """矩阵格集合转 (model, effort, source, harness) 白名单；cells 为 None 时不过滤。"""
+    if cells is None:
+        return None
+    return {(c.model, (c.effort or None), c.source, c.harness) for c in cells}
+
+
 def generate_latest_json(
     results_jsonl: Path | str,
     output_json: Path | str,
     scenario: str | None = "200k",
     _collect_only: bool = False,
+    allowed: set[tuple] | None = None,
 ) -> list[dict[str, Any]]:
     """读 data/results.jsonl 重新生成榜单。
 
@@ -122,13 +130,17 @@ def generate_latest_json(
             if scenario is not None and rec_scenario != scenario:
                 continue
 
+            effort = rec.get("effort", "")
             grid_key = (
                 rec_scenario,
                 rec.get("model", ""),
-                rec.get("effort", ""),
+                (effort or None),
                 rec.get("source", ""),
                 rec.get("harness", ""),
             )
+            # 只收录矩阵内格子：配置已删的模型不再上榜（results 明细保留）。
+            if allowed is not None and grid_key[1:] not in allowed:
+                continue
             grid_records[grid_key].append(rec)
 
     now_iso = datetime.now(timezone.utc).astimezone().isoformat()
@@ -205,17 +217,20 @@ def generate_latest_json(
 def generate_all_boards(
     results_jsonl: Path | str,
     output_path: Path | str,
+    cells: list | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
     """同一份 results.jsonl 写出唯一输出文件：扁平数组，行内 scenario 自描述。
 
     按 200k / 10k / sentence 分档块拼接，各档内按端到端 TPS 降序，
     互不混排，不合成总分，不改写 results.jsonl。
+    cells 给出时只收录矩阵内格子（配置已删模型不上榜，明细保留）。
     """
     out_path = Path(output_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    allowed = matrix_allow_set(cells)
     boards: dict[str, list[dict[str, Any]]] = {}
     for scen in BOARD_SCENARIOS:
-        boards[scen] = generate_latest_json(results_jsonl, out_path, scenario=scen, _collect_only=True)
+        boards[scen] = generate_latest_json(results_jsonl, out_path, scenario=scen, _collect_only=True, allowed=allowed)
     flat = boards["200k"] + boards["10k"] + boards["sentence"]
     out_path.write_text(json.dumps(flat, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return boards

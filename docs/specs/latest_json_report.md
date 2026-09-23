@@ -41,7 +41,7 @@
 
 ## 5. 输出格式与契约（`data/latest.json`）
 
-- **文件操作**：全量覆盖写入 `data/latest.json`，全仓唯一榜单输出文件。
+- **文件操作**：全量覆盖写入 `data/latest.json`，全仓唯一榜单输出文件；只收录当前 `config/benchmark.yaml` 矩阵内格子（配置已删模型不上榜，`results.jsonl` 明细保留）。
 - **结构契约**：
     - 顶层为扁平数组，行内 `scenario` 自描述，按 200k / 10k / sentence 分档块拼接，各档互不混排。
     - 每个上站网格包含 13 个规定字段：

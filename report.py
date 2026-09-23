@@ -16,6 +16,7 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
+from agent_speed.config import load_benchmark_config
 from agent_speed.report import generate_all_boards
 from agent_speed.board_preview import refresh_board_preview
 
@@ -29,7 +30,7 @@ def main(argv: list[str] | None = None) -> int:
     results_file = Path(args.results)
     out_file = Path(args.out)
 
-    boards = generate_all_boards(results_file, out_file)
+    boards = generate_all_boards(results_file, out_file, cells=load_benchmark_config().cells)
     for scen, rows in boards.items():
         print(f"Generated {len(rows)} rows to {out_file} (scenario={scen})")
     preview = refresh_board_preview(latest=out_file)

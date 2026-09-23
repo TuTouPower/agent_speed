@@ -170,3 +170,31 @@ def test_generate_all_boards_writes_single_latest(tmp_path):
     assert [r["model"] for r in combined] == ["m200", "m10", "msen"]
     assert [r["scenario"] for r in combined] == ["200k", "10k", "sentence"]
     assert combined == boards["200k"] + boards["10k"] + boards["sentence"]
+
+
+def test_board_excludes_removed_matrix_cells(tmp_path):
+    """矩阵已删的格子不上榜（results 明细保留，只过滤榜单）；cells=None 时不过滤。"""
+    from agent_speed.models import GridCell
+    from agent_speed.report import generate_all_boards, generate_latest_json
+
+    jsonl = tmp_path / "results.jsonl"
+    rows = []
+    for model in ("mkeep", "mgone"):
+        for rep, start in enumerate(["2026-09-23T10:00:00+08:00", "2026-09-23T10:01:00+08:00"], start=1):
+            rows.append({"scenario": "200k", "model": model, "effort": "high", "source": "s", "harness": "h",
+                         "rep": rep, "batch_id": "b1", "start_time": start, "wall": 10.0, "ttft": 1.0,
+                         "decode_window": 8.0, "out_tokens": 1000, "in_tokens": 200000, "e2e_tps": 50.0,
+                         "gen_tps": 100.0, "decode_window_source": "x", "cl100k_tokens": 200000,
+                         "status": "success", "exclude_reason": None, "error_summary": None})
+    jsonl.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    keep = GridCell(scenario="200k", model="mkeep", effort="high", source="s", harness="h")
+
+    out1 = tmp_path / "filtered.json"
+    boards = generate_all_boards(jsonl, out1, cells=[keep])
+    got = json.loads(out1.read_text(encoding="utf-8"))
+    assert [r["model"] for r in got] == ["mkeep"]
+    assert boards["10k"] == [] and boards["sentence"] == []
+
+    out2 = tmp_path / "unfiltered.json"
+    generate_latest_json(jsonl, out2, scenario="200k")
+    assert sorted(r["model"] for r in json.loads(out2.read_text(encoding="utf-8"))) == ["mgone", "mkeep"]
