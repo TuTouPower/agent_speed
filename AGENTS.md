@@ -22,7 +22,7 @@
 |`config/`|配置（默认 + 环境覆盖 +`.env.example`）|仅`.env.example` 入库；真值写本地 `.env`|
 |`src/agent_speed/`|核心测速与调度驱动包（models/harness/metrics/scheduler/report）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`tests/`|项目单元测试与契约验证套件|仅在 task 执行期按 spec 修改；debug 复现不得写入|
-|`scripts/`|项目构建与运行脚本（`build_django_corpus.py`、`run_bench.py`）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`scripts/`|项目构建、运行与检测脚本（`build_django_corpus.py`、`run_bench.py`、`check_coverage.py` 等）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`report.py`|公开报告生成脚本（data/results.jsonl → data/latest.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`fixtures/`|评测输入素材与切片元数据（包含 django 切片、manifest、任务副本与 BSD 声明）|只读夹具，改动按 task 流程|
 |`prompts/`|公开评测任务 prompt（`task_200k.md`）|评测基线文件，改动按 task 流程|

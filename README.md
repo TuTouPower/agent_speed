@@ -90,7 +90,15 @@ python3 scripts/run_bench.py --scenario 10k
 python3 scripts/run_bench.py --harnesses opencode --models cpa/gemini-3.8-flash
 ```
 
-### 4. 生成上站汇总报告
+### 4. 检查数据覆盖缺口
+
+检查各档（sentence / 10k / 200k）是否有缺失或未达上站门槛的数据格：
+
+```bash
+python3 scripts/check_coverage.py
+```
+
+### 5. 生成上站汇总报告
 
 由 `data/results.jsonl` 重新生成合一榜单（`data/latest.json`）：
 
@@ -98,7 +106,7 @@ python3 scripts/run_bench.py --harnesses opencode --models cpa/gemini-3.8-flash
 python3 report.py
 ```
 
-### 5. 运行测试套件
+### 6. 运行测试套件
 
 执行项目契约与自动化测试：
 
