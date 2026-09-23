@@ -97,12 +97,12 @@ def generate_latest_json(
     - scenario 为 None 时不过滤（兼容旧调用）；为档位名时只含该档；
     - 唯一输出 `data/latest.json` 为扁平数组（行内 scenario 自描述），各档互不混排，不合成总分；
     - 每个格子跨全部 batch 收集有效成功调用；
-    - 按 start_time 取最近 2 次有效成功；有效次数 < 2 不上站；
+    - 按 start_time 取最近最多 4 次有效成功；有效次数 < 2 不上站；
     - 不再要求同一次 bench / 同一 batch_id 内凑满 2 次；
     - 输出 token < 500 或失败的调用无效；
     - 对方账单输入 token 中位数 < 该记录 cl100k_tokens 一半的格子不上站（等于一半上站）；
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
-    - 中位数由最近 2 次有效成功计算（含 wall 秒，三位小数）；
+    - 中位数由最近最多 4 次有效成功计算（含 wall 秒，三位小数）；
     - 按端到端 TPS 降序覆盖写输出文件；某档无上站行时写 `[]`；不改写 results.jsonl；
       `_collect_only=True` 时只计算返回，不写盘（供合一文件组装）。
     """
@@ -151,11 +151,11 @@ def generate_latest_json(
             continue
 
         valid_calls = [r for r in records if _is_valid_call(r)]
-        # 最近两次有效成功（跨 batch）
+        # 最近最多 4 次有效成功（跨 batch，最少 2 次）
         valid_calls.sort(key=_parse_start)
         if len(valid_calls) < 2:
             continue
-        used = valid_calls[-2:]
+        used = valid_calls[-4:]
 
         in_toks_list = [r["in_tokens"] for r in used if r.get("in_tokens") is not None]
         in_toks_median = statistics.median(in_toks_list) if in_toks_list else 0

@@ -114,14 +114,14 @@ def test_report_pipeline(tmp_path):
 
     by = {r["model"]: r for r in rows}
 
-    # model-a 最近 2 次: 150.0, 91.67 -> 120.835 -> 120.84
-    assert by["model-a"]["valid_reps"] == 2
-    assert by["model-a"]["e2e_tps"] == 120.84
+    # model-a 最近 3 次: 100.0, 150.0, 91.67 -> 中位数 100.0
+    assert by["model-a"]["valid_reps"] == 3
+    assert by["model-a"]["e2e_tps"] == 100.0
     assert by["model-a"]["batch_id"] == "batch_A"
 
-    # model-b 最近 2 次成功: old@08:01 (110) + new@11:00 (120) -> 115
-    assert by["model-b"]["valid_reps"] == 2
-    assert by["model-b"]["e2e_tps"] == 115.0
+    # model-b 最近 3 次成功: old 100 + old@08:01 (110) + new@11:00 (120) -> 中位数 110
+    assert by["model-b"]["valid_reps"] == 3
+    assert by["model-b"]["e2e_tps"] == 110.0
     assert by["model-b"]["batch_id"] == "batch_B_new"
 
     # model-c 短输出丢弃后最近 2: 80, 75 -> 77.5
@@ -133,10 +133,10 @@ def test_report_pipeline(tmp_path):
     assert by["model-e"]["gen_tps"] is None
     assert by["model-e"]["e2e_tps"] == 55.0
 
-    # wall medians (seconds, 3 dp) from same last-2 successes
-    # model-a last2 walls: 8.0, 12.0 -> 10.0
+    # wall medians (seconds, 3 dp) from same last successes
+    # model-a walls: 10.0, 8.0, 12.0 -> 10.0
     assert by["model-a"]["wall"] == 10.0
-    # model-b last2: 10.0 (old@08:01), 10.0 (new@11:00) -> 10.0
+    # model-b walls: 10.0, 10.0, 10.0 -> 10.0
     assert by["model-b"]["wall"] == 10.0
     # model-c last2 (after short drop): 10.0, 12.0 -> 11.0
     assert by["model-c"]["wall"] == 11.0
@@ -198,3 +198,23 @@ def test_board_excludes_removed_matrix_cells(tmp_path):
     out2 = tmp_path / "unfiltered.json"
     generate_latest_json(jsonl, out2, scenario="200k")
     assert sorted(r["model"] for r in json.loads(out2.read_text(encoding="utf-8"))) == ["mgone", "mkeep"]
+
+
+def test_latest_uses_max_four_of_valid(tmp_path):
+    """5 次有效只取最近 4 次算中位数；valid_reps 为实际采用数。"""
+    from agent_speed.report import generate_latest_json
+    jsonl = tmp_path / "r.jsonl"
+    out = tmp_path / "o.json"
+    rows = []
+    for i, e2e in enumerate([10.0, 20.0, 30.0, 40.0, 50.0]):
+        rows.append({"scenario": "200k", "model": "m", "effort": "high", "source": "s", "harness": "h",
+                     "rep": i + 1, "batch_id": "b1", "start_time": f"2026-09-23T10:0{i}:00+08:00",
+                     "wall": 10.0, "ttft": 1.0, "decode_window": 8.0, "out_tokens": 1000,
+                     "in_tokens": 200000, "e2e_tps": e2e, "gen_tps": 100.0,
+                     "decode_window_source": "x", "cl100k_tokens": 200000,
+                     "status": "success", "exclude_reason": None, "error_summary": None})
+    jsonl.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+    got = generate_latest_json(jsonl, out, scenario="200k")
+    assert len(got) == 1
+    assert got[0]["valid_reps"] == 4
+    assert got[0]["e2e_tps"] == 35.0
