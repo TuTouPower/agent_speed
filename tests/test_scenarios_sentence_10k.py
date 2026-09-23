@@ -7,6 +7,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SENTENCE = "请用中文写一篇 800 到 1200 字的短文，说明关系型数据库里的迁移解决什么问题；不要调用工具，不要读写文件，不要输出思考过程。"
 
 
+def _scenarios_cfg():
+    from agent_speed.config import load_benchmark_config
+    return load_benchmark_config().scenarios
+
+
 def _rec(scenario, model="m", effort="high", source="s", harness="opencode",
          start="2026-09-23T10:00:00+08:00", batch="b1", wall=10.0, out=800,
          in_toks=200000, e2e=80.0, gen=90.0, cl100k=200000,
@@ -23,13 +28,14 @@ def _rec(scenario, model="m", effort="high", source="s", harness="opencode",
 
 
 def test_ac001_sentence_inputs():
-    from agent_speed.scenarios import SENTENCE_PROMPT, SENTENCE_CL100K, resolve_scenario_inputs, build_user_message
-    assert SENTENCE_PROMPT == SENTENCE
-    assert SENTENCE_CL100K == 61
+    from agent_speed.scenarios import resolve_scenario_inputs, build_user_message
+    cfg = _scenarios_cfg()
+    assert cfg["sentence"]["prompt_text"] == SENTENCE
+    assert cfg["sentence"]["cl100k_tokens"] == 61
     import tiktoken
     enc = tiktoken.get_encoding("cl100k_base")
-    assert len(enc.encode(SENTENCE_PROMPT)) == 61
-    prompt, fixture_text, fixture_path, cl100k = resolve_scenario_inputs("sentence")
+    assert len(enc.encode(SENTENCE)) == 61
+    prompt, fixture_text, fixture_path, cl100k = resolve_scenario_inputs("sentence", scenarios_cfg=cfg)
     assert prompt == SENTENCE
     assert fixture_text == ""
     assert cl100k == 61
@@ -41,14 +47,14 @@ def test_ac001_sentence_inputs():
     from agent_speed.models import GridCell
     from agent_speed.scenarios import apply_scenario_to_cell
     cell = GridCell(scenario="200k", model="m", effort="high", source="s", harness="opencode", queue="q")
-    cell2 = apply_scenario_to_cell(cell, "sentence")
+    cell2 = apply_scenario_to_cell(cell, "sentence", _scenarios_cfg())
     assert cell2.scenario == "sentence"
     assert cell2.cl100k_tokens == 61
 
 
 def test_ac002_10k_inputs():
     from agent_speed.scenarios import resolve_scenario_inputs, build_user_message
-    prompt, fixture_text, fixture_path, cl100k = resolve_scenario_inputs("10k")
+    prompt, fixture_text, fixture_path, cl100k = resolve_scenario_inputs("10k", scenarios_cfg=_scenarios_cfg())
     assert cl100k == 10000
     task_200k = (REPO_ROOT / "prompts" / "task_200k.md").read_text(encoding="utf-8")
     assert prompt == task_200k
@@ -69,6 +75,7 @@ def test_ac002_10k_inputs():
     cell = apply_scenario_to_cell(
         GridCell(scenario="200k", model="m", effort="high", source="s", harness="kimi-code", queue="q"),
         "10k",
+        _scenarios_cfg(),
     )
     assert cell.cl100k_tokens == 10000
     # 模拟 Kimi 截断判定：10k 不进入截断分支
@@ -77,7 +84,7 @@ def test_ac002_10k_inputs():
 
 def test_ac003_default_200k():
     from agent_speed.scenarios import resolve_scenario_inputs
-    prompt, fixture_text, _, cl100k = resolve_scenario_inputs("200k")
+    prompt, fixture_text, _, cl100k = resolve_scenario_inputs("200k", scenarios_cfg=_scenarios_cfg())
     assert prompt == (REPO_ROOT / "prompts" / "task_200k.md").read_text(encoding="utf-8")
     assert fixture_text == (REPO_ROOT / "fixtures" / "django_200k.txt").read_text(encoding="utf-8")
     assert cl100k == 200000
@@ -94,7 +101,7 @@ def test_ac004_single_scenario_per_run():
     cfg = load_benchmark_config()
     base_keys = {(c.model, str(c.effort), c.source, c.harness) for c in cfg.cells}
     for scen, expected_cl in [("sentence", 61), ("10k", 10000), ("200k", 200000)]:
-        converted = [apply_scenario_to_cell(c, scen) for c in cfg.cells]
+        converted = [apply_scenario_to_cell(c, scen, cfg.scenarios) for c in cfg.cells]
         scenarios = {c.scenario for c in converted}
         assert scenarios == {scen}
         assert {c.cl100k_tokens for c in converted} == {expected_cl}
@@ -108,7 +115,7 @@ def test_ac005_no_truncation_for_short():
     from agent_speed.models import GridCell
     from agent_speed.scenarios import resolve_scenario_inputs
     for scen in ("10k", "sentence"):
-        _, fixture_text, _, cl = resolve_scenario_inputs(scen)
+        _, fixture_text, _, cl = resolve_scenario_inputs(scen, scenarios_cfg=_scenarios_cfg())
         assert len(fixture_text.encode("utf-8")) <= KIMI_ARGV_MAX_BYTES
         assert cl != 173218
     # 代码层面：Kimi 截断只对 200k 生效（构造超长 fixture 也只在 200k 截断）
@@ -123,16 +130,58 @@ def test_ac005_no_truncation_for_short():
 
 
 def test_ac005_sentence_no_fixture_marker_all_harness():
-    from agent_speed.scenarios import build_user_message, SENTENCE_PROMPT
-    msg = build_user_message(SENTENCE_PROMPT, "")
-    assert msg == SENTENCE_PROMPT
+    from agent_speed.scenarios import build_user_message
+    msg = build_user_message(SENTENCE, "")
+    assert msg == SENTENCE
     assert "CODE FIXTURE" not in msg
     from agent_speed.harness.kimi import build_kimi_cmd
     from agent_speed.harness.antigravity import build_antigravity_cmd
     from agent_speed.models import GridCell
     cell = GridCell(scenario="sentence", model="m", effort="high", source="s", harness="opencode", queue="q")
-    assert build_kimi_cmd(cell, SENTENCE_PROMPT, "") == ["kimi", "-m", cell.resolved_cli_model, "-p", SENTENCE_PROMPT, "--output-format", "stream-json"] or "CODE FIXTURE" not in build_kimi_cmd(cell, SENTENCE_PROMPT, "")[4]
-    assert "CODE FIXTURE" not in build_antigravity_cmd(cell, SENTENCE_PROMPT, "")[2]
+    assert build_kimi_cmd(cell, SENTENCE, "") == ["kimi", "-m", cell.resolved_cli_model, "-p", SENTENCE, "--output-format", "stream-json"] or "CODE FIXTURE" not in build_kimi_cmd(cell, SENTENCE, "")[4]
+    assert "CODE FIXTURE" not in build_antigravity_cmd(cell, SENTENCE, "")[2]
+
+
+def test_scenarios_config_validation_rejects_bad_entries(tmp_path):
+    """配置 scenarios 节缺档、双 prompt 源、非法 cl100k 时加载失败。"""
+    import pytest
+    from agent_speed.config import load_benchmark_config
+    base = (
+        "concurrency:\n  global_max: 10\n  per_queue: 2\n"
+        "defaults:\n  scenario: \"200k\"\n  reps: 1\n  results_file: \"data/results.jsonl\"\n"
+        "cells:\n  - model: \"m\"\n    source: \"s\"\n    harness: \"h\"\n"
+    )
+    good_scen = (
+        "scenarios:\n"
+        "  sentence:\n    prompt_text: \"hi\"\n    cl100k_tokens: 61\n"
+        "  10k:\n    prompt_file: \"prompts/task_200k.md\"\n    fixture_file: \"fixtures/django_10k.txt\"\n    cl100k_tokens: 10000\n"
+        "  200k:\n    prompt_file: \"prompts/task_200k.md\"\n    fixture_file: \"fixtures/django_200k.txt\"\n    cl100k_tokens: 200000\n"
+    )
+    p = tmp_path / "bench.yaml"
+    p.write_text(base + good_scen, encoding="utf-8")
+    cfg = load_benchmark_config(p)
+    assert set(cfg.scenarios) == {"sentence", "10k", "200k"}
+
+    bad_missing = base + good_scen.replace(
+        "  10k:\n    prompt_file: \"prompts/task_200k.md\"\n    fixture_file: \"fixtures/django_10k.txt\"\n    cl100k_tokens: 10000\n", "")
+    p.write_text(bad_missing, encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_benchmark_config(p)
+
+    bad_both = base + good_scen.replace(
+        "  sentence:\n    prompt_text: \"hi\"\n", "  sentence:\n    prompt_text: \"hi\"\n    prompt_file: \"prompts/task_200k.md\"\n")
+    p.write_text(bad_both, encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_benchmark_config(p)
+
+    bad_cl = base + good_scen.replace("cl100k_tokens: 61", "cl100k_tokens: 0")
+    p.write_text(bad_cl, encoding="utf-8")
+    with pytest.raises(ValueError):
+        load_benchmark_config(p)
+
+    from agent_speed.scenarios import resolve_scenario_inputs
+    with pytest.raises(ValueError):
+        resolve_scenario_inputs("10k", scenarios_cfg={"sentence": cfg.scenarios["sentence"]})
 
 
 def test_ac006_three_boards_split(tmp_path):

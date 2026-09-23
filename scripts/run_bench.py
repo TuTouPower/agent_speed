@@ -36,8 +36,8 @@ def main(argv: list[str] | None = None) -> int:
 
     ap = argparse.ArgumentParser(description="按 queue 分队列双层并发基准测速驱动")
     ap.add_argument("--config", default=str(default_config), help="集中配置文件路径")
-    ap.add_argument("--prompt", help="任务 prompt 文件（默认从配置读取）")
-    ap.add_argument("--fixture", help="代码切片文件（默认从配置读取）")
+    ap.add_argument("--prompt", help="任务 prompt 文件（覆盖对应档位的配置输入）")
+    ap.add_argument("--fixture", help="代码切片文件（覆盖对应档位的配置输入）")
     ap.add_argument("--out", help="结果输出 results.jsonl 路径（默认从配置读取）")
     ap.add_argument("--sources", help="以逗号分隔的 source 过滤白名单")
     ap.add_argument("--harnesses", help="以逗号分隔的 harness 过滤白名单")
@@ -55,14 +55,13 @@ def main(argv: list[str] | None = None) -> int:
     if scenario not in VALID_SCENARIOS:
         sys.exit(f"Unknown scenario: {scenario!r}, expected one of {VALID_SCENARIOS}")
 
-    scen_prompt, scen_fixture_text, scen_fixture_path, scen_cl100k = resolve_scenario_inputs(scenario, REPO_ROOT)
+    scen_prompt, scen_fixture_text, scen_fixture_path, scen_cl100k = resolve_scenario_inputs(
+        scenario, REPO_ROOT, bench_cfg.scenarios)
 
     if args.prompt:
-        prompt_path: Path | None = Path(args.prompt)
-        prompt_text = prompt_path.read_text(encoding="utf-8")
+        prompt_text = Path(args.prompt).read_text(encoding="utf-8")
     else:
         prompt_text = scen_prompt
-        prompt_path = REPO_ROOT / defaults.get("prompt_file", "prompts/task_200k.md") if scenario != "sentence" else None
 
     if args.fixture:
         fixture_path: Path | None = Path(args.fixture)
@@ -74,13 +73,8 @@ def main(argv: list[str] | None = None) -> int:
     reps = args.reps or defaults.get("reps", 3)
     timeout_sec = args.timeout or defaults.get("timeout_sec", 300)
 
-    if prompt_path is not None and not prompt_path.exists():
-        sys.exit(f"Prompt file not found: {prompt_path}")
-    if fixture_path is not None and not fixture_path.exists():
-        sys.exit(f"Fixture file not found: {fixture_path}")
-
     # 筛选待执行 cells（一次运行只产生一个 scenario；格子集合不因档位增删）
-    cells = [apply_scenario_to_cell(c, scenario) for c in bench_cfg.cells]
+    cells = [apply_scenario_to_cell(c, scenario, bench_cfg.scenarios) for c in bench_cfg.cells]
     if args.sources:
         src_set = set(args.sources.split(","))
         cells = [c for c in cells if c.source in src_set]

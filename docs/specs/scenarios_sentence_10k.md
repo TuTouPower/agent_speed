@@ -6,6 +6,7 @@
 
 ## 2. 运行入口与输入选择
 
+- 各档输入（prompt 文件或内联文本、切片、cl100k）唯一真相为 `config/benchmark.yaml` 的 `scenarios:` 节；代码只做解析，不内置回退。
 - 一次运行只选一档：`sentence`、`10k`、`200k`；未指定时仍为 `200k`（`scripts/run_bench.py --scenario`）。
 - `sentence` 的用户内容为单句中文指令，不附加 Django 切片，不附加 fixture 分隔标记；cl100k_base 计数为 61：
     - `请用中文写一篇 800 到 1200 字的短文，说明关系型数据库里的迁移解决什么问题；不要调用工具，不要读写文件，不要输出思考过程。`
@@ -19,7 +20,7 @@
 
 - 同一份 `results.jsonl` 聚合出唯一文件 `data/latest.json`，为扁平数组，按 200k / 10k / sentence 分档块拼接。
 - 每档内部按 `e2e_tps` 降序；聚合不改写 `results.jsonl`。
-- 三档共用既有有效性（`status == success`、`out_tokens >= 500`、最近 2 次有效成功、中位数；无生成窗口时 `gen_tps` 为 null）。
+- 三档共用既有有效性（`status == success`、`out_tokens >= 500`、最近最多 4 次有效成功（最少 2 次）、中位数；无生成窗口时 `gen_tps` 为 null）。
 - 账单输入中位数低于该记录 `cl100k_tokens` 的一半则不上站，等于一半上站；`200k` 记录缺 `cl100k_tokens` 时分母仍为 200000；`10k` 或 `sentence` 缺 `cl100k_tokens` 时不上站，且不得把分母当成 200000。
 
 ## 4. 非范围

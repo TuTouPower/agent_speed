@@ -85,9 +85,13 @@ class ConcurrencyTrackerHarness:
 def test_load_benchmark_config_file():
     """AC-001: 校验 config/benchmark.yaml 主配置加载与字段完整性"""
     cfg = load_benchmark_config()
-    assert cfg.global_max_concurrency == 10
-    assert cfg.per_queue_concurrency == 2
+    assert cfg.global_max_concurrency == 12
+    assert cfg.per_queue_concurrency == 3
     assert bool(cfg.cells)
+    assert set(cfg.scenarios) == {"sentence", "10k", "200k"}
+    assert cfg.scenarios["sentence"]["cl100k_tokens"] == 61
+    assert cfg.scenarios["10k"]["cl100k_tokens"] == 10000
+    assert cfg.scenarios["200k"]["cl100k_tokens"] == 200000
 
     # 验证模型名解耦与渠道正名 (AC-002)
     for c in cfg.cells:

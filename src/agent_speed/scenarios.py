@@ -5,19 +5,7 @@ from pathlib import Path
 
 from agent_speed.models import GridCell
 
-SENTENCE_PROMPT = "请用中文写一篇 800 到 1200 字的短文，说明关系型数据库里的迁移解决什么问题；不要调用工具，不要读写文件，不要输出思考过程。"
-
-SENTENCE_CL100K = 61
-TEN_K_CL100K = 10000
-TWO_HUNDRED_K_CL100K = 200000
-
 VALID_SCENARIOS = ("sentence", "10k", "200k")
-
-SCENARIO_CL100K: dict[str, int] = {
-    "sentence": SENTENCE_CL100K,
-    "10k": TEN_K_CL100K,
-    "200k": TWO_HUNDRED_K_CL100K,
-}
 
 
 def build_user_message(prompt: str, fixture_text: str | None) -> str:
@@ -34,30 +22,40 @@ def _repo_root() -> Path:
 def resolve_scenario_inputs(
     scenario: str,
     repo_root: Path | None = None,
+    scenarios_cfg: dict | None = None,
 ) -> tuple[str, str, Path | None, int]:
-    """按档位解析 (prompt_text, fixture_text, fixture_path, cl100k_tokens)。"""
+    """按档位解析 (prompt_text, fixture_text, fixture_path, cl100k_tokens)。
+
+    输入映射唯一真相为配置 `scenarios:` 节（config.py 加载时已校验结构）；
+    scenarios_cfg 缺失或缺档时显式报错，不设代码内置回退。
+    """
     if scenario not in VALID_SCENARIOS:
         raise ValueError(f"Unknown scenario: {scenario!r}, expected one of {VALID_SCENARIOS}")
+    if not isinstance(scenarios_cfg, dict) or scenario not in scenarios_cfg:
+        raise ValueError(f"scenarios_cfg 缺 `{scenario}` 档输入映射")
+    entry = scenarios_cfg[scenario]
     root = Path(repo_root) if repo_root is not None else _repo_root()
-    if scenario == "sentence":
-        return SENTENCE_PROMPT, "", None, SENTENCE_CL100K
-    if scenario == "10k":
-        prompt = (root / "prompts" / "task_200k.md").read_text(encoding="utf-8")
-        fixture_path = root / "fixtures" / "django_10k.txt"
+    if entry.get("prompt_file"):
+        prompt_text = (root / entry["prompt_file"]).read_text(encoding="utf-8")
+    else:
+        prompt_text = entry.get("prompt_text") or ""
+    fixture_file = entry.get("fixture_file")
+    if fixture_file:
+        fixture_path = root / fixture_file
         fixture_text = fixture_path.read_text(encoding="utf-8")
-        return prompt, fixture_text, fixture_path, TEN_K_CL100K
-    prompt = (root / "prompts" / "task_200k.md").read_text(encoding="utf-8")
-    fixture_path = root / "fixtures" / "django_200k.txt"
-    fixture_text = fixture_path.read_text(encoding="utf-8")
-    return prompt, fixture_text, fixture_path, TWO_HUNDRED_K_CL100K
+    else:
+        fixture_path, fixture_text = None, ""
+    return prompt_text, fixture_text, fixture_path, entry["cl100k_tokens"]
 
 
-def apply_scenario_to_cell(cell: GridCell, scenario: str) -> GridCell:
+def apply_scenario_to_cell(cell: GridCell, scenario: str, scenarios_cfg: dict | None = None) -> GridCell:
     """将选中档位写入格子的 scenario 与 cl100k_tokens，不增删 model/effort/source/harness 集合。"""
     if scenario not in VALID_SCENARIOS:
         raise ValueError(f"Unknown scenario: {scenario!r}")
+    if not isinstance(scenarios_cfg, dict) or scenario not in scenarios_cfg:
+        raise ValueError(f"scenarios_cfg 缺 `{scenario}` 档输入映射")
     return dataclasses.replace(
         cell,
         scenario=scenario,
-        cl100k_tokens=SCENARIO_CL100K[scenario],
+        cl100k_tokens=scenarios_cfg[scenario]["cl100k_tokens"],
     )

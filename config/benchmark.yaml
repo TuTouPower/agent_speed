@@ -1,15 +1,28 @@
 concurrency:
-  global_max: 10
-  per_queue: 2
+  global_max: 12
+  per_queue: 3
 
 defaults:
   scenario: "200k"
   reps: 3
   max_retry: 1
   timeout_sec: 300
-  prompt_file: "prompts/task_200k.md"
-  fixture_file: "fixtures/django_200k.txt"
   results_file: "data/results.jsonl"
+
+# 各档输入唯一真相：prompt（文件或内联文本二选一）+ 切片 + cl100k
+scenarios:
+  sentence:
+    prompt_text: "请用中文写一篇 800 到 1200 字的短文，说明关系型数据库里的迁移解决什么问题；不要调用工具，不要读写文件，不要输出思考过程。"
+    fixture_file: null
+    cl100k_tokens: 61
+  10k:
+    prompt_file: "prompts/task_200k.md"
+    fixture_file: "fixtures/django_10k.txt"
+    cl100k_tokens: 10000
+  200k:
+    prompt_file: "prompts/task_200k.md"
+    fixture_file: "fixtures/django_200k.txt"
+    cl100k_tokens: 200000
 
 cells:
   - model: "deepseek-v4.1-flash"
@@ -75,6 +88,14 @@ cells:
     alias: "minimax-official/MiniMax-M3"
     source: "minimax-official"
     harness: "opencode"
+    effort: null
+    queue: "minimax-official"
+
+  # mcode 的模型引用为 provider/model 形态；MiniMax-M3 不支持思考强度选择，effort 恒为 null
+  - model: "MiniMax-M3"
+    alias: "minimax/MiniMax-M3"
+    source: "minimax-official"
+    harness: "minimax-code"
     effort: null
     queue: "minimax-official"
 
