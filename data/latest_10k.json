@@ -1,0 +1,62 @@
+[
+  {
+    "scenario": "10k",
+    "model": "MiniMax-M3",
+    "effort": null,
+    "source": "minimax-official",
+    "harness": "opencode",
+    "valid_reps": 2,
+    "e2e_tps": 64.88,
+    "gen_tps": 72.22,
+    "ttft": 47.341,
+    "wall": 47.627,
+    "out_tokens": 2944.5,
+    "in_tokens": 19601.5,
+    "batch_id": "cc318ab2c51c",
+    "sample_times": [
+      "2026-09-23T10:02:58.757587+08:00",
+      "2026-09-23T10:03:31.200162+08:00"
+    ],
+    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-flash",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 2,
+    "e2e_tps": 43.76,
+    "gen_tps": 54.86,
+    "ttft": 84.401,
+    "wall": 84.485,
+    "out_tokens": 3705.5,
+    "in_tokens": 10328.0,
+    "batch_id": "46a196c39440",
+    "sample_times": [
+      "2026-09-23T10:05:14.114915+08:00",
+      "2026-09-23T10:06:40.610344+08:00"
+    ],
+    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-pro",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 2,
+    "e2e_tps": 27.97,
+    "gen_tps": 30.16,
+    "ttft": 186.726,
+    "wall": 186.817,
+    "out_tokens": 5222.0,
+    "in_tokens": 10328.0,
+    "batch_id": "2546af7d642b",
+    "sample_times": [
+      "2026-09-23T10:08:03.090618+08:00",
+      "2026-09-23T10:11:05.469894+08:00"
+    ],
+    "generated_at": "2026-09-23T10:37:42.882236+08:00"
+  }
+]
