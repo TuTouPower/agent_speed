@@ -1,5 +1,11 @@
+import shutil
+
 from agent_speed.models import GridCell
-from agent_speed.harness.mimo import MimoHarness, build_mimo_cmd
+from agent_speed.harness.mimo import (
+    MIMO_ARGV_MAX_BYTES,
+    MimoHarness,
+    build_mimo_cmd,
+)
 from agent_speed.harness import get_harness
 from agent_speed.metrics import parse_mimo_metrics
 
@@ -56,6 +62,91 @@ def test_parse_mimo_metrics():
     assert in_toks == 200000
     assert out_toks == 850
     assert not used_tools
+
+
+def _big_cell():
+    return GridCell(
+        scenario="200k",
+        model="mimo-v2.6-flash",
+        effort="high",
+        source="mimo-official",
+        harness="mimo-code",
+        alias="xiaomi/mimo-v2.6-flash",
+    )
+
+
+def _node_script(tmp_path, name="mimo"):
+    p = tmp_path / name
+    p.write_text("#!/opt/homebrew/opt/node/bin/node\n// fake mimo cli\n", encoding="utf-8")
+    return str(p)
+
+
+def _patch_which(monkeypatch, mapping):
+    real_which = shutil.which
+
+    def fake(name, *args, **kwargs):
+        if name in mapping:
+            return mapping[name]
+        return real_which(name, *args, **kwargs)
+
+    monkeypatch.setattr(shutil, "which", fake)
+
+
+def test_big_message_wraps_node_stack(tmp_path, monkeypatch):
+    """AC-005: 超 850KB 的整包消息改经 node --stack-size 拉起，切片不截断"""
+    cell = _big_cell()
+    fixture = "x" * (MIMO_ARGV_MAX_BYTES + 1)
+    mimo_path = _node_script(tmp_path)
+    _patch_which(monkeypatch, {"node": "/usr/bin/node"})
+    monkeypatch.delenv("MIMO_NODE_STACK", raising=False)
+
+    cmd = build_mimo_cmd(cell, "prompt", fixture, bin_name=mimo_path)
+
+    assert cmd[0] == "/usr/bin/node"
+    assert cmd[1] == "--stack-size=8192"
+    assert cmd[2] == mimo_path
+    assert cmd[3] == "run"
+    assert "--variant" in cmd and "high" in cmd
+    assert cmd[-1].endswith(fixture) and "prompt" in cmd[-1]
+
+
+def test_big_message_no_node_falls_back(tmp_path, monkeypatch):
+    """AC-006: 无 node 可用时回退直调（失败如实透出，不静默截断）"""
+    cell = _big_cell()
+    fixture = "x" * (MIMO_ARGV_MAX_BYTES + 1)
+    mimo_path = _node_script(tmp_path)
+    _patch_which(monkeypatch, {"node": None})
+
+    cmd = build_mimo_cmd(cell, "prompt", fixture, bin_name=mimo_path)
+
+    assert cmd[0] == mimo_path
+    assert cmd[1] == "run"
+    assert cmd[-1].endswith(fixture)
+
+
+def test_at_limit_stays_direct(tmp_path, monkeypatch):
+    """AC-007: 恰为上限字节数时仍直调"""
+    cell = _big_cell()
+    fixture = "x" * (MIMO_ARGV_MAX_BYTES - len("prompt\n\n===== CODE FIXTURE =====\n"))
+    mimo_path = _node_script(tmp_path)
+    _patch_which(monkeypatch, {"node": "/usr/bin/node"})
+
+    cmd = build_mimo_cmd(cell, "prompt", fixture, bin_name=mimo_path)
+
+    assert cmd[0] == mimo_path
+
+
+def test_parse_mimo_metrics_cache_read_counts_as_input():
+    """AC-008: mimo step-finish 的 input 只含非缓存增量，cache.read 须计入账单输入"""
+    lines = [
+        (113.6, '{"type":"step-finish","part":{"tokens":{"total":249138,"input":50,'
+                 '"output":11117,"reasoning":83,"cache":{"write":0,"read":237888}}}}'),
+    ]
+
+    _, _, _, in_toks, out_toks, _ = parse_mimo_metrics(lines)
+
+    assert in_toks == 237938
+    assert out_toks == 11117
 
 
 def test_harness_registry_mimo():

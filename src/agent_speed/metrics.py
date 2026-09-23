@@ -99,11 +99,68 @@ def parse_mimo_metrics(
     """mimo (mimo-code CLI) 指标解析。
 
     mimo 系 opencode fork，`mimo run --format json` 事件协议与 opencode 一致，
-    直接复用 parse_opencode_metrics，仅把窗口来源标签换成 mimo 前缀。
+    口径相同，仅窗口来源标签换成 mimo 前缀；唯一差异是输入拆账：
+    step-finish 的 `tokens.input` 只含非缓存增量，缓存命中数在
+    `tokens.cache.read/write`，账单输入必须加总（实测 200k：input=50、
+    cache.read=237888，合计 237938）。
     """
-    ttft, decode_window, source, in_toks, out_toks, used_tools = parse_opencode_metrics(lines)
-    if source == "opencode:text_part_time":
-        source = "mimo:text_part_time"
+    ttft: float | None = None
+    decode_window: float | None = None
+    source: str | None = None
+    in_toks: int | None = None
+    out_toks: int | None = None
+    used_tools: bool = False
+
+    for t, line in lines:
+        try:
+            o = json.loads(line)
+        except (json.JSONDecodeError, ValueError):
+            continue
+        if not isinstance(o, dict):
+            continue
+
+        evt_type = o.get("type")
+        part = o.get("part") if isinstance(o.get("part"), dict) else {}
+
+        if evt_type in ("tool", "action", "tool_call", "call_tool") or (isinstance(part, dict) and part.get("type") in ("tool", "action")):
+            used_tools = True
+
+        if ttft is None:
+            if evt_type in ("reasoning", "thought", "thinking"):
+                ttft = t
+            elif evt_type == "text" and (part.get("text") or "text" in o):
+                ttft = t
+
+        if evt_type == "text" and isinstance(part, dict):
+            tm = part.get("time") or {}
+            if tm.get("start") and tm.get("end") and tm["end"] > tm["start"]:
+                decode_window = round((tm["end"] - tm["start"]) / 1000.0, 3)
+                source = "mimo:text_part_time"
+
+        if evt_type in ("step-finish", "step_finish"):
+            toks = part.get("tokens") or {}
+            if isinstance(toks, dict):
+                base = toks.get("input")
+                cache = toks.get("cache") or {}
+                extra = 0
+                if isinstance(cache, dict):
+                    extra = (cache.get("read") or 0) + (cache.get("write") or 0)
+                if isinstance(base, int) and not isinstance(base, bool):
+                    in_toks = base + extra
+                elif base is None and extra:
+                    in_toks = extra
+                if toks.get("output") is not None:
+                    out_toks = toks["output"]
+
+    if in_toks is None or out_toks is None:
+        for _, line in lines:
+            m_in = RE_IN.search(line)
+            if m_in and in_toks is None:
+                in_toks = int(m_in.group(1))
+            m_out = RE_OUT.search(line)
+            if m_out and out_toks is None:
+                out_toks = int(m_out.group(1))
+
     return ttft, decode_window, source, in_toks, out_toks, used_tools
 
 

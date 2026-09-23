@@ -12,6 +12,32 @@ from agent_speed.metrics import parse_mimo_metrics, calculate_tps
 from agent_speed.harness.base import BaseHarness
 
 
+# Node argv 上限：mimo CLI 是 node 脚本，整包 200K（约 972KB）走 argv 会
+# RangeError 爆栈（与 Kimi d002 同类）。超限时改经 node --stack-size 直接拉起
+# （已实测可过），切片不截断；小消息保持直调。
+MIMO_ARGV_MAX_BYTES = 850000
+MIMO_NODE_STACK_SIZE = "8192"
+
+
+def _node_bin() -> str | None:
+    return os.environ.get("MIMO_NODE_BIN") or shutil.which("node")
+
+
+def _is_node_script(path: str) -> bool:
+    try:
+        with open(path, "rb") as f:
+            first_line = f.read(256).split(b"\n", 1)[0]
+    except OSError:
+        return False
+    return first_line.startswith(b"#!") and b"node" in first_line
+
+
+def _resolve_mimo_path(bin_name: str) -> str | None:
+    if os.path.sep in bin_name:
+        return bin_name
+    return shutil.which(bin_name)
+
+
 def build_mimo_cmd(
     cell: GridCell,
     prompt: str,
@@ -34,6 +60,12 @@ def build_mimo_cmd(
         "-m", cell.resolved_cli_model,
         full_message,
     ]
+    if len(full_message.encode("utf-8")) > MIMO_ARGV_MAX_BYTES:
+        node = _node_bin()
+        mimo_path = _resolve_mimo_path(bin_name)
+        if node and mimo_path and _is_node_script(mimo_path):
+            stack = os.environ.get("MIMO_NODE_STACK", MIMO_NODE_STACK_SIZE)
+            cmd = [node, f"--stack-size={stack}", mimo_path] + cmd[1:]
     return cmd
 
 
