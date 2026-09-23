@@ -139,8 +139,8 @@ def test_ac006_three_boards_split(tmp_path):
     from agent_speed.report import generate_latest_json
     jsonl = tmp_path / "results.jsonl"
     out200 = tmp_path / "latest.json"
-    out10 = tmp_path / "latest_10k.json"
-    outsen = tmp_path / "latest_sentence.json"
+    out10 = tmp_path / "board_10k.json"
+    outsen = tmp_path / "board_sentence.json"
     rows = []
     # 200k 格：2 次有效
     rows.append(_rec("200k", model="m200", start="2026-09-23T10:00:00+08:00", batch="b1", e2e=50.0, in_toks=200000, cl100k=200000))
@@ -178,7 +178,7 @@ def test_ac006_three_boards_split(tmp_path):
 def test_ac006_sort_desc_within_board(tmp_path):
     from agent_speed.report import generate_latest_json
     jsonl = tmp_path / "results.jsonl"
-    out = tmp_path / "latest_10k.json"
+    out = tmp_path / "board_10k.json"
     rows = []
     for model, e2es in [("slow", (10.0, 12.0)), ("fast", (100.0, 120.0))]:
         rows.append(_rec("10k", model=model, start="2026-09-23T10:00:00+08:00", e2e=e2es[0], in_toks=10000, cl100k=10000))

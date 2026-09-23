@@ -26,7 +26,7 @@ from agent_speed.models import GridCell, CallRecord
 from agent_speed.harness import get_harness
 from agent_speed.scheduler import QueueScheduler
 from agent_speed.collector import append_result_record
-from agent_speed.report import SCENARIO_BOARD_FILES, generate_latest_json
+from agent_speed.report import generate_all_boards
 from agent_speed.board_preview import refresh_board_preview
 from agent_speed.scenarios import VALID_SCENARIOS, apply_scenario_to_cell, resolve_scenario_inputs
 
@@ -136,12 +136,11 @@ def main(argv: list[str] | None = None) -> int:
     success_cnt = sum(1 for r in records if r.status == "success")
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
 
-    # 测速完成后自动刷新三份榜（互不混排，不合成总分）
+    # 测速完成后自动刷新合一榜单（各档互不混排，不合成总分）
     data_dir = REPO_ROOT / "data"
-    for scen, filename in SCENARIO_BOARD_FILES.items():
-        board_path = data_dir / filename
-        rows = generate_latest_json(out_path, board_path, scenario=scen)
-        print(f"Auto-generated data/{filename} ({len(rows)} rows for scenario={scen})")
+    boards = generate_all_boards(out_path, data_dir / "latest.json")
+    for scen, rows in boards.items():
+        print(f"Auto-generated data/latest.json ({len(rows)} rows for scenario={scen})")
     latest_path = data_dir / "latest.json"
     preview = refresh_board_preview(latest=latest_path)
     if preview is not None:

@@ -143,3 +143,30 @@ def test_report_pipeline(tmp_path):
     # model-e: 20.0, 16.0 -> 18.0
     assert by["model-e"]["wall"] == 18.0
     assert all("wall" in r for r in rows)
+
+
+def test_generate_all_boards_writes_single_latest(tmp_path):
+    """唯一输出 latest.json：扁平数组、行内 scenario 自描述、分档块拼接、各档内 e2e 降序。"""
+    from agent_speed.report import generate_all_boards
+
+    jsonl = tmp_path / "results.jsonl"
+    out = tmp_path / "latest.json"
+    rows = []
+    for scen, model, e2e in [("200k", "m200", 50.0), ("10k", "m10", 200.0), ("sentence", "msen", 300.0)]:
+        cl = {"200k": 200000, "10k": 10000, "sentence": 61}[scen]
+        ink = {"200k": 200000, "10k": 10000, "sentence": 61}[scen]
+        for rep, start in enumerate(["2026-09-23T10:00:00+08:00", "2026-09-23T10:01:00+08:00"], start=1):
+            rows.append({"scenario": scen, "model": model, "effort": "high", "source": "s", "harness": "h",
+                         "rep": rep, "batch_id": "b1", "start_time": start, "wall": 10.0, "ttft": 1.0,
+                         "decode_window": 8.0, "out_tokens": 1000, "in_tokens": ink, "e2e_tps": e2e,
+                         "gen_tps": 100.0, "decode_window_source": "x", "cl100k_tokens": cl,
+                         "status": "success", "exclude_reason": None, "error_summary": None})
+    jsonl.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
+
+    boards = generate_all_boards(jsonl, out)
+
+    combined = json.loads(out.read_text(encoding="utf-8"))
+    assert isinstance(combined, list)
+    assert [r["model"] for r in combined] == ["m200", "m10", "msen"]
+    assert [r["scenario"] for r in combined] == ["200k", "10k", "sentence"]
+    assert combined == boards["200k"] + boards["10k"] + boards["sentence"]

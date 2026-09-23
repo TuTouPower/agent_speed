@@ -2,7 +2,7 @@
 
 ## 1. 概述与目标
 
-在 200K 长上下文基准之外，新增一句话（`sentence`）与 10K（`10k`）两个独立评测档。同一份 `data/results.jsonl` 写出三份榜，互不混排，不合成总分。`100k` 与 `1k` 不在本规范的上线范围。
+在 200K 长上下文基准之外，新增一句话（`sentence`）与 10K（`10k`）两个独立评测档。同一份 `data/results.jsonl` 写出唯一合一榜单 `data/latest.json`（扁平数组，行内 `scenario` 自描述），互不混排，不合成总分。`100k` 与 `1k` 不在本规范的上线范围。
 
 ## 2. 运行入口与输入选择
 
@@ -17,11 +17,8 @@
 
 ## 3. 聚合与上站
 
-- 同一份 `results.jsonl` 聚合出三份 JSON 数组：
-    - `data/latest.json`：只含 `200k`；
-    - `data/latest_10k.json`：只含 `10k`；
-    - `data/latest_sentence.json`：只含 `sentence`。
-- 每份内部按 `e2e_tps` 降序；某档无上站行时该文件为 `[]`；聚合不改写 `results.jsonl`。
+- 同一份 `results.jsonl` 聚合出唯一文件 `data/latest.json`，为扁平数组，按 200k / 10k / sentence 分档块拼接。
+- 每档内部按 `e2e_tps` 降序；聚合不改写 `results.jsonl`。
 - 三档共用既有有效性（`status == success`、`out_tokens >= 500`、最近 2 次有效成功、中位数；无生成窗口时 `gen_tps` 为 null）。
 - 账单输入中位数低于该记录 `cl100k_tokens` 的一半则不上站，等于一半上站；`200k` 记录缺 `cl100k_tokens` 时分母仍为 200000；`10k` 或 `sentence` 缺 `cl100k_tokens` 时不上站，且不得把分母当成 200000。
 

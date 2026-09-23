@@ -98,7 +98,7 @@ ______________________________________________________________________
 
 ## 4. 场景三：三档独立评测（sentence / 10k / 200k）
 
-一次运行只选一档，未指定时为 `200k`。同一份 `data/results.jsonl` 聚合出三份榜，互不混排，不合成总分：`data/latest.json`（只含 `200k`）、`data/latest_10k.json`（只含 `10k`）、`data/latest_sentence.json`（只含 `sentence`）。
+一次运行只选一档，未指定时为 `200k`。同一份 `data/results.jsonl` 聚合出唯一榜单 `data/latest.json`（扁平行内自描述，互不混排，不合成总分）。
 
 ```bash
 # 一句话档（单句指令，不附加切片，cl100k_tokens 61）
@@ -111,7 +111,7 @@ uv run python scripts/run_bench.py --scenario 10k
 uv run python scripts/run_bench.py --scenario 200k
 ```
 
-刷新三份榜：
+刷新合一榜单：
 
 ```bash
 python report.py
@@ -165,4 +165,4 @@ ______________________________________________________________________
     - 系统会生成全新的 `batch_id`，`report.py` 会自动跳过历史失败批次，直接采纳最新的完整批次。
 2. **测试结果未进入榜单的排查检查单**：
     - **有效次数不足**：最新 batch 成功且输出 token ≥ 500 的次数是否少于 2 次？
-    - **账单输入被截断**：事件流返回的 `in_tokens` 中位数是否低于该记录 `cl100k_tokens` 的一半（`200k` 为 100,000，`10k` 为 5,000，`sentence` 为 30.5，等于一半上站）？若低于门槛，契约判定为上下文严重丢失，拒绝上站。注意按档位分榜排查（`200k` 看 `data/latest.json`，`10k` 看 `data/latest_10k.json`，`sentence` 看 `data/latest_sentence.json`）。
+    - **账单输入被截断**：事件流返回的 `in_tokens` 中位数是否低于该记录 `cl100k_tokens` 的一半（`200k` 为 100,000，`10k` 为 5,000，`sentence` 为 30.5，等于一半上站）？若低于门槛，契约判定为上下文严重丢失，拒绝上站。注意在合一榜单内按行内 `scenario` 排查。

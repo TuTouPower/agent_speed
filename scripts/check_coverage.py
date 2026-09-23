@@ -20,7 +20,6 @@ if str(SRC_DIR) not in sys.path:
 
 from agent_speed.config import load_benchmark_config
 from agent_speed.coverage import compute_coverage
-from agent_speed.report import SCENARIO_BOARD_FILES
 from agent_speed.scenarios import VALID_SCENARIOS
 
 ICON = {"onboard": "ok ", "thin": "thin", "missing": "MISS", "gate-blocked": "GATE"}
@@ -50,14 +49,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.scenarios:
         scenarios = tuple(s for s in args.scenarios.split(",") if s in VALID_SCENARIOS)
 
+    combined_path = REPO_ROOT / "data" / "latest.json"
+    flat: list = []
+    if combined_path.exists():
+        try:
+            loaded = json.load(open(combined_path, encoding="utf-8"))
+            if isinstance(loaded, list):
+                flat = loaded
+        except Exception:
+            flat = []
+
     for scen in scenarios:
-        board_file = REPO_ROOT / "data" / SCENARIO_BOARD_FILES[scen]
-        board_rows: list = []
-        if board_file.exists():
-            try:
-                board_rows = json.load(open(board_file, encoding="utf-8"))
-            except Exception:
-                board_rows = []
+        board_rows: list = [r for r in flat if isinstance(r, dict) and r.get("scenario") == scen]
         statuses, stale = compute_coverage(bench_cfg.cells, records, scen, board_rows)
 
         print(f"== {scen}（矩阵 {len(statuses)} 格，榜 {len(board_rows)} 行）")

@@ -75,23 +75,19 @@ def _required_half(used: list[dict[str, Any]], scenario: str) -> float | None:
     return max(t / 2.0 for t in thresholds)
 
 
-SCENARIO_BOARD_FILES: dict[str, str] = {
-    "200k": "latest.json",
-    "10k": "latest_10k.json",
-    "sentence": "latest_sentence.json",
-}
+BOARD_SCENARIOS: tuple[str, ...] = ("200k", "10k", "sentence")
 
 
 def generate_latest_json(
     results_jsonl: Path | str,
     output_json: Path | str,
     scenario: str | None = "200k",
+    _collect_only: bool = False,
 ) -> list[dict[str, Any]]:
     """读 data/results.jsonl 重新生成榜单。
 
     - scenario 为 None 时不过滤（兼容旧调用）；为档位名时只含该档；
-    - `data/latest.json` 只含 `200k`，`data/latest_10k.json` 只含 `10k`，
-      `data/latest_sentence.json` 只含 `sentence`，互不混排，不合成总分；
+    - 唯一输出 `data/latest.json` 为扁平数组（行内 scenario 自描述），各档互不混排，不合成总分；
     - 每个格子跨全部 batch 收集有效成功调用；
     - 按 start_time 取最近 2 次有效成功；有效次数 < 2 不上站；
     - 不再要求同一次 bench / 同一 batch_id 内凑满 2 次；
@@ -99,7 +95,8 @@ def generate_latest_json(
     - 对方账单输入 token 中位数 < 该记录 cl100k_tokens 一半的格子不上站（等于一半上站）；
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
     - 中位数由最近 2 次有效成功计算（含 wall 秒，三位小数）；
-    - 按端到端 TPS 降序覆盖写输出文件；某档无上站行时写 `[]`；不改写 results.jsonl。
+    - 按端到端 TPS 降序覆盖写输出文件；某档无上站行时写 `[]`；不改写 results.jsonl；
+      `_collect_only=True` 时只计算返回，不写盘（供合一文件组装）。
     """
     jsonl_path = Path(results_jsonl)
     out_path = Path(output_json)
@@ -199,18 +196,26 @@ def generate_latest_json(
 
     rows.sort(key=lambda r: r["e2e_tps"], reverse=True)
 
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if not _collect_only:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return rows
 
 
 def generate_all_boards(
     results_jsonl: Path | str,
-    output_dir: Path | str,
+    output_path: Path | str,
 ) -> dict[str, list[dict[str, Any]]]:
-    """同一份 results.jsonl 写出三份榜，互不混排，不合成总分，不改写 results.jsonl。"""
-    out_dir = Path(output_dir)
+    """同一份 results.jsonl 写出唯一输出文件：扁平数组，行内 scenario 自描述。
+
+    按 200k / 10k / sentence 分档块拼接，各档内按端到端 TPS 降序，
+    互不混排，不合成总分，不改写 results.jsonl。
+    """
+    out_path = Path(output_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     boards: dict[str, list[dict[str, Any]]] = {}
-    for scen, filename in SCENARIO_BOARD_FILES.items():
-        boards[scen] = generate_latest_json(results_jsonl, out_dir / filename, scenario=scen)
+    for scen in BOARD_SCENARIOS:
+        boards[scen] = generate_latest_json(results_jsonl, out_path, scenario=scen, _collect_only=True)
+    flat = boards["200k"] + boards["10k"] + boards["sentence"]
+    out_path.write_text(json.dumps(flat, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return boards

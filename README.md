@@ -53,10 +53,7 @@
 ## 数据产物
 
 - **`data/results.jsonl`**：原始调用明细账本。每次调用追加一行，包含完整的 timing、token usage、队列键与批次 ID；绝不保存模型回答正文，不泄露任何本地私有路径与凭据。
-- **三档分榜（互不混排，不合成总分）**：同一份 `data/results.jsonl` 聚合出三份 JSON 数组，每份内部按端到端 TPS 降序，某档无上站行时为 `[]`。
-    - **`data/latest.json`**：只含 `200k`。
-    - **`data/latest_10k.json`**：只含 `10k`。
-    - **`data/latest_sentence.json`**：只含 `sentence`。
+- **唯一榜单 `data/latest.json`**：同一份 `data/results.jsonl` 聚合成扁平数组，行内 `scenario` 自描述，按 200k / 10k / sentence 分档块拼接，各档内按端到端 TPS 降序，互不混排，不合成总分。
 - **上站门槛**：仅读取最新一个 `batch_id`，严格执行上站门槛（最新 batch 有效次数 ≥ 2、账单输入 token 中位数 ≥ 该记录 `cl100k_tokens` 的一半且等于一半上站、单次输出 token ≥ 500）；`200k` 缺 `cl100k_tokens` 时分母仍为 200000，`10k` / `sentence` 缺 `cl100k_tokens` 时不上站；各项中位数仅由有效次数聚合计算，无生成窗口时 `gen_tps` 为 null。
 
 ## 快速上手
@@ -95,7 +92,7 @@ python3 scripts/run_bench.py --harnesses opencode --models cpa/gemini-3.8-flash
 
 ### 4. 生成上站汇总报告
 
-由 `data/results.jsonl` 重新生成三份分榜（`data/latest.json`、`data/latest_10k.json`、`data/latest_sentence.json`）：
+由 `data/results.jsonl` 重新生成合一榜单（`data/latest.json`）：
 
 ```bash
 python3 report.py
@@ -124,6 +121,6 @@ pytest tests -v
 - **线上地址**：https://agent-speed.ooll.lol
 - **README 预览图**：`docs/board-preview-dark.png`（`report.py` / `run_bench.py` 更新 `data/latest.json` 后会尽量自动重截；也可手动 `python3 scripts/screenshot_board.py`）
 - **微信交流群二维码**：`docs/wechat-group-qr.png`（与 `latest.json` 一并复制到 great_websites 的 `systems/agent_speed/web/`）
-- 本仓库只负责评测与数据（`data/results.jsonl`、`data/latest.json`、`data/latest_10k.json`、`data/latest_sentence.json`）。**静态公开榜单不在本仓**：站点与 Cloudflare Pages 部署维护在 [`TuTouPower/great_websites`](https://github.com/TuTouPower/great_websites) 的 `systems/agent_speed/web/`。
+- 本仓库只负责评测与数据（`data/results.jsonl`、`data/latest.json`）。**静态公开榜单不在本仓**：站点与 Cloudflare Pages 部署维护在 [`TuTouPower/great_websites`](https://github.com/TuTouPower/great_websites) 的 `systems/agent_speed/web/`。
 
-刷新上站数据后，将本仓 `data/latest.json`（及需要上站的 `data/latest_10k.json`、`data/latest_sentence.json`）复制到 great_websites 对应目录并按其 README 部署（或运行那边的 `scripts/deploy_pages.sh`）。
+刷新上站数据后，将本仓 `data/latest.json` 复制到 great_websites 对应目录并按其 README 部署（或运行那边的 `scripts/deploy_pages.sh`）。注意站点须按行内 `scenario` 过滤（`200k` 为主榜），copy 后确认展示正常。
