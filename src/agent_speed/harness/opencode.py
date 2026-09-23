@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.metrics import parse_opencode_metrics, calculate_tps
 from agent_speed.harness.base import BaseHarness
+from agent_speed.scenarios import build_user_message
 
 
 class OpencodeHarness(BaseHarness):
@@ -38,7 +39,7 @@ class OpencodeHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        full_message = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}" if fixture_text else prompt
+        full_message = build_user_message(prompt, fixture_text)
 
         cmd = [
             self.bin_path,

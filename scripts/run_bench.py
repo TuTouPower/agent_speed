@@ -26,8 +26,9 @@ from agent_speed.models import GridCell, CallRecord
 from agent_speed.harness import get_harness
 from agent_speed.scheduler import QueueScheduler
 from agent_speed.collector import append_result_record
-from agent_speed.report import generate_latest_json
+from agent_speed.report import SCENARIO_BOARD_FILES, generate_latest_json
 from agent_speed.board_preview import refresh_board_preview
+from agent_speed.scenarios import VALID_SCENARIOS, apply_scenario_to_cell, resolve_scenario_inputs
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -44,27 +45,42 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--efforts", help="以逗号分隔的 effort 过滤白名单")
     ap.add_argument("--reps", type=int, help="每格执行次数（默认从配置读取）")
     ap.add_argument("--timeout", type=int, help="单次调用超时（秒，默认从配置读取）")
+    ap.add_argument("--scenario", choices=list(VALID_SCENARIOS), help="评测档位：sentence / 10k / 200k（默认 200k）")
     args = ap.parse_args(argv)
 
     bench_cfg = load_benchmark_config(args.config)
     defaults = bench_cfg.defaults
 
-    prompt_path = Path(args.prompt or (REPO_ROOT / defaults.get("prompt_file", "prompts/task_200k.md")))
-    fixture_path = Path(args.fixture or (REPO_ROOT / defaults.get("fixture_file", "fixtures/django_200k.txt")))
+    scenario = args.scenario or defaults.get("scenario", "200k")
+    if scenario not in VALID_SCENARIOS:
+        sys.exit(f"Unknown scenario: {scenario!r}, expected one of {VALID_SCENARIOS}")
+
+    scen_prompt, scen_fixture_text, scen_fixture_path, scen_cl100k = resolve_scenario_inputs(scenario, REPO_ROOT)
+
+    if args.prompt:
+        prompt_path: Path | None = Path(args.prompt)
+        prompt_text = prompt_path.read_text(encoding="utf-8")
+    else:
+        prompt_text = scen_prompt
+        prompt_path = REPO_ROOT / defaults.get("prompt_file", "prompts/task_200k.md") if scenario != "sentence" else None
+
+    if args.fixture:
+        fixture_path: Path | None = Path(args.fixture)
+        fixture_text = fixture_path.read_text(encoding="utf-8")
+    else:
+        fixture_text = scen_fixture_text
+        fixture_path = scen_fixture_path
     out_path = Path(args.out or (REPO_ROOT / defaults.get("results_file", "data/results.jsonl")))
     reps = args.reps or defaults.get("reps", 3)
     timeout_sec = args.timeout or defaults.get("timeout_sec", 300)
 
-    if not prompt_path.exists():
+    if prompt_path is not None and not prompt_path.exists():
         sys.exit(f"Prompt file not found: {prompt_path}")
-    if not fixture_path.exists():
+    if fixture_path is not None and not fixture_path.exists():
         sys.exit(f"Fixture file not found: {fixture_path}")
 
-    prompt_text = prompt_path.read_text(encoding="utf-8")
-    fixture_text = fixture_path.read_text(encoding="utf-8")
-
-    # 筛选待执行 cells
-    cells = list(bench_cfg.cells)
+    # 筛选待执行 cells（一次运行只产生一个 scenario；格子集合不因档位增删）
+    cells = [apply_scenario_to_cell(c, scenario) for c in bench_cfg.cells]
     if args.sources:
         src_set = set(args.sources.split(","))
         cells = [c for c in cells if c.source in src_set]
@@ -83,6 +99,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     print(f"Loaded config: {args.config} (global_max={bench_cfg.global_max_concurrency}, per_queue={bench_cfg.per_queue_concurrency})")
+    print(f"Scenario: {scenario} (cl100k_tokens={scen_cl100k})")
     print(f"Selected {len(cells)} cells across queues:")
     queues = {}
     for c in cells:
@@ -119,10 +136,13 @@ def main(argv: list[str] | None = None) -> int:
     success_cnt = sum(1 for r in records if r.status == "success")
     print(f"\nAll queues completed. Total calls: {len(records)}, Success: {success_cnt}")
 
-    # 测速完成后自动刷新 latest.json 报告
-    latest_path = REPO_ROOT / "data" / "latest.json"
-    rows = generate_latest_json(out_path, latest_path)
-    print(f"Auto-generated data/latest.json ({len(rows)} models on leaderboard)")
+    # 测速完成后自动刷新三份榜（互不混排，不合成总分）
+    data_dir = REPO_ROOT / "data"
+    for scen, filename in SCENARIO_BOARD_FILES.items():
+        board_path = data_dir / filename
+        rows = generate_latest_json(out_path, board_path, scenario=scen)
+        print(f"Auto-generated data/{filename} ({len(rows)} rows for scenario={scen})")
+    latest_path = data_dir / "latest.json"
     preview = refresh_board_preview(latest=latest_path)
     if preview is not None:
         print(f"Updated board preview: {preview}")

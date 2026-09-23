@@ -36,20 +36,70 @@ def _is_valid_call(r: dict[str, Any]) -> bool:
     return True
 
 
+def _record_scenario(rec: dict[str, Any]) -> str:
+    scen = rec.get("scenario")
+    if isinstance(scen, str) and scen:
+        return scen
+    return "200k"
+
+
+def _cl100k_value(rec: dict[str, Any]) -> int | None:
+    v = rec.get("cl100k_tokens")
+    if isinstance(v, bool):
+        return None
+    if isinstance(v, int) and v > 0:
+        return v
+    if isinstance(v, float) and v > 0:
+        return int(v)
+    return None
+
+
+def _required_half(used: list[dict[str, Any]], scenario: str) -> float | None:
+    """账单门槛：分母取该记录自己的 cl100k_tokens。
+
+    - 200k 缺 cl100k_tokens 时分母仍为 200000；
+    - 10k / sentence 缺 cl100k_tokens 时不上站（返回 None），不得当成 200000；
+    - 等于一半上站，低于一半不上站（调用方用 `<` 判定）。
+    """
+    thresholds: list[int] = []
+    for r in used:
+        v = _cl100k_value(r)
+        if v is None:
+            if scenario == "200k":
+                v = 200000
+            else:
+                return None
+        thresholds.append(v)
+    if not thresholds:
+        return None
+    return max(t / 2.0 for t in thresholds)
+
+
+SCENARIO_BOARD_FILES: dict[str, str] = {
+    "200k": "latest.json",
+    "10k": "latest_10k.json",
+    "sentence": "latest_sentence.json",
+}
+
+
 def generate_latest_json(
     results_jsonl: Path | str,
     output_json: Path | str,
+    scenario: str | None = "200k",
 ) -> list[dict[str, Any]]:
-    """读 data/results.jsonl 重新生成 data/latest.json。
+    """读 data/results.jsonl 重新生成榜单。
 
+    - scenario 为 None 时不过滤（兼容旧调用）；为档位名时只含该档；
+    - `data/latest.json` 只含 `200k`，`data/latest_10k.json` 只含 `10k`，
+      `data/latest_sentence.json` 只含 `sentence`，互不混排，不合成总分；
     - 每个格子跨全部 batch 收集有效成功调用；
     - 按 start_time 取最近 2 次有效成功；有效次数 < 2 不上站；
     - 不再要求同一次 bench / 同一 batch_id 内凑满 2 次；
     - 输出 token < 500 或失败的调用无效；
-    - 对方账单输入 token < 切片 cl100k 一半的格子不上站；
+    - 对方账单输入 token 中位数 < 该记录 cl100k_tokens 一半的格子不上站（等于一半上站）；
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
     - 中位数由最近 2 次有效成功计算（含 wall 秒，三位小数）；
-    - 按端到端 TPS 降序覆盖写 data/latest.json。
+    - 按端到端 TPS 降序覆盖写输出文件；某档无上站行时写 `[]`；不改写 results.jsonl。
     """
     jsonl_path = Path(results_jsonl)
     out_path = Path(output_json)
@@ -71,8 +121,12 @@ def generate_latest_json(
             except Exception:
                 continue
 
+            rec_scenario = _record_scenario(rec)
+            if scenario is not None and rec_scenario != scenario:
+                continue
+
             grid_key = (
-                rec.get("scenario", ""),
+                rec_scenario,
                 rec.get("model", ""),
                 rec.get("effort", ""),
                 rec.get("source", ""),
@@ -83,7 +137,7 @@ def generate_latest_json(
     now_iso = datetime.now(timezone.utc).astimezone().isoformat()
     rows: list[dict[str, Any]] = []
 
-    for (scenario, model, effort, source, harness), records in grid_records.items():
+    for (grid_scenario, model, effort, source, harness), records in grid_records.items():
         if not records:
             continue
 
@@ -97,8 +151,10 @@ def generate_latest_json(
         in_toks_list = [r["in_tokens"] for r in used if r.get("in_tokens") is not None]
         in_toks_median = statistics.median(in_toks_list) if in_toks_list else 0
 
-        cl100k = used[-1].get("cl100k_tokens") or used[0].get("cl100k_tokens") or 200000
-        if in_toks_median < (cl100k / 2.0):
+        required_half = _required_half(used, grid_scenario)
+        if required_half is None:
+            continue
+        if in_toks_median < required_half:
             continue
 
         e2e_list = [r["e2e_tps"] for r in used if r.get("e2e_tps") is not None]
@@ -123,7 +179,7 @@ def generate_latest_json(
         sample_times = [str(r["start_time"]) for r in used if r.get("start_time")]
 
         row = {
-            "scenario": scenario,
+            "scenario": grid_scenario,
             "model": model,
             "effort": effort,
             "source": source,
@@ -146,3 +202,15 @@ def generate_latest_json(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(rows, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return rows
+
+
+def generate_all_boards(
+    results_jsonl: Path | str,
+    output_dir: Path | str,
+) -> dict[str, list[dict[str, Any]]]:
+    """同一份 results.jsonl 写出三份榜，互不混排，不合成总分，不改写 results.jsonl。"""
+    out_dir = Path(output_dir)
+    boards: dict[str, list[dict[str, Any]]] = {}
+    for scen, filename in SCENARIO_BOARD_FILES.items():
+        boards[scen] = generate_latest_json(results_jsonl, out_dir / filename, scenario=scen)
+    return boards

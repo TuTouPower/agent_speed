@@ -8,6 +8,7 @@
 |collector_scheduler|t002, t005|2026-09-22|-|
 |latest_json_report|t003|2026-09-22|-|
 |public_repo_release|t004|2026-09-22|-|
+|scenarios_sentence_10k|t007|2026-09-23|-|
 
 <!-- 示例行（实际项目使用时从真实 task 收尾开始填写；示例勿放表内，「在表即生效」）：
 |example_slug|t000|2026-07-21|-|

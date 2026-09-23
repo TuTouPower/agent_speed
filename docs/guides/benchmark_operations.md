@@ -96,7 +96,30 @@ python report.py
 
 ______________________________________________________________________
 
-## 4. 场景三：常用命令行过滤与调试组合
+## 4. 场景三：三档独立评测（sentence / 10k / 200k）
+
+一次运行只选一档，未指定时为 `200k`。同一份 `data/results.jsonl` 聚合出三份榜，互不混排，不合成总分：`data/latest.json`（只含 `200k`）、`data/latest_10k.json`（只含 `10k`）、`data/latest_sentence.json`（只含 `sentence`）。
+
+```bash
+# 一句话档（单句指令，不附加切片，cl100k_tokens 61）
+uv run python scripts/run_bench.py --scenario sentence
+
+# 10K 档（任务说明与 task_200k.md 一致，切片为 django_10k.txt 全文，cl100k_tokens 10000）
+uv run python scripts/run_bench.py --scenario 10k
+
+# 200k 档（默认，可省略）
+uv run python scripts/run_bench.py --scenario 200k
+```
+
+刷新三份榜：
+
+```bash
+python report.py
+```
+
+______________________________________________________________________
+
+## 5. 场景四：常用命令行过滤与调试组合
 
 `scripts/run_bench.py` 支持丰富的白名单过滤与调试参数：
 
@@ -134,12 +157,12 @@ uv run python scripts/run_bench.py --models gemini-3.8-flash --reps 1 --timeout 
 
 ______________________________________________________________________
 
-## 5. 异常排障与脏数据处理
+## 6. 异常排障与脏数据处理
 
 1. **调用过程遭遇限流或网络断开**：
     - 无需手动编辑 `data/results.jsonl` 清理脏数据；
     - 修复网络或等待限流恢复后，直接按原命令重新执行该模型测试；
     - 系统会生成全新的 `batch_id`，`report.py` 会自动跳过历史失败批次，直接采纳最新的完整批次。
-2. **测试结果未进入 `data/latest.json` 的排查检查单**：
+2. **测试结果未进入榜单的排查检查单**：
     - **有效次数不足**：最新 batch 成功且输出 token ≥ 500 的次数是否少于 2 次？
-    - **账单输入被截断**：事件流返回的 `in_tokens` 中位数是否低于 100,000 tokens（切片 cl100k 的一半）？若低于门槛，契约判定为上下文严重丢失，拒绝上站。
+    - **账单输入被截断**：事件流返回的 `in_tokens` 中位数是否低于该记录 `cl100k_tokens` 的一半（`200k` 为 100,000，`10k` 为 5,000，`sentence` 为 30.5，等于一半上站）？若低于门槛，契约判定为上下文严重丢失，拒绝上站。注意按档位分榜排查（`200k` 看 `data/latest.json`，`10k` 看 `data/latest_10k.json`，`sentence` 看 `data/latest_sentence.json`）。
