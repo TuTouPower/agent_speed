@@ -55,6 +55,14 @@ cells:
     effort: null
     queue: "opencode-go"
 
+  # MiniMax-M3 仅支持自适应思考（adaptive/enabled/disabled），不支持细分思考强度，effort 设为 null，CLI 不传 --variant
+  - model: "MiniMax-M3"
+    alias: "minimax-official/MiniMax-M3"
+    source: "minimax-official"
+    harness: "opencode"
+    effort: null
+    queue: "minimax-official"
+
   - model: "muse-spark-1.3-contributor"
     alias: "opencode-go/muse-spark-1.3-contributor"
     source: "opencode-go"
