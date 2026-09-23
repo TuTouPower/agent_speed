@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.metrics import parse_codex_metrics, calculate_tps
 from agent_speed.harness.base import BaseHarness
+from agent_speed.scenarios import build_user_message
 
 
 class CodexHarness(BaseHarness):
@@ -37,7 +38,7 @@ class CodexHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        full_input = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}"
+        full_input = build_user_message(prompt, fixture_text)
 
         cmd = [
             self.bin_path,

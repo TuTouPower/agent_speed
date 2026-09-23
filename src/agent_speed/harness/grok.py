@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.metrics import parse_grok_metrics, calculate_tps
 from agent_speed.harness.base import BaseHarness
+from agent_speed.scenarios import build_user_message
 
 
 class GrokHarness(BaseHarness):
@@ -37,10 +38,10 @@ class GrokHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        # 构造 prompt-file
+        # 构造 prompt-file（sentence 档 fixture 为空时不附加分隔标记）
         prompt_file = cwd_path / "grok_prompt.md"
         prompt_file.write_text(
-            f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}",
+            build_user_message(prompt, fixture_text),
             encoding="utf-8",
         )
 

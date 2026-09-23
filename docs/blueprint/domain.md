@@ -5,7 +5,7 @@
 |术语|英文|说明|
 |---|---|---|
 |比较单位|Comparison Unit|基准比较单位为「`model` × `effort` × `source` × `harness` × `scenario`」。|
-|评测场景|Scenario|评测输入上下文与任务规模。MVP 版本为 200K 的 prompt，后续还会支持一句话、10K、100K prompt。|
+|评测场景|Scenario|评测输入上下文与任务规模。已支持 `sentence`、`10k`、`200k` 三档独立评测；`100k` 仍未做。|
 |服务提供方|Source|模型服务提供方渠道（如 `deepseek-official`、`opencode-go`、`cpa`、`google-antigravity` 等，非裸写 `official`）。|
 |运行框架|Harness|调用驱动框架（opencode、grok、codex、kimi、antigravity）。|
 |思考强度|Reasoning Effort / Variant|模型的思考档位（如 low、high、xhigh、max 等）。按 CLI 原文显示，不支持者为 null。|

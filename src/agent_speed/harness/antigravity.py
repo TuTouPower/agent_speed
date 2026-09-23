@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.metrics import parse_antigravity_metrics, calculate_tps
+from agent_speed.scenarios import build_user_message
 from agent_speed.harness.base import BaseHarness
 
 
@@ -19,7 +20,7 @@ def build_antigravity_cmd(
     fixture_text: str,
     bin_name: str = "agy",
 ) -> list[str]:
-    full_prompt = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_text}"
+    full_prompt = build_user_message(prompt, fixture_text)
     cmd = [
         bin_name,
         "-p", full_prompt,
@@ -62,8 +63,9 @@ class AntigravityHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        # 当输入超过 150KB 时，采用方案 1（多轮对话分块累积流水线），规避 agy 单消息截断
-        if len(fixture_text.encode("utf-8")) > 150 * 1024:
+        # 当输入超过 150KB 时，采用方案 1（多轮对话分块累积流水线），规避 agy 单消息截断。
+        # 该流水线只适用于 200k 档；10k 与 sentence 走单轮，不分块。
+        if cell.scenario == "200k" and len(fixture_text.encode("utf-8")) > 150 * 1024:
             return self._run_multiturn_pipeline(
                 cell=cell,
                 rep=rep,

@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 
 from agent_speed.models import GridCell, CallRecord
 from agent_speed.metrics import parse_kimi_metrics, calculate_tps
+from agent_speed.scenarios import build_user_message
 
 
 def get_kimi_config_path() -> Path:
@@ -35,7 +36,7 @@ KIMI_ARGV_MAX_BYTES = 850000
 
 
 def build_kimi_cmd(cell: GridCell, prompt: str, fixture_content: str, bin_name: str = "kimi") -> list[str]:
-    full_prompt = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_content}"
+    full_prompt = build_user_message(prompt, fixture_content)
     cmd = [
         bin_name,
         "-m", cell.resolved_cli_model,
@@ -142,7 +143,8 @@ class KimiHarness:
 
         cl100k_tokens = cell.cl100k_tokens
         fixture_bytes = fixture_text.encode("utf-8")
-        if len(fixture_bytes) > KIMI_ARGV_MAX_BYTES:
+        # 200K 超长切片截断只适用于 200k 档；10k 与 sentence 不截断、不改写 cl100k_tokens。
+        if cell.scenario == "200k" and len(fixture_bytes) > KIMI_ARGV_MAX_BYTES:
             fixture_text = fixture_bytes[:KIMI_ARGV_MAX_BYTES].decode("utf-8", errors="ignore")
             cl100k_tokens = 173218
 
