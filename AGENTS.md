@@ -28,9 +28,10 @@
 |`prompts/`|公开评测任务 prompt（`task_200k.md`）|评测基线文件，改动按 task 流程|
 |`data/results.jsonl`|原始测速调用明细（只追加）|公开跟踪的评测数据文件，不存模型正文|
 |`data/latest.json`|公开站上站聚合表（覆盖写）|公开跟踪的上站数据文件，按端到端 TPS 降序|
+|`data/models.json`|本仓权威模型身份表（覆盖写；`id` + 可选定价仓 `pricing_aliases`）|由模型表维护 task / 后续维护更新；测速流水线只读|
 |`runs/`|测试运行生成数据与日志（已 gitignore）|本地调试与运行产物，不入库|
 |`.repo_template/`|模板工具链（skills、scripts、docs、hooks）|仅模板演进时修改；细目与写权见`.repo_template/docs/usage.md`|
-|`artifacts/` `.scratch/`|产物与一次性草稿|运行与草稿；debug 复现和临时实验只写`.scratch/`（已 gitignore）；需保留的 spike 验证材料写 `docs/spikes/{sid}_{slug}/code/`。`data/` 下仅跟踪 `results.jsonl` / `latest.json` / `.gitkeep`，其余 runtime 忽略|
+|`artifacts/` `.scratch/`|产物与一次性草稿|运行与草稿；debug 复现和临时实验只写`.scratch/`（已 gitignore）；需保留的 spike 验证材料写 `docs/spikes/{sid}_{slug}/code/`。`data/` 下仅跟踪 `results.jsonl` / `latest.json` / `models.json` / `.gitkeep`，其余 runtime 忽略|
 
 ## 开发原则
 

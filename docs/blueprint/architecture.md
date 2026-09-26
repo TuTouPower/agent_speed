@@ -16,6 +16,7 @@
 - `prompts/`：公开评测任务 prompt（`task_200k.md`）。
 - `data/results.jsonl`：原始测速调用账本（追加写）。
 - `data/latest.json`：公开展示站聚合汇总表（覆盖写，扁平数组，行内 `scenario` 自描述）。
+- `data/models.json`：本仓权威模型身份表（`id` 主键；可选 `pricing_aliases` 挂定价仓 `served_model`）；测速与单价共用同一套模型 ID。
 - `tests/`：自动化测试套件。
 - `docs/`：项目规范与知识库。
     - `docs/specs/`：生效需求级规范（语料、调度、上站报告、发布）。
