@@ -1,0 +1,402 @@
+{
+  "source": "FeiZhuLulu/real-api-pricing web/src/assets/provider-logos (+ derived/points.json vendor)",
+  "note": "单价仓是厂商级图标（非每模型一图）。按 derived/points.json 的 vendor 映射；inkling* 上游 vendor=other，暂用 Command Code 渠道标；nemotron 按型号归 Microsoft。",
+  "logo_dir": "docs/provider-logos",
+  "absolute_dir": "/workspace/agent_speed_hist/docs/provider-logos",
+  "files": [
+    "alibaba.svg",
+    "anthropic.svg",
+    "claude.svg",
+    "command-code.webp",
+    "cursor.svg",
+    "deepseek.svg",
+    "devin.svg",
+    "google.svg",
+    "kimi.svg",
+    "meituan.svg",
+    "meta.svg",
+    "microsoft.svg",
+    "minimax.svg",
+    "ollama.svg",
+    "openai.svg",
+    "opencode.svg",
+    "stepfun.svg",
+    "tencent.svg",
+    "xai.svg",
+    "xiaomi.svg",
+    "zhipu.svg"
+  ],
+  "model_to_logo": {
+    "MiniMax-M3": {
+      "vendor": "MiniMax",
+      "logo_slug": "minimax",
+      "file": "minimax.svg",
+      "path": "docs/provider-logos/minimax.svg"
+    },
+    "claude-fable-5": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "claude-fable-5.1": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "claude-opus-4.8": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "claude-opus-5": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "claude-opus-5.5": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "claude-sonnet-5": {
+      "vendor": "Anthropic",
+      "logo_slug": "anthropic",
+      "file": "anthropic.svg",
+      "path": "docs/provider-logos/anthropic.svg"
+    },
+    "composer-2.5": {
+      "vendor": "Cursor",
+      "logo_slug": "cursor",
+      "file": "cursor.svg",
+      "path": "docs/provider-logos/cursor.svg"
+    },
+    "deepseek-v4-flash": {
+      "vendor": "DeepSeek",
+      "logo_slug": "deepseek",
+      "file": "deepseek.svg",
+      "path": "docs/provider-logos/deepseek.svg"
+    },
+    "deepseek-v4-flash-fast": {
+      "vendor": "DeepSeek",
+      "logo_slug": "deepseek",
+      "file": "deepseek.svg",
+      "path": "docs/provider-logos/deepseek.svg"
+    },
+    "deepseek-v4-pro": {
+      "vendor": "DeepSeek",
+      "logo_slug": "deepseek",
+      "file": "deepseek.svg",
+      "path": "docs/provider-logos/deepseek.svg"
+    },
+    "deepseek-v4.1-flash": {
+      "vendor": "DeepSeek",
+      "logo_slug": "deepseek",
+      "file": "deepseek.svg",
+      "path": "docs/provider-logos/deepseek.svg"
+    },
+    "gemini-3.7-flash": {
+      "vendor": "Google",
+      "logo_slug": "google",
+      "file": "google.svg",
+      "path": "docs/provider-logos/google.svg"
+    },
+    "gemini-3.8-flash": {
+      "vendor": "Google",
+      "logo_slug": "google",
+      "file": "google.svg",
+      "path": "docs/provider-logos/google.svg"
+    },
+    "glm-5.1": {
+      "vendor": "Zhipu",
+      "logo_slug": "zhipu",
+      "file": "zhipu.svg",
+      "path": "docs/provider-logos/zhipu.svg"
+    },
+    "glm-5.2": {
+      "vendor": "Zhipu",
+      "logo_slug": "zhipu",
+      "file": "zhipu.svg",
+      "path": "docs/provider-logos/zhipu.svg"
+    },
+    "glm-5.2-fast": {
+      "vendor": "Zhipu",
+      "logo_slug": "zhipu",
+      "file": "zhipu.svg",
+      "path": "docs/provider-logos/zhipu.svg"
+    },
+    "glm-5.3": {
+      "vendor": "Zhipu",
+      "logo_slug": "zhipu",
+      "file": "zhipu.svg",
+      "path": "docs/provider-logos/zhipu.svg"
+    },
+    "glm-5.3-flash": {
+      "vendor": "Zhipu",
+      "logo_slug": "zhipu",
+      "file": "zhipu.svg",
+      "path": "docs/provider-logos/zhipu.svg"
+    },
+    "gpt-5.5": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "gpt-5.6-luna": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "gpt-5.6-sol": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "gpt-5.6-terra": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "gpt-6-astra": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "gpt-6-sol": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg"
+    },
+    "grok-4.5": {
+      "vendor": "xAI",
+      "logo_slug": "xai",
+      "file": "xai.svg",
+      "path": "docs/provider-logos/xai.svg"
+    },
+    "grok-4.6": {
+      "vendor": "xAI",
+      "logo_slug": "xai",
+      "file": "xai.svg",
+      "path": "docs/provider-logos/xai.svg"
+    },
+    "grok-4.7": {
+      "vendor": "xAI",
+      "logo_slug": "xai",
+      "file": "xai.svg",
+      "path": "docs/provider-logos/xai.svg"
+    },
+    "hy3": {
+      "vendor": "Tencent",
+      "logo_slug": "tencent",
+      "file": "tencent.svg",
+      "path": "docs/provider-logos/tencent.svg"
+    },
+    "hy4-preview": {
+      "vendor": "Tencent",
+      "logo_slug": "tencent",
+      "file": "tencent.svg",
+      "path": "docs/provider-logos/tencent.svg"
+    },
+    "kimi-k2.6": {
+      "vendor": "Kimi",
+      "logo_slug": "kimi",
+      "file": "kimi.svg",
+      "path": "docs/provider-logos/kimi.svg"
+    },
+    "kimi-k2.7-code": {
+      "vendor": "Kimi",
+      "logo_slug": "kimi",
+      "file": "kimi.svg",
+      "path": "docs/provider-logos/kimi.svg"
+    },
+    "kimi-k2.7-code-highspeed": {
+      "vendor": "Kimi",
+      "logo_slug": "kimi",
+      "file": "kimi.svg",
+      "path": "docs/provider-logos/kimi.svg"
+    },
+    "kimi-k3": {
+      "vendor": "Kimi",
+      "logo_slug": "kimi",
+      "file": "kimi.svg",
+      "path": "docs/provider-logos/kimi.svg"
+    },
+    "longcat-2.0": {
+      "vendor": "Meituan",
+      "logo_slug": "meituan",
+      "file": "meituan.svg",
+      "path": "docs/provider-logos/meituan.svg"
+    },
+    "mimo-v2.5": {
+      "vendor": "Xiaomi",
+      "logo_slug": "xiaomi",
+      "file": "xiaomi.svg",
+      "path": "docs/provider-logos/xiaomi.svg"
+    },
+    "mimo-v2.5-pro": {
+      "vendor": "Xiaomi",
+      "logo_slug": "xiaomi",
+      "file": "xiaomi.svg",
+      "path": "docs/provider-logos/xiaomi.svg"
+    },
+    "mimo-v2.6-flash": {
+      "vendor": "Xiaomi",
+      "logo_slug": "xiaomi",
+      "file": "xiaomi.svg",
+      "path": "docs/provider-logos/xiaomi.svg"
+    },
+    "mimo-v2.6-pro": {
+      "vendor": "Xiaomi",
+      "logo_slug": "xiaomi",
+      "file": "xiaomi.svg",
+      "path": "docs/provider-logos/xiaomi.svg"
+    },
+    "mimo-v2.6-pro-ultraspeed": {
+      "vendor": "Xiaomi",
+      "logo_slug": "xiaomi",
+      "file": "xiaomi.svg",
+      "path": "docs/provider-logos/xiaomi.svg"
+    },
+    "minimax-m2.5": {
+      "vendor": "MiniMax",
+      "logo_slug": "minimax",
+      "file": "minimax.svg",
+      "path": "docs/provider-logos/minimax.svg"
+    },
+    "minimax-m2.7": {
+      "vendor": "MiniMax",
+      "logo_slug": "minimax",
+      "file": "minimax.svg",
+      "path": "docs/provider-logos/minimax.svg"
+    },
+    "muse-spark-1.2": {
+      "vendor": "Meta",
+      "logo_slug": "meta",
+      "file": "meta.svg",
+      "path": "docs/provider-logos/meta.svg"
+    },
+    "muse-spark-1.2-contributor": {
+      "vendor": "Meta",
+      "logo_slug": "meta",
+      "file": "meta.svg",
+      "path": "docs/provider-logos/meta.svg"
+    },
+    "muse-spark-1.3": {
+      "vendor": "Meta",
+      "logo_slug": "meta",
+      "file": "meta.svg",
+      "path": "docs/provider-logos/meta.svg"
+    },
+    "muse-spark-1.3-contributor": {
+      "vendor": "Meta",
+      "logo_slug": "meta",
+      "file": "meta.svg",
+      "path": "docs/provider-logos/meta.svg"
+    },
+    "omen-alpha": {
+      "vendor": "OpenCode",
+      "logo_slug": "opencode",
+      "file": "opencode.svg",
+      "path": "docs/provider-logos/opencode.svg"
+    },
+    "qwen3.6-plus": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.7-max": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.7-plus": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.8-27b": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.8-flash": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.8-max": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "qwen3.8-max-0902": {
+      "vendor": "Alibaba",
+      "logo_slug": "alibaba",
+      "file": "alibaba.svg",
+      "path": "docs/provider-logos/alibaba.svg"
+    },
+    "step-3.5-flash": {
+      "vendor": "StepFun",
+      "logo_slug": "stepfun",
+      "file": "stepfun.svg",
+      "path": "docs/provider-logos/stepfun.svg"
+    },
+    "step-3.7-flash": {
+      "vendor": "StepFun",
+      "logo_slug": "stepfun",
+      "file": "stepfun.svg",
+      "path": "docs/provider-logos/stepfun.svg"
+    },
+    "step-5-preview": {
+      "vendor": "StepFun",
+      "logo_slug": "stepfun",
+      "file": "stepfun.svg",
+      "path": "docs/provider-logos/stepfun.svg"
+    },
+    "swe-2": {
+      "vendor": "Devin",
+      "logo_slug": "devin",
+      "file": "devin.svg",
+      "path": "docs/provider-logos/devin.svg"
+    },
+    "nemotron-3-ultra": {
+      "vendor": "Microsoft",
+      "logo_slug": "microsoft",
+      "file": "microsoft.svg",
+      "path": "docs/provider-logos/microsoft.svg",
+      "note": "heuristic/fallback"
+    },
+    "inkling": {
+      "vendor": "Command Code",
+      "logo_slug": "command-code",
+      "file": "command-code.webp",
+      "path": "docs/provider-logos/command-code.webp",
+      "note": "heuristic/fallback"
+    },
+    "inkling-small": {
+      "vendor": "Command Code",
+      "logo_slug": "command-code",
+      "file": "command-code.webp",
+      "path": "docs/provider-logos/command-code.webp",
+      "note": "heuristic/fallback"
+    }
+  },
+  "missing_vendor": [],
+  "missing_logo_file": []
+}
