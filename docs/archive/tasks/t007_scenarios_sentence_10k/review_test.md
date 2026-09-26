@@ -3,7 +3,7 @@
 - task：`t007_scenarios_sentence_10k`
 - spec：`docs/tasks/t007_scenarios_sentence_10k/spec.md`
 - diff_anchor：`b78cdd1ef4424a2778821e0775444328bb0dea41`
-- target：`git -C '/Users/karson/kar/code/agent_speed_t007' diff b78cdd1ef4424a2778821e0775444328bb0dea41`
+- target：`git -C '/Users/karson/kar/code/agent_rank_t007' diff b78cdd1ef4424a2778821e0775444328bb0dea41`
 - round：1
 - reviewed_at：2026-09-23 09:33 UTC+8
 
@@ -13,7 +13,7 @@
 
 ## 结论
 
-- 落点仓库校验：`git rev-parse --show-toplevel` 为 `/Users/karson/kar/code/agent_speed_t007`。
+- 落点仓库校验：`git rev-parse --show-toplevel` 为 `/Users/karson/kar/code/agent_rank_t007`。
 - 测试范围：新 `tests/test_scenarios_sentence_10k.py`（10 用例）+ 存量 `tests/test_report.py`、`tests/test_scheduler.py` 等未被弱化（diff 显示旧测试零改动）。
 - 可测性核对：spec 声明全部 AC 可自动测试；上下文区有意不测（实网、字数判定、100k/1k、站点、预览图、Kimi 200K 截断）均未要求新增测试，符合。
 - 反假绿检查：
@@ -39,7 +39,7 @@ reviewed_scope: 07b020202c22033b
 
 ## Round 2 (2026-09-23 09:55 UTC+8)
 
-- 被审对象：worktree `/Users/karson/kar/code/agent_speed_t007` 在执行 commit `f4a695e` 的完整交付；本轮以相对 `b78cdd1ef4424a2778821e0775444328bb0dea41` 的全量 diff 为准直接读文件；worktree 干净；本轮采用门禁已验证值见结尾两行。
+- 被审对象：worktree `/Users/karson/kar/code/agent_rank_t007` 在执行 commit `f4a695e` 的完整交付；本轮以相对 `b78cdd1ef4424a2778821e0775444328bb0dea41` 的全量 diff 为准直接读文件；worktree 干净；本轮采用门禁已验证值见结尾两行。
 
 ### 前轮复核
 

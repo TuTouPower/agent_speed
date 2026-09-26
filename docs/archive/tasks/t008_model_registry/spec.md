@@ -19,7 +19,7 @@
 ### 非范围
 
 - 不写单价更新脚本，不生成 `pricing_latest.json` / 未对齐清单。
-- 不改测速流水线、`report.py`、benchmark 格子语义、前端、`great_websites`、部署。
+- 不改测速流水线、`report.py`、benchmark 格子语义、前端、外部站点仓、部署。
 - 不新增单独映射表；不写展示长名、上游调用 ID、折扣感。
 - 不改 `data/latest.json` / `data/results.jsonl` 内容（本 task 只读它们抽 ID）。
 

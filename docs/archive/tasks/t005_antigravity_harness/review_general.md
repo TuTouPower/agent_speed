@@ -3,7 +3,7 @@
 - task：`t005_antigravity_harness`
 - spec：`docs/tasks/t005_antigravity_harness/spec.md`
 - diff_anchor：`912db344fc55e1906ab388010038466bd3a8dc99`
-- target：`git -C '/Users/karson/kar/code/agent_speed_t005' diff 912db344fc55e1906ab388010038466bd3a8dc99`
+- target：`git -C '/Users/karson/kar/code/agent_rank_t005' diff 912db344fc55e1906ab388010038466bd3a8dc99`
 - round：1
 - reviewed_at：2026-09-22 17:40 UTC+8
 
@@ -15,26 +15,26 @@
 
 1. **AC-001（命令组装与直传切片）**: PASS
 
-    - `src/agent_speed/harness/antigravity.py` 中 `build_antigravity_cmd` 组装 `[bin_name, "-p", full_prompt, "--output-format", "stream-json"]`，并通过 `full_prompt` 拼接任务提示词与代码切片文本。
+    - `src/agent_rank/harness/antigravity.py` 中 `build_antigravity_cmd` 组装 `[bin_name, "-p", full_prompt, "--output-format", "stream-json"]`，并通过 `full_prompt` 拼接任务提示词与代码切片文本。
     - 正确传递 `--model`（基于 `cell.resolved_cli_model`）与 `--effort`（基于 `cell.effort`）。
     - `scripts/run_bench.py` 已扩展分支，允许 `antigravity` 与 `agy` 通过 argv 直传切片文本与 prompt。
     - 单测 `test_antigravity_cmd_builder` 验证通过。
 
 2. **AC-002（stream-json 指标解析与窗口计算）**: PASS
 
-    - `src/agent_speed/metrics.py` 中实现 `parse_antigravity_metrics`，容错解析逐行 JSON 事件流。
+    - `src/agent_rank/metrics.py` 中实现 `parse_antigravity_metrics`，容错解析逐行 JSON 事件流。
     - TTFT 精确捕获首个 `step_update.text_delta` 到达时刻；持续追踪末次 `text_delta` 到达时刻 `last_delta_t`；生成窗口正确计算为 `round(last_delta_t - ttft, 3)`，标记来源为 `antigravity:last_delta_minus_ttft`。
     - 提取 `step_update.usage` 或 `result.usage` 中的 `input_tokens` 与 `output_tokens`；结合 `calculate_tps` 计算出端到端 TPS 与生成 TPS。
     - 单测 `test_parse_antigravity_metrics` 验证通过。
 
 3. **AC-003（harness 注册与别名）**: PASS
 
-    - `src/agent_speed/harness/__init__.py` 的 `get_harness` 工厂字典已同时注册 `"antigravity": AntigravityHarness` 与 `"agy": AntigravityHarness`。
+    - `src/agent_rank/harness/__init__.py` 的 `get_harness` 工厂字典已同时注册 `"antigravity": AntigravityHarness` 与 `"agy": AntigravityHarness`。
     - 单测 `test_harness_registry_antigravity` 验证通过。
 
 4. **AC-004（200K 评测矩阵条目与队列键）**: PASS
 
-    - `src/agent_speed/matrix.py` 中 `BENCH_MATRIX_200K` 增加了 `gemini-3.8-flash-high` 与 `gemini-3.8-flash-low` 两个条目，配置 `source="google"`, `harness="antigravity"`。
+    - `src/agent_rank/matrix.py` 中 `BENCH_MATRIX_200K` 增加了 `gemini-3.8-flash-high` 与 `gemini-3.8-flash-low` 两个条目，配置 `source="google"`, `harness="antigravity"`。
     - `queue_key` 准确计算为 `google:antigravity`，场景为 `200k`。
     - 单测 `test_matrix_contains_antigravity` 验证通过。
 

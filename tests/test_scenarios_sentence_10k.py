@@ -8,7 +8,7 @@ SENTENCE = "请用中文写一篇 800 到 1200 字的短文，说明关系型数
 
 
 def _scenarios_cfg():
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.config import load_benchmark_config
     return load_benchmark_config().scenarios
 
 
@@ -28,7 +28,7 @@ def _rec(scenario, model="m", effort="high", source="s", harness="opencode",
 
 
 def test_ac001_sentence_inputs():
-    from agent_speed.scenarios import resolve_scenario_inputs, build_user_message
+    from agent_rank.scenarios import resolve_scenario_inputs, build_user_message
     cfg = _scenarios_cfg()
     assert cfg["sentence"]["prompt_text"] == SENTENCE
     assert cfg["sentence"]["cl100k_tokens"] == 61
@@ -44,8 +44,8 @@ def test_ac001_sentence_inputs():
     assert "CODE FIXTURE" not in msg
     assert "django" not in msg.lower() or True  # 不含 fixture 正文由空 fixture 保证
     # harness 记录
-    from agent_speed.models import GridCell
-    from agent_speed.scenarios import apply_scenario_to_cell
+    from agent_rank.models import GridCell
+    from agent_rank.scenarios import apply_scenario_to_cell
     cell = GridCell(scenario="200k", model="m", effort="high", source="s", harness="opencode", queue="q")
     cell2 = apply_scenario_to_cell(cell, "sentence", _scenarios_cfg())
     assert cell2.scenario == "sentence"
@@ -53,7 +53,7 @@ def test_ac001_sentence_inputs():
 
 
 def test_ac002_10k_inputs():
-    from agent_speed.scenarios import resolve_scenario_inputs, build_user_message
+    from agent_rank.scenarios import resolve_scenario_inputs, build_user_message
     prompt, fixture_text, fixture_path, cl100k = resolve_scenario_inputs("10k", scenarios_cfg=_scenarios_cfg())
     assert cl100k == 10000
     task_200k = (REPO_ROOT / "prompts" / "task_200k.md").read_text(encoding="utf-8")
@@ -70,8 +70,8 @@ def test_ac002_10k_inputs():
     assert task_200k in msg
     assert fixture_text in msg
     # 不被截断：Kimi 对 10k 不截断
-    from agent_speed.models import GridCell
-    from agent_speed.scenarios import apply_scenario_to_cell
+    from agent_rank.models import GridCell
+    from agent_rank.scenarios import apply_scenario_to_cell
     cell = apply_scenario_to_cell(
         GridCell(scenario="200k", model="m", effort="high", source="s", harness="kimi-code", queue="q"),
         "10k",
@@ -83,21 +83,21 @@ def test_ac002_10k_inputs():
 
 
 def test_ac003_default_200k():
-    from agent_speed.scenarios import resolve_scenario_inputs
+    from agent_rank.scenarios import resolve_scenario_inputs
     prompt, fixture_text, _, cl100k = resolve_scenario_inputs("200k", scenarios_cfg=_scenarios_cfg())
     assert prompt == (REPO_ROOT / "prompts" / "task_200k.md").read_text(encoding="utf-8")
     assert fixture_text == (REPO_ROOT / "fixtures" / "django_200k.txt").read_text(encoding="utf-8")
     assert cl100k == 200000
     # run_bench 默认 scenario 为 200k
     import argparse  # noqa: F401
-    from agent_speed.scenarios import VALID_SCENARIOS
+    from agent_rank.scenarios import VALID_SCENARIOS
     assert "200k" in VALID_SCENARIOS
 
 
 def test_ac004_single_scenario_per_run():
-    from agent_speed.models import GridCell
-    from agent_speed.scenarios import apply_scenario_to_cell
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.models import GridCell
+    from agent_rank.scenarios import apply_scenario_to_cell
+    from agent_rank.config import load_benchmark_config
     cfg = load_benchmark_config()
     base_keys = {(c.model, str(c.effort), c.source, c.harness) for c in cfg.cells}
     for scen, expected_cl in [("sentence", 61), ("10k", 10000), ("200k", 200000)]:
@@ -111,32 +111,32 @@ def test_ac004_single_scenario_per_run():
 
 def test_ac005_no_truncation_for_short():
     # Kimi：10k 与 sentence 不进入 173218 截断
-    from agent_speed.harness.kimi import KIMI_ARGV_MAX_BYTES
-    from agent_speed.models import GridCell
-    from agent_speed.scenarios import resolve_scenario_inputs
+    from agent_rank.harness.kimi import KIMI_ARGV_MAX_BYTES
+    from agent_rank.models import GridCell
+    from agent_rank.scenarios import resolve_scenario_inputs
     for scen in ("10k", "sentence"):
         _, fixture_text, _, cl = resolve_scenario_inputs(scen, scenarios_cfg=_scenarios_cfg())
         assert len(fixture_text.encode("utf-8")) <= KIMI_ARGV_MAX_BYTES
         assert cl != 173218
     # 代码层面：Kimi 截断只对 200k 生效（构造超长 fixture 也只在 200k 截断）
-    import agent_speed.harness.kimi as kimi_mod
+    import agent_rank.harness.kimi as kimi_mod
     import inspect
     src = inspect.getsource(kimi_mod.KimiHarness.run)
     assert "200k" in src
     # antigravity 大输入流水线只对 200k 生效
-    import agent_speed.harness.antigravity as agy_mod
+    import agent_rank.harness.antigravity as agy_mod
     src2 = inspect.getsource(agy_mod.AntigravityHarness.run)
     assert "200k" in src2
 
 
 def test_ac005_sentence_no_fixture_marker_all_harness():
-    from agent_speed.scenarios import build_user_message
+    from agent_rank.scenarios import build_user_message
     msg = build_user_message(SENTENCE, "")
     assert msg == SENTENCE
     assert "CODE FIXTURE" not in msg
-    from agent_speed.harness.kimi import build_kimi_cmd
-    from agent_speed.harness.antigravity import build_antigravity_cmd
-    from agent_speed.models import GridCell
+    from agent_rank.harness.kimi import build_kimi_cmd
+    from agent_rank.harness.antigravity import build_antigravity_cmd
+    from agent_rank.models import GridCell
     cell = GridCell(scenario="sentence", model="m", effort="high", source="s", harness="opencode", queue="q")
     assert build_kimi_cmd(cell, SENTENCE, "") == ["kimi", "-m", cell.resolved_cli_model, "-p", SENTENCE, "--output-format", "stream-json"] or "CODE FIXTURE" not in build_kimi_cmd(cell, SENTENCE, "")[4]
     assert "CODE FIXTURE" not in build_antigravity_cmd(cell, SENTENCE, "")[2]
@@ -145,7 +145,7 @@ def test_ac005_sentence_no_fixture_marker_all_harness():
 def test_scenarios_config_validation_rejects_bad_entries(tmp_path):
     """配置 scenarios 节缺档、双 prompt 源、非法 cl100k 时加载失败。"""
     import pytest
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.config import load_benchmark_config
     base = (
         "concurrency:\n  global_max: 10\n  per_queue: 2\n"
         "defaults:\n  scenario: \"200k\"\n  reps: 1\n  results_file: \"data/results.jsonl\"\n"
@@ -179,13 +179,13 @@ def test_scenarios_config_validation_rejects_bad_entries(tmp_path):
     with pytest.raises(ValueError):
         load_benchmark_config(p)
 
-    from agent_speed.scenarios import resolve_scenario_inputs
+    from agent_rank.scenarios import resolve_scenario_inputs
     with pytest.raises(ValueError):
         resolve_scenario_inputs("10k", scenarios_cfg={"sentence": cfg.scenarios["sentence"]})
 
 
 def test_ac006_three_boards_split(tmp_path):
-    from agent_speed.report import generate_latest_json
+    from agent_rank.report import generate_latest_json
     jsonl = tmp_path / "results.jsonl"
     out200 = tmp_path / "latest_200k.json"
     out10 = tmp_path / "board_10k.json"
@@ -225,7 +225,7 @@ def test_ac006_three_boards_split(tmp_path):
 
 
 def test_ac006_sort_desc_within_board(tmp_path):
-    from agent_speed.report import generate_latest_json
+    from agent_rank.report import generate_latest_json
     jsonl = tmp_path / "results.jsonl"
     out = tmp_path / "board_10k.json"
     rows = []
@@ -242,7 +242,7 @@ def test_ac006_sort_desc_within_board(tmp_path):
 
 
 def test_ac007_billing_thresholds(tmp_path):
-    from agent_speed.report import generate_latest_json
+    from agent_rank.report import generate_latest_json
     # 等于一半上站
     jl = tmp_path / "a.jsonl"
     out = tmp_path / "o.json"

@@ -24,7 +24,7 @@ front matter 只经 `task.py` 修改；reviewer 只写对应 `review_*.md`。
 
 创建期不预测实施步骤。只记有追溯价值的内容；无事项时写“无”。
 
-- 实现新包 `src/agent_speed/`：包含数据模型 `models.py`、指标解析 `metrics.py`、队列调度器 `scheduler.py`、追加收集器 `collector.py`、矩阵定义 `matrix.py` 以及 harness 适配器（opencode、grok、codex、kimi）。
+- 实现新包 `src/agent_rank/`：包含数据模型 `models.py`、指标解析 `metrics.py`、队列调度器 `scheduler.py`、追加收集器 `collector.py`、矩阵定义 `matrix.py` 以及 harness 适配器（opencode、grok、codex、kimi）。
 - 调度器以 `source+harness` 为队列键，同队列内串行保证无重叠，队列间并行，支持每格 3 次 + 失败队列末尾补测 1 次机制。
 - 指标计算：TTFT 取含思考的首 token，区分端到端 TPS 与生成 TPS，生成窗口来源严格对齐契约口径（opencode 文本段服务端窗、grok 增量窗、kimi 服务端解码窗、codex 为空）。
 - 适配 kimi 直传 argv 机制，并根据全局配置校验 effort 不符跳过；真实 200K 冒烟验证 kimi CLI 报 `RangeError: Maximum call stack size exceeded`，已如实记录为失败并完成未知契约闭环。
@@ -52,7 +52,7 @@ Round 1 零 finding。
 
 ### 结果摘要
 
-- 重构评测驱动核心包 `src/agent_speed/` 与 CLI 驱动 `scripts/run_bench.py`。
+- 重构评测驱动核心包 `src/agent_rank/` 与 CLI 驱动 `scripts/run_bench.py`。
 - 实现按 source+harness 分队列调度机制（同队列串行、队列间并行、3+1 batch）。
 - 规范端到端 TPS 与生成 TPS 口径及生成窗口来源。
 - 实现 kimi 与 opencode 适配器，完成 200K 真实冒烟并安全记录 `results.jsonl`。

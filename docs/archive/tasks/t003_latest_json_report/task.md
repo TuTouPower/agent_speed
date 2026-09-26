@@ -24,7 +24,7 @@ front matter 只经 `task.py` 修改；reviewer 只写对应 `review_*.md`。
 
 创建期不预测实施步骤。只记有追溯价值的内容；无事项时写“无”。
 
-- 实现报告生成核心模块 `src/agent_speed/report.py` 与入口脚本 `report.py`。
+- 实现报告生成核心模块 `src/agent_rank/report.py` 与入口脚本 `report.py`。
 - 实现最新 batch 锁定与历史 batch 隔离机制（更早 batch 不补位）。
 - 落地完整上站门槛过滤：有效调用筛选（排除失败与 out_tokens < 500）、有效次数 >= 2 门槛、对方账单输入 token >= cl100k / 2 门槛。
 - codex 无生成窗口格子正常上站且 `gen_tps` 输出为 null。
@@ -53,6 +53,6 @@ Round 1 零 finding。
 
 ### 结果摘要
 
-- 实现 `src/agent_speed/report.py` 与 `report.py`。
+- 实现 `src/agent_rank/report.py` 与 `report.py`。
 - 完整实现最新 batch 隔离、有效样本过滤、输入 token 半数门槛、codex 生成 TPS 空值兼容与中位数计算。
 - 按端到端 TPS 降序覆盖输出 `latest.json`。

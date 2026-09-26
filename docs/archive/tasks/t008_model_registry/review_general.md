@@ -3,7 +3,7 @@
 - task：`t008_model_registry`
 - spec：`docs/tasks/t008_model_registry/spec.md`
 - diff_anchor：`6944aea3cb5767e5984935859a748d7cbda39273`
-- target：`git -C '/workspace/agent_speed_hist_t008' diff 6944aea3cb5767e5984935859a748d7cbda39273`
+- target：`git -C '/workspace/agent_rank_hist_t008' diff 6944aea3cb5767e5984935859a748d7cbda39273`
 - round：1
 - reviewed_at：2026-09-26 08:56 UTC+8
 

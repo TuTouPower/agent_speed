@@ -1,13 +1,13 @@
 import shutil
 
-from agent_speed.models import GridCell
-from agent_speed.harness.mimo import (
+from agent_rank.models import GridCell
+from agent_rank.harness.mimo import (
     MIMO_ARGV_MAX_BYTES,
     MimoHarness,
     build_mimo_cmd,
 )
-from agent_speed.harness import get_harness
-from agent_speed.metrics import parse_mimo_metrics
+from agent_rank.harness import get_harness
+from agent_rank.metrics import parse_mimo_metrics
 
 
 def test_mimo_cmd_builder():
@@ -160,7 +160,7 @@ def test_harness_registry_mimo():
 
 def test_config_contains_mimo_code_cells():
     """AC-004: 主配置包含 mimo-code 驱动的 2.6 flash/pro 格子"""
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.config import load_benchmark_config
     cfg = load_benchmark_config()
     mimo_cells = [c for c in cfg.cells if c.harness == "mimo-code"]
     assert len(mimo_cells) == 3

@@ -8,8 +8,8 @@ try:
 except ImportError:
     yaml = None
 
-from agent_speed.models import GridCell
-from agent_speed.scenarios import VALID_SCENARIOS
+from agent_rank.models import GridCell
+from agent_rank.scenarios import VALID_SCENARIOS
 
 
 class BenchmarkConfig:

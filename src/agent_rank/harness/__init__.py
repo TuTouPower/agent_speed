@@ -1,11 +1,11 @@
-from agent_speed.harness.base import BaseHarness
-from agent_speed.harness.opencode import OpencodeHarness
-from agent_speed.harness.grok import GrokHarness
-from agent_speed.harness.codex import CodexHarness
-from agent_speed.harness.kimi import KimiHarness
-from agent_speed.harness.antigravity import AntigravityHarness
-from agent_speed.harness.mimo import MimoHarness
-from agent_speed.harness.mcode import McodeHarness
+from agent_rank.harness.base import BaseHarness
+from agent_rank.harness.opencode import OpencodeHarness
+from agent_rank.harness.grok import GrokHarness
+from agent_rank.harness.codex import CodexHarness
+from agent_rank.harness.kimi import KimiHarness
+from agent_rank.harness.antigravity import AntigravityHarness
+from agent_rank.harness.mimo import MimoHarness
+from agent_rank.harness.mcode import McodeHarness
 
 
 def get_harness(name: str) -> BaseHarness:

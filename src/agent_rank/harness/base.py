@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from agent_speed.models import GridCell, CallRecord
+from agent_rank.models import GridCell, CallRecord
 
 
 class BaseHarness(ABC):

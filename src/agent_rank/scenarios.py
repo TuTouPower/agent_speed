@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 from pathlib import Path
 
-from agent_speed.models import GridCell
+from agent_rank.models import GridCell
 
 VALID_SCENARIOS = ("sentence", "10k", "200k")
 

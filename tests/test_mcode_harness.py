@@ -1,7 +1,7 @@
-from agent_speed.models import GridCell
-from agent_speed.harness.mcode import McodeHarness, build_mcode_cmd
-from agent_speed.harness import get_harness
-from agent_speed.metrics import parse_mcode_metrics
+from agent_rank.models import GridCell
+from agent_rank.harness.mcode import McodeHarness, build_mcode_cmd
+from agent_rank.harness import get_harness
+from agent_rank.metrics import parse_mcode_metrics
 
 
 def _cell(effort=None):
@@ -83,7 +83,7 @@ def test_harness_registry_mcode():
 
 def test_config_contains_minimax_code_cell():
     """AC-006: 主配置含 minimax-code 驱动的 MiniMax-M3 格子（effort 为空）"""
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.config import load_benchmark_config
     cfg = load_benchmark_config()
     cells = [c for c in cfg.cells if c.harness == "minimax-code"]
     assert len(cells) == 1

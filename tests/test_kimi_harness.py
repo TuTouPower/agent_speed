@@ -1,7 +1,7 @@
 import pytest
 from pathlib import Path
-from agent_speed.models import GridCell
-from agent_speed.harness.kimi import build_kimi_cmd, get_kimi_global_effort
+from agent_rank.models import GridCell
+from agent_rank.harness.kimi import build_kimi_cmd, get_kimi_global_effort
 
 
 def test_kimi_argv_direct_and_no_tools():
@@ -30,13 +30,13 @@ def test_kimi_effort_mismatch(monkeypatch, tmp_path):
     cfg_file = tmp_path / "config.toml"
     cfg_file.write_text('[thinking]\neffort = "high"\n', encoding="utf-8")
 
-    monkeypatch.setattr("agent_speed.harness.kimi.get_kimi_config_path", lambda: cfg_file)
+    monkeypatch.setattr("agent_rank.harness.kimi.get_kimi_config_path", lambda: cfg_file)
 
     assert get_kimi_global_effort() == "high"
 
     # 请求 max，但全局是 high
     cell = GridCell("200k", "kimi-code/k3", "max", "moonshot", "kimi")
-    from agent_speed.harness.kimi import KimiHarness
+    from agent_rank.harness.kimi import KimiHarness
     harness = KimiHarness()
     record = harness.run(cell, rep=1, batch_id="b1", prompt="test", fixture_text="fake", cwd=tmp_path)
 

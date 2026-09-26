@@ -8,15 +8,15 @@ import subprocess
 import time
 from datetime import datetime, timezone
 
-from agent_speed.models import GridCell, CallRecord
-from agent_speed.metrics import parse_codex_metrics, calculate_tps
-from agent_speed.harness.base import BaseHarness
-from agent_speed.scenarios import build_user_message
+from agent_rank.models import GridCell, CallRecord
+from agent_rank.metrics import parse_grok_metrics, calculate_tps
+from agent_rank.harness.base import BaseHarness
+from agent_rank.scenarios import build_user_message
 
 
-class CodexHarness(BaseHarness):
+class GrokHarness(BaseHarness):
     def __init__(self, bin_path: str | None = None):
-        self.bin_path = bin_path or os.environ.get("CODEX_BIN") or shutil.which("codex") or "codex"
+        self.bin_path = bin_path or os.environ.get("GROK_BIN") or shutil.which("grok") or "grok"
 
     def run(
         self,
@@ -38,21 +38,27 @@ class CodexHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        full_input = build_user_message(prompt, fixture_text)
+        # 构造 prompt-file（sentence 档 fixture 为空时不附加分隔标记）
+        prompt_file = cwd_path / "grok_prompt.md"
+        prompt_file.write_text(
+            build_user_message(prompt, fixture_text),
+            encoding="utf-8",
+        )
 
         cmd = [
             self.bin_path,
-            "exec",
-            "--json",
-            "--skip-git-repo-check",
-            "--sandbox", "read-only",
-            "-C", str(cwd_path),
+            "--output-format", "streaming-messages-json",
+            "--include-partial-messages",
+            "--tools", "",
+            "--no-subagents",
+            "-m", cell.resolved_cli_model,
         ]
         if cell.effort:
-            cmd += ["-c", f'model_reasoning_effort="{cell.effort}"']
+            cmd += ["--effort", cell.effort]
         cmd += [
-            "-m", cell.resolved_cli_model,
-            "-",
+            "--always-approve",
+            "--cwd", str(cwd_path),
+            "--prompt-file", str(prompt_file),
         ]
 
         t0 = time.monotonic()
@@ -64,18 +70,12 @@ class CodexHarness(BaseHarness):
             proc = subprocess.Popen(
                 cmd,
                 cwd=str(cwd_path),
-                stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
                 bufsize=1,
             )
             assert proc.stdout is not None
-            assert proc.stdin is not None
-
-            proc.stdin.write(full_input)
-            proc.stdin.close()
-
             for line in proc.stdout:
                 lines.append((round(time.monotonic() - t0, 3), line.rstrip("\n")))
 
@@ -94,7 +94,7 @@ class CodexHarness(BaseHarness):
 
         wall = round(time.monotonic() - t0, 3)
 
-        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_codex_metrics(lines)
+        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_grok_metrics(lines)
         e2e_tps, gen_tps = calculate_tps(wall, decode_window, out_toks)
 
         return CallRecord(

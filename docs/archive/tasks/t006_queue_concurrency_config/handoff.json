@@ -5,22 +5,22 @@
   "status": "done",
   "branch": "t006_queue_concurrency_config",
   "base_sha": "b5df8cdd452136d298304d9f12b2296820fbd36c",
-  "tests": "132 contract passed, 22 agent_speed tests passed",
+  "tests": "132 contract passed, 22 agent_rank tests passed",
   "blackbox": "无",
   "review": "Round 1 PASS (full)",
   "ac_evidence": {
     "AC-001": [
       "config/benchmark.json:1-125",
-      "src/agent_speed/config.py:1-48",
+      "src/agent_rank/config.py:1-48",
       "tests/test_scheduler.py:84-95"
     ],
     "AC-002": [
-      "src/agent_speed/models.py:8-41",
+      "src/agent_rank/models.py:8-41",
       "config/benchmark.json:14-124",
       "tests/test_scheduler.py:90-95"
     ],
     "AC-003": [
-      "src/agent_speed/scheduler.py:20-117",
+      "src/agent_rank/scheduler.py:20-117",
       "tests/test_scheduler.py:98-132"
     ],
     "AC-004": [

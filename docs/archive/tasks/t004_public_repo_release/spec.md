@@ -2,7 +2,7 @@
 
 ## 背景
 
-契约要求公开仓库（AGPL）不含旧私有材料，README/AGENTS/blueprint 与实现一致，公开仓 `TuTouPower/agent_speed` 建立。当前仓库仍含旧脚本与旧文档。
+契约要求公开仓库（AGPL）不含旧私有材料，README/AGENTS/blueprint 与实现一致，公开仓 `TuTouPower/agent_rank` 建立。当前仓库仍含旧脚本与旧文档。
 
 ## 契约区
 
@@ -29,10 +29,10 @@
 - [ ] AC-001：仓库不含旧脚本（`src/bench_speed.py`、`bench_stream.py`、`bench_ctx.py`、`merge_final.py`、`rescan_stream.py`、`render_md.py`、`ts_capture.py`）、旧三档 prompts、`reproduce_prompt.md`。
 - [ ] AC-002：`LICENSE` 为 AGPL-3.0 全文；Django 切片的 BSD 声明随切片保留。
 - [ ] AC-003：README 与新实现一致：含许可证、语料说明（django pin）、用法、结果文件（`results.jsonl`/`latest.json`）说明。
-- [ ] AC-004：`AGENTS.md` 目录与读写规则表更新到新结构（`src/agent_speed/`、`tests/`、`fixtures/`、`results.jsonl`、`latest.json`）。
+- [ ] AC-004：`AGENTS.md` 目录与读写规则表更新到新结构（`src/agent_rank/`、`tests/`、`fixtures/`、`results.jsonl`、`latest.json`）。
 - [ ] AC-005：`docs/blueprint/architecture.md`、`domain.md`、`testing.md` 与实现一致，`test_cmd` 实际可跑。
 - [ ] AC-006：本机 `runs/` 旧跑分删除；仓库无对旧跑分的引用。
-- [ ] AC-007：[deploy] GitHub `TuTouPower/agent_speed` 公开仓库存在，`main` 与本地一致；远端无私有材料、密钥、本机绝对路径。
+- [ ] AC-007：[deploy] GitHub `TuTouPower/agent_rank` 公开仓库存在，`main` 与本地一致；远端无私有材料、密钥、本机绝对路径。
 
 ### 可测试性声明
 

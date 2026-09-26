@@ -7,9 +7,9 @@ reviewed_scope: a216ee1c28e7cf80
 - 比较基线：`b5df8cdd452136d298304d9f12b2296820fbd36c`
 - 审查文件：
   - `config/benchmark.json`
-  - `src/agent_speed/config.py`
-  - `src/agent_speed/models.py`
-  - `src/agent_speed/scheduler.py`
+  - `src/agent_rank/config.py`
+  - `src/agent_rank/models.py`
+  - `src/agent_rank/scheduler.py`
   - `scripts/run_bench.py`
   - `tests/test_scheduler.py`
   - `docs/specs/collector_scheduler.md`
@@ -22,7 +22,7 @@ reviewed_scope: a216ee1c28e7cf80
 
 1. **AC-001（`config/benchmark.json` 主配置合法性与字段完整性）**: PASS
    - 新增 `config/benchmark.json`，包含 `concurrency`（`global_max: 10`, `per_queue: 2`）、`defaults`（场景、重复次数、重试次数、超时、素材路径及结果文件）以及 12 个完整评测网格。
-   - 新增 `src/agent_speed/config.py`，实现 `load_benchmark_config` 安全解析配置并挂载至 `BenchmarkConfig` 对象。
+   - 新增 `src/agent_rank/config.py`，实现 `load_benchmark_config` 安全解析配置并挂载至 `BenchmarkConfig` 对象。
    - 单测 `tests/test_scheduler.py:test_load_benchmark_config_file` 验证配置读取完整无误。
 
 2. **AC-002（`GridCell` 显式 `queue`、`model`/`cli_model` 解耦、`source` 规范化）**: PASS
@@ -58,11 +58,11 @@ reviewed_scope: a216ee1c28e7cf80
 - **并发协调与死锁防护**：各物理队列管理循环通过主执行器外独立的 Python 线程调度，任务通过 `pool.submit` 提交至全局线程池，在池内工作线程获取队列 Semaphore。此拓扑保证了只要 runner 能正常返回，Semaphore 必按序释放，不会造成全局线程槽耗尽导致的自锁现象。
 - **向后兼容性**：`GridCell` 的 `queue_key` 与 `resolved_cli_model` 保持优雅降级，存量单测与测试桩不受破坏。
 - **非阻断观察项（Non-blocking）**：
-  - `src/agent_speed/matrix.py` 中留存的 `BENCH_MATRIX_200K` 仍包含历史测试用的 `source="official"` 条目，仅在 `tests/test_antigravity_harness.py` 冒烟测试中引用；建议后续 task 将其统一迁至 `config/benchmark.json` 或更新常量定义。
+  - `src/agent_rank/matrix.py` 中留存的 `BENCH_MATRIX_200K` 仍包含历史测试用的 `source="official"` 条目，仅在 `tests/test_antigravity_harness.py` 冒烟测试中引用；建议后续 task 将其统一迁至 `config/benchmark.json` 或更新常量定义。
 
 ## AC 复验方式
 
-在工作仓库 `/Users/karson/kar/code/agent_speed_t006` 下执行以下命令复验：
+在工作仓库 `/Users/karson/kar/code/agent_rank_t006` 下执行以下命令复验：
 
 1. **单元测试与双层并发断言（覆盖 AC-001 ~ AC-004）**：
    ```bash

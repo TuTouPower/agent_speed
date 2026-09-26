@@ -1,11 +1,11 @@
 import pytest
 from pathlib import Path
 
-from agent_speed.models import GridCell
-from agent_speed.harness.antigravity import AntigravityHarness, build_antigravity_cmd
-from agent_speed.harness import get_harness
-from agent_speed.metrics import parse_antigravity_metrics
-from agent_speed.matrix import BENCH_MATRIX_200K
+from agent_rank.models import GridCell
+from agent_rank.harness.antigravity import AntigravityHarness, build_antigravity_cmd
+from agent_rank.harness import get_harness
+from agent_rank.metrics import parse_antigravity_metrics
+from agent_rank.matrix import BENCH_MATRIX_200K
 
 
 def test_antigravity_cmd_builder():
@@ -75,7 +75,7 @@ def test_harness_registry_antigravity():
 
 def test_matrix_contains_antigravity():
     """AC-004: 校验主配置中包含 antigravity 驱动格子的合法性"""
-    from agent_speed.config import load_benchmark_config
+    from agent_rank.config import load_benchmark_config
     cfg = load_benchmark_config()
     agy_cells = [c for c in cfg.cells if c.harness in ("antigravity", "agy")]
     assert bool(agy_cells)

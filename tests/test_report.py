@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from agent_speed.report import generate_latest_json
+from agent_rank.report import generate_latest_json
 
 
 def test_report_pipeline(tmp_path):
@@ -147,7 +147,7 @@ def test_report_pipeline(tmp_path):
 
 def test_generate_all_boards_writes_three_latest(tmp_path):
     """写出 latest_200k / latest_10k / latest_sentence：各档独立、行内 scenario 自描述、档内 e2e 降序。"""
-    from agent_speed.report import BOARD_FILENAMES, generate_all_boards
+    from agent_rank.report import BOARD_FILENAMES, generate_all_boards
 
     jsonl = tmp_path / "results.jsonl"
     out = tmp_path / "latest_200k.json"
@@ -175,8 +175,8 @@ def test_generate_all_boards_writes_three_latest(tmp_path):
 
 def test_board_excludes_removed_matrix_cells(tmp_path):
     """矩阵已删的格子不上榜（results 明细保留，只过滤榜单）；cells=None 时不过滤。"""
-    from agent_speed.models import GridCell
-    from agent_speed.report import generate_all_boards, generate_latest_json
+    from agent_rank.models import GridCell
+    from agent_rank.report import generate_all_boards, generate_latest_json
 
     jsonl = tmp_path / "results.jsonl"
     rows = []
@@ -205,7 +205,7 @@ def test_board_excludes_removed_matrix_cells(tmp_path):
 
 def test_latest_uses_max_four_of_valid(tmp_path):
     """5 次有效只取最近 4 次算中位数；valid_reps 为实际采用数。"""
-    from agent_speed.report import generate_latest_json
+    from agent_rank.report import generate_latest_json
     jsonl = tmp_path / "r.jsonl"
     out = tmp_path / "o.json"
     rows = []

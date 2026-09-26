@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from agent_speed.models import CallRecord
+from agent_rank.models import CallRecord
 
 
 def append_result_record(file_path: Path | str, record: CallRecord) -> None:

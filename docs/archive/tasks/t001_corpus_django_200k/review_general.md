@@ -3,7 +3,7 @@
 - task：`t001_corpus_django_200k`
 - spec：`docs/tasks/t001_corpus_django_200k/spec.md`
 - diff_anchor：`938f3534effe9f3cc6ebe15f426ff83fae27addf`
-- target：`git -C '/Users/karson/kar/code/agent_speed_t001' diff 938f3534effe9f3cc6ebe15f426ff83fae27addf`
+- target：`git -C '/Users/karson/kar/code/agent_rank_t001' diff 938f3534effe9f3cc6ebe15f426ff83fae27addf`
 - round：1
 - reviewed_at：2026-09-22 14:10 UTC+8
 

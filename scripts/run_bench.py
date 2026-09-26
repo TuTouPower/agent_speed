@@ -21,14 +21,14 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from agent_speed.config import load_benchmark_config
-from agent_speed.models import GridCell, CallRecord
-from agent_speed.harness import get_harness
-from agent_speed.scheduler import QueueScheduler
-from agent_speed.collector import append_result_record
-from agent_speed.report import generate_all_boards
-from agent_speed.board_preview import refresh_board_preview
-from agent_speed.scenarios import VALID_SCENARIOS, apply_scenario_to_cell, resolve_scenario_inputs
+from agent_rank.config import load_benchmark_config
+from agent_rank.models import GridCell, CallRecord
+from agent_rank.harness import get_harness
+from agent_rank.scheduler import QueueScheduler
+from agent_rank.collector import append_result_record
+from agent_rank.report import generate_all_boards
+from agent_rank.board_preview import refresh_board_preview
+from agent_rank.scenarios import VALID_SCENARIOS, apply_scenario_to_cell, resolve_scenario_inputs
 
 
 def main(argv: list[str] | None = None) -> int:

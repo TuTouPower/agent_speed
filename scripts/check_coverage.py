@@ -18,9 +18,9 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from agent_speed.config import load_benchmark_config
-from agent_speed.coverage import compute_coverage
-from agent_speed.scenarios import VALID_SCENARIOS
+from agent_rank.config import load_benchmark_config
+from agent_rank.coverage import compute_coverage
+from agent_rank.scenarios import VALID_SCENARIOS
 
 ICON = {"onboard": "ok ", "thin": "thin", "missing": "MISS", "gate-blocked": "GATE"}
 
@@ -49,7 +49,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.scenarios:
         scenarios = tuple(s for s in args.scenarios.split(",") if s in VALID_SCENARIOS)
 
-    from agent_speed.report import board_path
+    from agent_rank.report import board_path
 
     for scen in scenarios:
         board_file = board_path(REPO_ROOT / "data", scen)

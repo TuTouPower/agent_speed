@@ -5,12 +5,12 @@ reviewed_scope: a216ee1c28e7cf80
 ## 审查范围与基线
 
 - 审查基线：`b5df8cdd452136d298304d9f12b2296820fbd36c`
-- 工作仓库：`/Users/karson/kar/code/agent_speed_t006`
+- 工作仓库：`/Users/karson/kar/code/agent_rank_t006`
 - 涉及改动：
   - `config/benchmark.json`
-  - `src/agent_speed/config.py`
-  - `src/agent_speed/models.py`
-  - `src/agent_speed/scheduler.py`
+  - `src/agent_rank/config.py`
+  - `src/agent_rank/models.py`
+  - `src/agent_rank/scheduler.py`
   - `scripts/run_bench.py`
   - `tests/test_scheduler.py`
   - `docs/specs/collector_scheduler.md`
@@ -63,7 +63,7 @@ reviewed_scope: a216ee1c28e7cf80
 
 ## AC 复验方式
 
-在工作仓库 `/Users/karson/kar/code/agent_speed_t006` 下执行以下命令复验：
+在工作仓库 `/Users/karson/kar/code/agent_rank_t006` 下执行以下命令复验：
 
 1. **复验门禁测试套件（132 契约 + 22 单测）**：
    ```bash

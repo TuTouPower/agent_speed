@@ -1,7 +1,7 @@
 """tests/test_coverage.py — 缺数据检测纯逻辑测试（触达生产逻辑）。"""
 
-from agent_speed.coverage import compute_coverage
-from agent_speed.models import GridCell
+from agent_rank.coverage import compute_coverage
+from agent_rank.models import GridCell
 
 
 def _cell(model="m", effort=None, source="s", harness="h"):

@@ -1,8 +1,8 @@
 import json
 import pytest
 from pathlib import Path
-from agent_speed.models import CallRecord
-from agent_speed.collector import append_result_record
+from agent_rank.models import CallRecord
+from agent_rank.collector import append_result_record
 
 REQUIRED_FIELDS = {
     "scenario", "model", "effort", "source", "harness", "rep", "batch_id",

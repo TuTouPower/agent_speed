@@ -6,17 +6,17 @@ reviewed_scope: 23bc7cd3a2f84d85
 
 - 比较基线：`c01c8bfcde06f14510a57d5fe9bc25df6576aa90`
 - 审查文件：
-  - `src/agent_speed/models.py`
-  - `src/agent_speed/collector.py`
-  - `src/agent_speed/scheduler.py`
-  - `src/agent_speed/metrics.py`
-  - `src/agent_speed/matrix.py`
-  - `src/agent_speed/harness/base.py`
-  - `src/agent_speed/harness/opencode.py`
-  - `src/agent_speed/harness/grok.py`
-  - `src/agent_speed/harness/codex.py`
-  - `src/agent_speed/harness/kimi.py`
-  - `src/agent_speed/harness/__init__.py`
+  - `src/agent_rank/models.py`
+  - `src/agent_rank/collector.py`
+  - `src/agent_rank/scheduler.py`
+  - `src/agent_rank/metrics.py`
+  - `src/agent_rank/matrix.py`
+  - `src/agent_rank/harness/base.py`
+  - `src/agent_rank/harness/opencode.py`
+  - `src/agent_rank/harness/grok.py`
+  - `src/agent_rank/harness/codex.py`
+  - `src/agent_rank/harness/kimi.py`
+  - `src/agent_rank/harness/__init__.py`
   - `scripts/run_bench.py`
   - `tests/test_scheduler.py`
   - `tests/test_metrics.py`
@@ -80,7 +80,7 @@ reviewed_scope: 23bc7cd3a2f84d85
 
 ## AC 复验方式
 
-在工作仓库 `/Users/karson/kar/code/agent_speed_t002` 下执行以下命令复验：
+在工作仓库 `/Users/karson/kar/code/agent_rank_t002` 下执行以下命令复验：
 
 1. **单元测试集复验（覆盖 AC-001 ~ AC-006）**:
    ```bash

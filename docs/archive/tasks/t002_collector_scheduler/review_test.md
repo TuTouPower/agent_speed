@@ -101,7 +101,7 @@ reviewed_scope: 23bc7cd3a2f84d85
 
 ## AC 复验方式
 
-在工作仓库 `/Users/karson/kar/code/agent_speed_t002` 下执行以下命令进行独立复验：
+在工作仓库 `/Users/karson/kar/code/agent_rank_t002` 下执行以下命令进行独立复验：
 
 1. **执行单元测试集（覆盖 AC-001 ~ AC-006）**：
    ```bash

@@ -3,7 +3,7 @@
 - task：`t009_pricing_update`
 - spec：`docs/tasks/t009_pricing_update/spec.md`
 - diff_anchor：`a5f2475d005d1775b83f63cc62ce0df2636a7005`
-- target：`git -C '/workspace/agent_speed_hist_t009' diff a5f2475d005d1775b83f63cc62ce0df2636a7005`
+- target：`git -C '/workspace/agent_rank_hist_t009' diff a5f2475d005d1775b83f63cc62ce0df2636a7005`
 - round：1
 - reviewed_at：2026-09-26 08:59 UTC+8
 
@@ -43,7 +43,7 @@ Round 1 零 finding。
 
 - 未对齐 203 行属预期（上游远大于本仓模型表）；不强制全对齐。
 - 套餐→source 对照保守扩展若干已有测速 source；未知为空字符串。
-- CSV 用 utf-8-sig；`--csv` / `AGENT_SPEED_ADOPTED_CSV` 支持测试注入。
+- CSV 用 utf-8-sig；`--csv` / `AGENT_RANK_ADOPTED_CSV` 支持测试注入。
 
 ## 结论
 

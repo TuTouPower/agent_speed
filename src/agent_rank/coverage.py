@@ -6,8 +6,8 @@ import statistics
 from dataclasses import dataclass
 from typing import Any
 
-from agent_speed.models import GridCell
-from agent_speed.report import _is_valid_call, _parse_start, _record_scenario, _required_half
+from agent_rank.models import GridCell
+from agent_rank.report import _is_valid_call, _parse_start, _record_scenario, _required_half
 
 
 @dataclass

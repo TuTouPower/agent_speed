@@ -5,7 +5,7 @@ reviewed_scope: d085715263d4e406
 ## 审查范围
 
 - 比较基线：`6894ee2e861c72dcf38ce16f374c01be6b8d93d0`
-- 审查命令：`git -C '/Users/karson/kar/code/agent_speed_t004' diff 6894ee2e861c72dcf38ce16f374c01be6b8d93d0`
+- 审查命令：`git -C '/Users/karson/kar/code/agent_rank_t004' diff 6894ee2e861c72dcf38ce16f374c01be6b8d93d0`
 - 审查文件：
   - `AGENTS.md`
   - `LICENSE`
@@ -35,11 +35,11 @@ reviewed_scope: d085715263d4e406
    - 快速上手步骤涵盖语料构建、评测调度、报告汇总与 pytest 测试。
 
 4. **AC-004 (AGENTS.md 读写规则更新)**: PASS
-   - 读写规则表补充 `src/agent_speed/`、`tests/`、`scripts/`、`report.py`、`fixtures/`、`prompts/`、`results.jsonl`、`latest.json`。
+   - 读写规则表补充 `src/agent_rank/`、`tests/`、`scripts/`、`report.py`、`fixtures/`、`prompts/`、`results.jsonl`、`latest.json`。
    - 明确各文件写权归属与职责范围，移除旧资产条目。
 
 5. **AC-005 (Blueprint 架构与领域模型更新)**: PASS
-   - `architecture.md` 移除旧 300K / 短中长三档脚本描述，更新为 `agent_speed/` 驱动核心与新脚本入口。
+   - `architecture.md` 移除旧 300K / 短中长三档脚本描述，更新为 `agent_rank/` 驱动核心与新脚本入口。
    - `domain.md` 统一定义比较单位、Source、Harness、Reasoning Effort、Queue Key、3+1 Batch、Wall、TTFT、Decode Window、双 TPS、Corpus Slice、Billed Input Tokens、Latest Report 等核心领域术语。
    - 架构与领域定义与当前代码实现完全一致。
 
@@ -58,44 +58,44 @@ reviewed_scope: d085715263d4e406
 
 ## AC 复验方式
 
-在工作仓库 `/Users/karson/kar/code/agent_speed_t004` 下执行以下命令复验：
+在工作仓库 `/Users/karson/kar/code/agent_rank_t004` 下执行以下命令复验：
 
 1. **AC-001：旧脚本与旧 prompts 删除复验**
    ```bash
-   git -C '/Users/karson/kar/code/agent_speed_t004' status --porcelain | grep -E "prompts/(short|medium|long)\.md|reproduce_prompt\.md|src/(bench_|merge_final|render_md|rescan_stream|ts_capture)"
+   git -C '/Users/karson/kar/code/agent_rank_t004' status --porcelain | grep -E "prompts/(short|medium|long)\.md|reproduce_prompt\.md|src/(bench_|merge_final|render_md|rescan_stream|ts_capture)"
    ```
    预期输出：所有对应项状态为 ` D`（已删除）。
 
 2. **AC-002：许可证全文复验**
    ```bash
-   head -n 2 '/Users/karson/kar/code/agent_speed_t004/LICENSE'
-   head -n 1 '/Users/karson/kar/code/agent_speed_t004/fixtures/LICENSE.django'
+   head -n 2 '/Users/karson/kar/code/agent_rank_t004/LICENSE'
+   head -n 1 '/Users/karson/kar/code/agent_rank_t004/fixtures/LICENSE.django'
    ```
    预期输出：`GNU AFFERO GENERAL PUBLIC LICENSE` 与 `Copyright (c) Django Software Foundation and individual contributors.`。
 
 3. **AC-003 & AC-004：README 与 AGENTS.md 新结构检查**
    ```bash
-   grep -E "AGPL-3.0|django/django|249b13d|results.jsonl|latest.json" '/Users/karson/kar/code/agent_speed_t004/README.md'
-   grep -E "src/agent_speed/|report.py|results.jsonl|latest.json" '/Users/karson/kar/code/agent_speed_t004/AGENTS.md'
+   grep -E "AGPL-3.0|django/django|249b13d|results.jsonl|latest.json" '/Users/karson/kar/code/agent_rank_t004/README.md'
+   grep -E "src/agent_rank/|report.py|results.jsonl|latest.json" '/Users/karson/kar/code/agent_rank_t004/AGENTS.md'
    ```
    预期输出：均匹配新架构与路径规则。
 
 4. **AC-005：Blueprint 与单测验证**
    ```bash
-   pytest /Users/karson/kar/code/agent_speed_t004/.repo_template/tests -q -m contract
-   pytest /Users/karson/kar/code/agent_speed_t004/tests -q
+   pytest /Users/karson/kar/code/agent_rank_t004/.repo_template/tests -q -m contract
+   pytest /Users/karson/kar/code/agent_rank_t004/tests -q
    ```
    预期输出：132 passed、16 passed。
 
 5. **AC-006：runs 目录与旧引用清理检查**
    ```bash
-   test ! -d '/Users/karson/kar/code/agent_speed_t004/runs' && echo "runs directory deleted"
+   test ! -d '/Users/karson/kar/code/agent_rank_t004/runs' && echo "runs directory deleted"
    ```
    预期输出：`runs directory deleted`。
 
 6. **AC-007：[deploy] 外部仓状态复验**
    ```bash
-   git -C '/Users/karson/kar/code/agent_speed_t004' remote -v
+   git -C '/Users/karson/kar/code/agent_rank_t004' remote -v
    ```
    预期输出：无未受权远端配置，符合待部署状态披露。
 

@@ -5,7 +5,7 @@
   "status": "done",
   "branch": "t004_public_repo_release",
   "base_sha": "6894ee2e861c72dcf38ce16f374c01be6b8d93d0",
-  "tests": "132 contract passed, 16 agent_speed tests passed",
+  "tests": "132 contract passed, 16 agent_rank tests passed",
   "blackbox": "无",
   "review": "Round 1 PASS (full)",
   "ac_evidence": {

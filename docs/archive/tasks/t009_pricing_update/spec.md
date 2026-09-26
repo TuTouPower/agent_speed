@@ -24,7 +24,7 @@ Agent 排名需要单价维度。上游公开仓 `FeiZhuLulu/real-api-pricing` �
 
 ### 非范围
 
-- 不改前端、`great_websites`、Cloudflare 部署、公开站 UI。
+- 不改前端、外部站点仓、Cloudflare 部署、公开站 UI。
 - 不单独新增「转换配置」文件；对照与覆盖写在脚本内。
 - 不输出折扣感、展示长名、分层、负载档、本币价、能力榜、上游调用 ID、单独映射表。
 - 不要求把定价仓全部 266 行都对齐进本仓（未对齐进清单即可）；不强制为仅有单价、无测速的模型预建模型表行（需要时人工加）。
@@ -90,7 +90,7 @@ Agent 排名需要单价维度。上游公开仓 `FeiZhuLulu/real-api-pricing` �
 ### 依赖与约束
 
 - 依赖 t008（需要 `data/models.json`）。
-- 仅改测速仓；禁止改 `great_websites` 与部署配置。
+- 仅改测速仓；禁止改外部站点仓与部署配置。
 
 ### Finalization 时更新的 blueprint
 

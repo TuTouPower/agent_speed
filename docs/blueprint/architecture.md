@@ -7,7 +7,7 @@
 - `config/`：集中式评测主配置文件
     - `benchmark.yaml`：定义全局并发（10）、单队列并发（2）、默认参数与 200K 全量评测网格清单。
 - `src/`：核心测速与分析工具链
-    - `agent_speed/`：评测驱动核心包，提供数据模型（models）、档位输入选择（scenarios：`sentence` / `10k` / `200k` 一次一档，未指定为 `200k`）、各 harness（opencode/grok-build/codex/kimi-code/antigravity）适配器、指标计算（metrics）、双层受控并发调度器（scheduler）以及报告生成模块（report：分档榜 latest_{200k,10k,sentence}.json，不合成总分）。
+    - `agent_rank/`：评测驱动核心包，提供数据模型（models）、档位输入选择（scenarios：`sentence` / `10k` / `200k` 一次一档，未指定为 `200k`）、各 harness（opencode/grok-build/codex/kimi-code/antigravity）适配器、指标计算（metrics）、双层受控并发调度器（scheduler）以及报告生成模块（report：分档榜 latest\_{200k,10k,sentence}.json，不合成总分）。
 - `report.py`：公开报告生成脚本，读 `data/results.jsonl` 按有效次数与账单输入过滤规则计算中位数并覆盖写分档榜 `data/latest_{200k,10k,sentence}.json`。
 - `scripts/`：项目构建与运行脚本。
     - `run_bench.py`：默认加载 `config/benchmark.yaml` 的双层并发基准测速驱动入口；`--scenario` 一次只选一档，选中的档写入每条调用的 `scenario` 与对应 `cl100k_tokens`。

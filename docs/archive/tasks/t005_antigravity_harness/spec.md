@@ -8,14 +8,14 @@
 
 ### 范围
 
-- 新增 `src/agent_speed/harness/antigravity.py`：实现 `AntigravityHarness`，调用 `agy -p <prompt> --model <model> --effort <effort> --output-format stream-json`。
-- 在 `src/agent_speed/harness/__init__.py` 注册 `antigravity` 与 `agy`。
-- 在 `src/agent_speed/metrics.py` 新增 `parse_antigravity_metrics(lines)`：
+- 新增 `src/agent_rank/harness/antigravity.py`：实现 `AntigravityHarness`，调用 `agy -p <prompt> --model <model> --effort <effort> --output-format stream-json`。
+- 在 `src/agent_rank/harness/__init__.py` 注册 `antigravity` 与 `agy`。
+- 在 `src/agent_rank/metrics.py` 新增 `parse_antigravity_metrics(lines)`：
     - TTFT：首个 `step_update.step_type == "agent_response"` 且含 `text_delta` 的到达时刻；
     - 生成窗口：最后一个 `text_delta` 到达时刻减去 TTFT；
     - 来源：`antigravity:last_delta_minus_ttft`；
     - token counts：`usage.input_tokens` 与 `usage.output_tokens`。
-- 在 `src/agent_speed/matrix.py` 增加 antigravity 模型条目（source 为 `google`，harness 为 `antigravity`）。
+- 在 `src/agent_rank/matrix.py` 增加 antigravity 模型条目（source 为 `google`，harness 为 `antigravity`）。
 - 编写单测 `tests/test_antigravity_harness.py`。
 - 完成真实冒烟验证。
 

@@ -2,7 +2,7 @@
 """update_pricing.py — 抓取定价仓 adopted.csv，对齐本仓模型表并写出单价产物。
 
 默认从 FeiZhuLulu/real-api-pricing 的 main 分支拉取最新 `data/adopted.csv`
-（HTTPS raw）。测试或离线可用环境变量 `AGENT_SPEED_ADOPTED_CSV` 或 CLI
+（HTTPS raw）。测试或离线可用环境变量 `AGENT_RANK_ADOPTED_CSV` 或 CLI
 `--csv` 指向本地文件。覆盖规则硬编码在本脚本，不另建转换配置。
 
 写出：
@@ -151,7 +151,7 @@ def build_served_index(models: list[dict[str, Any]]) -> dict[str, str]:
 
 def fetch_adopted_csv(url: str, dest: Path) -> Path:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    req = urllib.request.Request(url, headers={"User-Agent": "agent_speed/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "agent_rank/1.0"})
     with urllib.request.urlopen(req, timeout=60) as resp:
         dest.write_bytes(resp.read())
     return dest
@@ -160,7 +160,7 @@ def fetch_adopted_csv(url: str, dest: Path) -> Path:
 def resolve_csv_path(cli_csv: str | None, cache_dir: Path) -> Path:
     if cli_csv:
         return Path(cli_csv)
-    env = os.environ.get("AGENT_SPEED_ADOPTED_CSV", "").strip()
+    env = os.environ.get("AGENT_RANK_ADOPTED_CSV", "").strip()
     if env:
         return Path(env)
     cache = cache_dir / "adopted.csv"

@@ -16,7 +16,7 @@ python3 scripts/update_pricing.py
 python3 scripts/update_pricing.py --csv /path/to/adopted.csv
 
 # 等价环境变量（CLI --csv 优先）
-AGENT_SPEED_ADOPTED_CSV=/path/to/adopted.csv python3 scripts/update_pricing.py
+AGENT_RANK_ADOPTED_CSV=/path/to/adopted.csv python3 scripts/update_pricing.py
 ```
 
 写出：

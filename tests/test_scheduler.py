@@ -3,9 +3,9 @@ import time
 import pytest
 from pathlib import Path
 
-from agent_speed.models import GridCell, CallRecord
-from agent_speed.scheduler import QueueScheduler
-from agent_speed.config import load_benchmark_config
+from agent_rank.models import GridCell, CallRecord
+from agent_rank.scheduler import QueueScheduler
+from agent_rank.config import load_benchmark_config
 
 
 class ConcurrencyTrackerHarness:

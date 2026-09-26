@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 import shutil
@@ -7,71 +8,15 @@ import subprocess
 import time
 from datetime import datetime, timezone
 
-from agent_speed.models import GridCell, CallRecord
-from agent_speed.metrics import parse_mimo_metrics, calculate_tps
-from agent_speed.harness.base import BaseHarness
+from agent_rank.models import GridCell, CallRecord
+from agent_rank.metrics import parse_codex_metrics, calculate_tps
+from agent_rank.harness.base import BaseHarness
+from agent_rank.scenarios import build_user_message
 
 
-# Node argv 上限：mimo CLI 是 node 脚本，整包 200K（约 972KB）走 argv 会
-# RangeError 爆栈（与 Kimi d002 同类）。超限时改经 node --stack-size 直接拉起
-# （已实测可过），切片不截断；小消息保持直调。
-MIMO_ARGV_MAX_BYTES = 850000
-MIMO_NODE_STACK_SIZE = "8192"
-
-
-def _node_bin() -> str | None:
-    return os.environ.get("MIMO_NODE_BIN") or shutil.which("node")
-
-
-def _is_node_script(path: str) -> bool:
-    try:
-        with open(path, "rb") as f:
-            first_line = f.read(256).split(b"\n", 1)[0]
-    except OSError:
-        return False
-    return first_line.startswith(b"#!") and b"node" in first_line
-
-
-def _resolve_mimo_path(bin_name: str) -> str | None:
-    if os.path.sep in bin_name:
-        return bin_name
-    return shutil.which(bin_name)
-
-
-def build_mimo_cmd(
-    cell: GridCell,
-    prompt: str,
-    fixture_content: str,
-    cwd: Path | str = ".",
-    bin_name: str = "mimo",
-) -> list[str]:
-    # 直传完整 200K 切片，避免 -f 附件的内部截断
-    full_message = f"{prompt}\n\n===== CODE FIXTURE =====\n{fixture_content}" if fixture_content else prompt
-    # mimo-code 支持 --variant 设置思考强度（如 high），与 opencode 调小米只走 auto 不同
-    cmd = [
-        bin_name,
-        "run",
-        "--format", "json",
-        "--dir", str(cwd),
-    ]
-    if cell.effort:
-        cmd += ["--variant", cell.effort]
-    cmd += [
-        "-m", cell.resolved_cli_model,
-        full_message,
-    ]
-    if len(full_message.encode("utf-8")) > MIMO_ARGV_MAX_BYTES:
-        node = _node_bin()
-        mimo_path = _resolve_mimo_path(bin_name)
-        if node and mimo_path and _is_node_script(mimo_path):
-            stack = os.environ.get("MIMO_NODE_STACK", MIMO_NODE_STACK_SIZE)
-            cmd = [node, f"--stack-size={stack}", mimo_path] + cmd[1:]
-    return cmd
-
-
-class MimoHarness(BaseHarness):
+class CodexHarness(BaseHarness):
     def __init__(self, bin_path: str | None = None):
-        self.bin_path = bin_path or os.environ.get("MIMO_BIN") or shutil.which("mimo") or "mimo"
+        self.bin_path = bin_path or os.environ.get("CODEX_BIN") or shutil.which("codex") or "codex"
 
     def run(
         self,
@@ -93,7 +38,22 @@ class MimoHarness(BaseHarness):
             else:
                 fixture_text = ""
 
-        cmd = build_mimo_cmd(cell, prompt, fixture_text, cwd_path, self.bin_path)
+        full_input = build_user_message(prompt, fixture_text)
+
+        cmd = [
+            self.bin_path,
+            "exec",
+            "--json",
+            "--skip-git-repo-check",
+            "--sandbox", "read-only",
+            "-C", str(cwd_path),
+        ]
+        if cell.effort:
+            cmd += ["-c", f'model_reasoning_effort="{cell.effort}"']
+        cmd += [
+            "-m", cell.resolved_cli_model,
+            "-",
+        ]
 
         t0 = time.monotonic()
         lines: list[tuple[float, str]] = []
@@ -104,12 +64,18 @@ class MimoHarness(BaseHarness):
             proc = subprocess.Popen(
                 cmd,
                 cwd=str(cwd_path),
+                stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
                 bufsize=1,
             )
             assert proc.stdout is not None
+            assert proc.stdin is not None
+
+            proc.stdin.write(full_input)
+            proc.stdin.close()
+
             for line in proc.stdout:
                 lines.append((round(time.monotonic() - t0, 3), line.rstrip("\n")))
 
@@ -128,7 +94,7 @@ class MimoHarness(BaseHarness):
 
         wall = round(time.monotonic() - t0, 3)
 
-        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_mimo_metrics(lines)
+        ttft, decode_window, win_source, in_toks, out_toks, used_tools = parse_codex_metrics(lines)
         e2e_tps, gen_tps = calculate_tps(wall, decode_window, out_toks)
 
         return CallRecord(

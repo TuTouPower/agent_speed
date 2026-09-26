@@ -5,33 +5,33 @@
   "status": "done",
   "branch": "t002_collector_scheduler",
   "base_sha": "c01c8bfcde06f14510a57d5fe9bc25df6576aa90",
-  "tests": "132 contract passed, 15 agent_speed tests passed",
+  "tests": "132 contract passed, 15 agent_rank tests passed",
   "blackbox": "无",
   "review": "Round 1 PASS (full)",
   "ac_evidence": {
     "AC-001": [
-      "src/agent_speed/scheduler.py:16-90",
+      "src/agent_rank/scheduler.py:16-90",
       "tests/test_scheduler.py:48-84"
     ],
     "AC-002": [
-      "src/agent_speed/scheduler.py:38-75",
+      "src/agent_rank/scheduler.py:38-75",
       "tests/test_scheduler.py:86-107"
     ],
     "AC-003": [
-      "src/agent_speed/metrics.py:34-187",
+      "src/agent_rank/metrics.py:34-187",
       "tests/test_metrics.py:27-104"
     ],
     "AC-004": [
-      "src/agent_speed/metrics.py:15-32",
+      "src/agent_rank/metrics.py:15-32",
       "tests/test_metrics.py:8-25"
     ],
     "AC-005": [
-      "src/agent_speed/harness/kimi.py:27-142",
+      "src/agent_rank/harness/kimi.py:27-142",
       "tests/test_kimi_harness.py:8-37"
     ],
     "AC-006": [
-      "src/agent_speed/collector.py:8-19",
-      "src/agent_speed/models.py:44-84",
+      "src/agent_rank/collector.py:8-19",
+      "src/agent_rank/models.py:44-84",
       "tests/test_results_schema.py:12-63"
     ],
     "AC-007": [

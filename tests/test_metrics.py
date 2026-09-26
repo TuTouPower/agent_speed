@@ -1,5 +1,5 @@
 import pytest
-from agent_speed.metrics import (
+from agent_rank.metrics import (
     calculate_tps,
     parse_opencode_metrics,
     parse_grok_metrics,

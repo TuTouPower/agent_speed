@@ -9,9 +9,9 @@ import subprocess
 import time
 from datetime import datetime, timezone
 
-from agent_speed.models import GridCell, CallRecord
-from agent_speed.metrics import parse_kimi_metrics, calculate_tps
-from agent_speed.scenarios import build_user_message
+from agent_rank.models import GridCell, CallRecord
+from agent_rank.metrics import parse_kimi_metrics, calculate_tps
+from agent_rank.scenarios import build_user_message
 
 
 def get_kimi_config_path() -> Path:

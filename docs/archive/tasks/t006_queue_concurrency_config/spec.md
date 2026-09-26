@@ -9,8 +9,8 @@
 ### 范围
 
 - 新建集中式主配置文件 `config/benchmark.json`（定义全局/单队列并发上限、运行默认值、全量网格清单）。
-- `src/agent_speed/models.py`：`GridCell` 增加 `queue` 与 `cli_model` 字段；规范 `source` 命名（如 `deepseek-official`、`mimo-official`、`google-antigravity`，彻底去除裸写 `official`）。
-- `src/agent_speed/scheduler.py`：重构为双层受控并发（全局 `ThreadPoolExecutor` 控全局 10 并发，每个 `queue` 配备独立的 `Semaphore` 控单队 2 并发）；保持同一网格 3+1 批次与队列末尾补测机制。
+- `src/agent_rank/models.py`：`GridCell` 增加 `queue` 与 `cli_model` 字段；规范 `source` 命名（如 `deepseek-official`、`mimo-official`、`google-antigravity`，彻底去除裸写 `official`）。
+- `src/agent_rank/scheduler.py`：重构为双层受控并发（全局 `ThreadPoolExecutor` 控全局 10 并发，每个 `queue` 配备独立的 `Semaphore` 控单队 2 并发）；保持同一网格 3+1 批次与队列末尾补测机制。
 - `scripts/run_bench.py`：默认从 `config/benchmark.json` 加载配置与网格，支持 `--config` 覆盖。
 - `tests/test_scheduler.py`：编写双层并发压力测试，断言全局最大并发 ≤ 10、单队列最大并发 ≤ 2。
 - 同步修订 `docs/specs/collector_scheduler.md`、`docs/plan.md`、`docs/blueprint/architecture.md` 与 `docs/blueprint/domain.md`。

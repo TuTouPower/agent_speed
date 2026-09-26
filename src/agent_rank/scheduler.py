@@ -7,7 +7,7 @@ import threading
 from typing import Callable
 import uuid
 
-from agent_speed.models import GridCell, CallRecord
+from agent_rank.models import GridCell, CallRecord
 
 
 RunnerFunc = Callable[[GridCell, int, str], CallRecord]

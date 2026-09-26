@@ -24,7 +24,7 @@ front matter 只经 `task.py` 修改；reviewer 只写对应 `review_*.md`。
 
 创建期不预测实施步骤。只记有追溯价值的内容；无事项时写“无”。
 
-- 实现 `scripts/update_pricing.py`：默认 raw GitHub 拉取；`--csv` / `AGENT_SPEED_ADOPTED_CSV` 注入夹具。
+- 实现 `scripts/update_pricing.py`：默认 raw GitHub 拉取；`--csv` / `AGENT_RANK_ADOPTED_CSV` 注入夹具。
 - 覆盖：OpenCode Go deepseek- 额度 ×4；Command Code GOAT 月费 10.78。
 - 实跑：latest 63 / unmatched 203；OpenCode deepseek-v4.1-flash real≈0.00161；GOAT MiniMax-M3 price=10.78。
 - 黑盒：`testing.md` blackbox_verify 为「无」。

@@ -1,8 +1,8 @@
-# agent_speed：Coding Agent 与推理模型真实速度基准
+# agent_rank：Coding Agent 与推理模型真实速度基准
 
-**公开榜单**：https://agent-speed.ooll.lol
+**公开榜单**：https://agent-rank.ooll.lol
 
-![Agent Speed 公开榜单预览](docs/board-preview-dark.png)
+![Agent Rank 公开榜单预览](docs/board-preview-dark.png)
 
 ### 微信交流群
 
@@ -126,9 +126,7 @@ pytest tests -v
 
 ## 公开榜单网站
 
-- **线上地址**：https://agent-speed.ooll.lol
-- **README 预览图**：`docs/board-preview-dark.png`（`report.py` / `run_bench.py` 更新 `data/latest_200k.json` 后会尽量自动重截；也可手动 `python3 scripts/screenshot_board.py`）
-- **微信交流群二维码**：`docs/wechat-group-qr.png`（与 `latest_200k.json` 一并复制到 great_websites 的 `systems/agent_speed/web/`，站点侧文件名仍可为 `latest.json`）
-- 本仓库只负责评测与数据（`data/results.jsonl`、`data/latest_200k.json`）。**静态公开榜单不在本仓**：站点与 Cloudflare Pages 部署维护在 [`TuTouPower/great_websites`](https://github.com/TuTouPower/great_websites) 的 `systems/agent_speed/web/`。
-
-刷新上站数据后，将本仓 `data/latest_200k.json` 复制到 great_websites 对应目录（站点消费名可为 `latest.json`）并按其 README 部署（或运行那边的 `scripts/deploy_pages.sh`）。copy 后确认展示正常。
+- **线上地址**：https://agent-rank.ooll.lol
+- **README 预览图**：`docs/board-preview-dark.png`（`report.py` / `run_bench.py` 更新 `data/latest_200k.json` 后会自动重截；也可手动 `python3 scripts/screenshot_board.py`）。
+- **微信交流群二维码**：`docs/wechat-group-qr.png`。
+- 本仓库只负责评测与数据（`data/results.jsonl`、`data/latest_200k.json`）。**前端展示站点独立部署**，直接消费本仓导出的聚合数据文件。

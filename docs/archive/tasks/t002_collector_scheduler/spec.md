@@ -8,7 +8,7 @@
 
 ### 范围
 
-- 新包 `src/agent_speed/`：矩阵配置、harness 适配（opencode/grok/codex/kimi）、单次执行与指标、队列调度器。
+- 新包 `src/agent_rank/`：矩阵配置、harness 适配（opencode/grok/codex/kimi）、单次执行与指标、队列调度器。
 - 队列键 = source+harness；同队列串行、队列间并行、无全局上限。
 - 每格 3 次 + 失败在该队列末尾补测 1 次；`batch_id`；无 warmup。
 - 指标：wall、TTFT（含思考）、生成窗口、端到端 TPS、生成 TPS、生成窗口来源；codex 生成窗口为空。

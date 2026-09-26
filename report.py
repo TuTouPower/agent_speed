@@ -16,9 +16,9 @@ SRC_DIR = REPO_ROOT / "src"
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
-from agent_speed.config import load_benchmark_config
-from agent_speed.report import generate_all_boards
-from agent_speed.board_preview import refresh_board_preview
+from agent_rank.config import load_benchmark_config
+from agent_rank.report import generate_all_boards
+from agent_rank.board_preview import refresh_board_preview
 
 
 def main(argv: list[str] | None = None) -> int:

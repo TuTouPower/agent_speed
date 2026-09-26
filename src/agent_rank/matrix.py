@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agent_speed.models import GridCell
+from agent_rank.models import GridCell
 
 # 标准 200K 评测矩阵
 BENCH_MATRIX_200K = [

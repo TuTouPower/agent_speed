@@ -3,7 +3,7 @@
 - task：`t003_latest_json_report`
 - spec：`docs/tasks/t003_latest_json_report/spec.md`
 - diff_anchor：`122f59268ad6e13cbe90fb1ea52858039b14a66e`
-- target：`git -C '/Users/karson/kar/code/agent_speed_t003' diff 122f59268ad6e13cbe90fb1ea52858039b14a66e`
+- target：`git -C '/Users/karson/kar/code/agent_rank_t003' diff 122f59268ad6e13cbe90fb1ea52858039b14a66e`
 - round：1
 - reviewed_at：2026-09-22 14:15 UTC+8
 
@@ -15,7 +15,7 @@
 
 1. **AC-001（最新 batch 判定）**: PASS
 
-    - 在 `src/agent_speed/report.py` 中按记录时序收集，以 `records[-1].get("batch_id")` 严格锁定每个格子的最新批次。
+    - 在 `src/agent_rank/report.py` 中按记录时序收集，以 `records[-1].get("batch_id")` 严格锁定每个格子的最新批次。
     - 过滤与统计仅在 `batch_records` 内展开，更早 batch 彻底排除，不参与统计亦不进行补位。
 
 2. **AC-002（2 次有效上站门槛）**: PASS
@@ -52,7 +52,7 @@
 - 前轮 finding 复核：首轮审查，无前轮 finding
 - 本轮新发现：0 条（clean review，无 blocking finding）
 - 未进表的提示：
-    - `src/agent_speed/report.py` 中定义的函数 `calculate_median` 未在 `generate_latest_json` 内部直接调用（内部因各字段精度及默认值差异直接调用了 `statistics.median` + `round`），属冗余工具函数，不影响功能正确性。
+    - `src/agent_rank/report.py` 中定义的函数 `calculate_median` 未在 `generate_latest_json` 内部直接调用（内部因各字段精度及默认值差异直接调用了 `statistics.median` + `round`），属冗余工具函数，不影响功能正确性。
     - `tests/test_report.py` 覆盖了主流程，后续可根据需要进一步补充 `out_tokens == 500` 与 `in_tokens == cl100k / 2` 的临界边界单测。
 - 总体判断：实现干净精确，完全满足 AC-001 ~ AC-007 验收标准，单测与契约门禁全部通过，同意 PASS。
 - 系统性 follow-up：无

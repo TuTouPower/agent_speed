@@ -2,6 +2,15 @@
 
 本项目使用模板仓 repo_template。此声明必须保留，消费仓不得删除。
 
+## 开源脱敏与隐私保护铁律
+
+本项目为公开发布的开源仓库。严禁提交或在任何文档、代码、注释、配置、测试及提交信息中提及以下任何隐私与内部信息：
+
+1. **严禁出现任何内部私有仓库名称**（如任何私有展示站仓库、内部管理仓库等）；
+2. **严禁出现任何本地或开发容器绝对路径**（如 `/Users/...`、`/workspace/...` 等私有路径）；
+3. **严禁包含任何内部凭据、API 密钥、私有部署链接、账号密码或未公开内部服务配置**；
+4. 外部消费端与协同系统一律按公开标准契约描述，绝不写入私有仓库或私有目录细节。
+
 ## 目录与读写规则
 
 |路径|用途|写权归属|
@@ -20,10 +29,10 @@
 |`docs/archive/`|完结或终止的历史|镜像原路径；内部文件只准新增|
 |`schemas/`|跨服务接口契约|改契约走 task 流程|
 |`config/`|配置（默认 + 环境覆盖 +`.env.example`）|仅`.env.example` 入库；真值写本地 `.env`|
-|`src/agent_speed/`|核心测速与调度驱动包（models/harness/metrics/scheduler/report）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`src/agent_rank/`|核心测速与调度驱动包（models/harness/metrics/scheduler/report）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`tests/`|项目单元测试与契约验证套件|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`scripts/`|项目构建、运行与检测脚本（`build_django_corpus.py`、`run_bench.py`、`check_coverage.py`、`update_pricing.py` 等）|仅在 task 执行期按 spec 修改；`update_pricing.py` 写定价产物，不改测速流水线；debug 复现不得写入|
-|`report.py`|公开报告生成脚本（data/results.jsonl → data/latest_{200k,10k,sentence}.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
+|`report.py`|公开报告生成脚本（data/results.jsonl → data/latest\_{200k,10k,sentence}.json）|仅在 task 执行期按 spec 修改；debug 复现不得写入|
 |`fixtures/`|评测输入素材与切片元数据（包含 django 切片、manifest、任务副本与 BSD 声明）|只读夹具，改动按 task 流程|
 |`prompts/`|公开评测任务 prompt（`task_200k.md`）|评测基线文件，改动按 task 流程|
 |`data/results.jsonl`|原始测速调用明细（只追加）|公开跟踪的评测数据文件，不存模型正文|

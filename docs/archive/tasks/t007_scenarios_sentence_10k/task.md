@@ -26,8 +26,8 @@ front matter 只经 `task.py` 修改；reviewer 只写对应 `review_*.md`。
 
 - preflight `task.py preflight t007 --require-verified` 严格 PASS 后实施；未知契约为无。
 - TDD 先红后绿：新增 `tests/test_scenarios_sentence_10k.py` 10 用例初跑 10 红，实现后 10 绿；旧测试零改动。
-- 新增 `src/agent_speed/scenarios.py` 收敛档位常量与输入选择（sentence 单句 61、10k 全文 10000、200k 保持）；五 harness 经 `build_user_message` 组装，空 fixture 不附加分隔标记；Kimi 850KB 截断与 agy 150KB 流水线加 `scenario == "200k"` 守卫。
-- `src/agent_speed/report.py` 加 `scenario` 过滤与 `_required_half`（200k 缺省 200000，10k/sentence 缺失不上站，等于一半上站）；`scripts/run_bench.py` 加 `--scenario`（一次一档，缺省 200k）并生成三榜；`report.py` 生成三份榜。
+- 新增 `src/agent_rank/scenarios.py` 收敛档位常量与输入选择（sentence 单句 61、10k 全文 10000、200k 保持）；五 harness 经 `build_user_message` 组装，空 fixture 不附加分隔标记；Kimi 850KB 截断与 agy 150KB 流水线加 `scenario == "200k"` 守卫。
+- `src/agent_rank/report.py` 加 `scenario` 过滤与 `_required_half`（200k 缺省 200000，10k/sentence 缺失不上站，等于一半上站）；`scripts/run_bench.py` 加 `--scenario`（一次一档，缺省 200k）并生成三榜；`report.py` 生成三份榜。
 - `.gitignore` 放行 `latest_10k.json` / `latest_sentence.json`；README、guides、domain/architecture/decisions、specs/specs_index 同步三档分榜。
 - 验证：`uv run pytest tests -q` 32 passed；`pytest .repo_template/tests -q -m contract` 132 passed；`git diff --check` 干净；真实 `results.jsonl` 重聚验证 200k 18 行不变、10k/sentence 为 `[]`、sha 不变；黑盒未定义（见收尾）。
 - 阻塞：无；未动 p002 parked；无跨 task 修复。
