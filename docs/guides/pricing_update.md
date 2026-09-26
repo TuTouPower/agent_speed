@@ -19,10 +19,10 @@ python3 scripts/update_pricing.py --csv /path/to/adopted.csv
 AGENT_SPEED_ADOPTED_CSV=/path/to/adopted.csv python3 scripts/update_pricing.py
 ```
 
-写出（覆盖）：
+写出：
 
-- `data/pricing_latest.json`：对齐成功的单价行
-- `data/pricing_unmatched.json`：上游有、本仓模型表对不上的行
+- 成功：覆盖 `data/pricing_latest.json`（须等于采用表行数）与空的 `data/pricing_unmatched.json`
+- 失败（有未对齐）：**不**覆盖 `pricing_latest.json`；写出 `pricing_unmatched.json` 诊断清单；进程非零退出
 
 模型表路径默认 `data/models.json`，可用 `--models` 覆盖。
 
@@ -52,14 +52,14 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-## 4. 未对齐时如何补录
+## 4. 未对齐时如何补录（必须拿全）
 
-1. 打开 `data/pricing_unmatched.json`，看 `served_model`。
+脚本要求采用表每一行都能对齐；对不上就报错退出，禁止留下残缺单价表。
+
+1. 看终端 ERROR 与 `data/pricing_unmatched.json` 里的 `served_model`。
 2. 若对应本仓已有模型但字面不同：在 `data/models.json` 该行加 `pricing_aliases`。
-3. 若本仓尚无该模型且需要进单价表：先增模型表行（`id` 为本仓主键），必要时再加别名。
-4. 再跑 `python3 scripts/update_pricing.py`。
-
-不要求把上游全部行都对齐；仅有单价、无测速的模型可不建表。
+3. 若本仓尚无该模型：增模型表行（可用上游 `served_model` 作为 `id`），必要时再加别名。
+4. 再跑 `python3 scripts/update_pricing.py`，确认退出码 0 且 `pricing_unmatched.json` 为 `[]`。
 
 ______________________________________________________________________
 

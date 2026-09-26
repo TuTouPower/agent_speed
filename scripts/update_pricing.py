@@ -6,8 +6,11 @@
 `--csv` 指向本地文件。覆盖规则硬编码在本脚本，不另建转换配置。
 
 写出：
-- data/pricing_latest.json（对齐且可排序的单价行）
-- data/pricing_unmatched.json（上游有、本仓模型表对不上的行）
+- data/pricing_latest.json（对齐成功的单价行；须覆盖采用表全部行）
+- data/pricing_unmatched.json（仅在失败时写出诊断清单）
+
+任一上游行无法在模型表对齐时：打印报错、写出未对齐清单、**不**覆盖
+pricing_latest.json，并以非零退出码失败。必须拿全数据。
 """
 
 from __future__ import annotations
@@ -327,8 +330,29 @@ def main(argv: list[str] | None = None) -> int:
     models = load_models(Path(args.models))
     adopted = read_adopted_rows(csv_path)
     latest, unmatched = build_pricing(models, adopted)
+
+    if unmatched:
+        write_json(Path(args.out_unmatched), unmatched)
+        # 禁止写出残缺单价表：不覆盖既有 pricing_latest.json
+        samples = unmatched[:20]
+        lines = [
+            f"ERROR: 单价对齐未拿全数据：采用表 {len(adopted)} 行，对齐 {len(latest)} 行，"
+            f"未对齐 {len(unmatched)} 行。请先补 data/models.json（id 或 pricing_aliases），再重跑。",
+            f"未对齐清单已写入: {args.out_unmatched}",
+            "示例:",
+        ]
+        for u in samples:
+            lines.append(
+                f"  - plan={u.get('plan')!r} served_model={u.get('served_model')!r} "
+                f"reason={u.get('reason')!r}"
+            )
+        if len(unmatched) > len(samples):
+            lines.append(f"  … 另有 {len(unmatched) - len(samples)} 行，见清单文件")
+        print("\n".join(lines), flush=True)
+        return 1
+
     write_json(Path(args.out_latest), latest)
-    write_json(Path(args.out_unmatched), unmatched)
+    write_json(Path(args.out_unmatched), unmatched)  # 空数组，表示全量对齐
     print(
         f"wrote {args.out_latest} ({len(latest)} rows), "
         f"{args.out_unmatched} ({len(unmatched)} rows) from {csv_path}"

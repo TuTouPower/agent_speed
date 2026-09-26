@@ -106,10 +106,10 @@ def test_command_code_goat_override(fixture_models, fixture_adopted):
     assert row["notes"] and "本仓覆盖" in row["notes"] and "10.78" in row["notes"]
 
 
-def test_cli_writes_outputs(tmp_path, fixture_models):
-    """AC-001：脚本写入可解析的 pricing_latest / pricing_unmatched。"""
+def test_cli_writes_outputs_when_complete(tmp_path):
+    """全量对齐时写入 pricing_latest，unmatched 为空，退出码 0。"""
     models_path = tmp_path / "models.json"
-    models_path.write_text(json.dumps(fixture_models, ensure_ascii=False), encoding="utf-8")
+    models_path.write_text((FIXTURES / "models_complete.json").read_text(encoding="utf-8"), encoding="utf-8")
     out_latest = tmp_path / "pricing_latest.json"
     out_unmatched = tmp_path / "pricing_unmatched.json"
     r = subprocess.run(
@@ -133,6 +133,39 @@ def test_cli_writes_outputs(tmp_path, fixture_models):
     latest = json.loads(out_latest.read_text(encoding="utf-8"))
     unmatched = json.loads(out_unmatched.read_text(encoding="utf-8"))
     assert isinstance(latest, list) and latest
+    assert unmatched == []
+
+
+def test_cli_fails_without_writing_latest_when_unmatched(tmp_path, fixture_models):
+    """有未对齐时非零退出，写出 unmatched 诊断，不覆盖 pricing_latest。"""
+    models_path = tmp_path / "models.json"
+    models_path.write_text(json.dumps(fixture_models, ensure_ascii=False), encoding="utf-8")
+    out_latest = tmp_path / "pricing_latest.json"
+    sentinel = [{"sentinel": True}]
+    out_latest.write_text(json.dumps(sentinel), encoding="utf-8")
+    out_unmatched = tmp_path / "pricing_unmatched.json"
+    r = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT),
+            "--csv",
+            str(FIXTURES / "adopted.csv"),
+            "--models",
+            str(models_path),
+            "--out-latest",
+            str(out_latest),
+            "--out-unmatched",
+            str(out_unmatched),
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert r.returncode != 0
+    assert "ERROR" in r.stdout or "ERROR" in r.stderr
+    assert "未拿全" in r.stdout or "未拿全" in r.stderr
+    assert json.loads(out_latest.read_text(encoding="utf-8")) == sentinel
+    unmatched = json.loads(out_unmatched.read_text(encoding="utf-8"))
     assert isinstance(unmatched, list) and unmatched
 
 
