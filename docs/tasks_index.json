@@ -2,5 +2,38 @@
     "generated_by": ".repo_template/scripts/task.py",
     "authority": "docs/tasks/{tid}_{slug}/task.md front matter",
     "workspace": ".",
-    "tasks": []
+    "tasks": [
+        {
+            "tid": "t008",
+            "slug": "model_registry",
+            "title": "建立本仓模型表（权威 ID + 定价仓别名）",
+            "status": "backlog",
+            "branch": "",
+            "worktree": "",
+            "review_level": "single",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "",
+            "depends_on": "",
+            "conflicts_with": "",
+            "note": "Agent 排名数据底座：模型身份唯一库",
+            "dir": "docs/tasks/t008_model_registry"
+        },
+        {
+            "tid": "t009",
+            "slug": "pricing_update",
+            "title": "单价数据更新脚本与定价产物",
+            "status": "backlog",
+            "branch": "",
+            "worktree": "",
+            "review_level": "single",
+            "review_limit": "5",
+            "verify_limit": "5",
+            "diff_anchor": "",
+            "depends_on": "t008",
+            "conflicts_with": "",
+            "note": "抓取 real-api-pricing 最新采用表，对齐模型表，写出单价与未对齐清单",
+            "dir": "docs/tasks/t009_pricing_update"
+        }
+    ]
 }
