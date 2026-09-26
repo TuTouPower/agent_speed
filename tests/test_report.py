@@ -145,12 +145,12 @@ def test_report_pipeline(tmp_path):
     assert all("wall" in r for r in rows)
 
 
-def test_generate_all_boards_writes_single_latest(tmp_path):
-    """唯一输出 latest.json：扁平数组、行内 scenario 自描述、分档块拼接、各档内 e2e 降序。"""
-    from agent_speed.report import generate_all_boards
+def test_generate_all_boards_writes_three_latest(tmp_path):
+    """写出 latest_200k / latest_10k / latest_sentence：各档独立、行内 scenario 自描述、档内 e2e 降序。"""
+    from agent_speed.report import BOARD_FILENAMES, generate_all_boards
 
     jsonl = tmp_path / "results.jsonl"
-    out = tmp_path / "latest.json"
+    out = tmp_path / "latest_200k.json"
     rows = []
     for scen, model, e2e in [("200k", "m200", 50.0), ("10k", "m10", 200.0), ("sentence", "msen", 300.0)]:
         cl = {"200k": 200000, "10k": 10000, "sentence": 61}[scen]
@@ -165,11 +165,12 @@ def test_generate_all_boards_writes_single_latest(tmp_path):
 
     boards = generate_all_boards(jsonl, out)
 
-    combined = json.loads(out.read_text(encoding="utf-8"))
-    assert isinstance(combined, list)
-    assert [r["model"] for r in combined] == ["m200", "m10", "msen"]
-    assert [r["scenario"] for r in combined] == ["200k", "10k", "sentence"]
-    assert combined == boards["200k"] + boards["10k"] + boards["sentence"]
+    for scen, model in [("200k", "m200"), ("10k", "m10"), ("sentence", "msen")]:
+        path = tmp_path / BOARD_FILENAMES[scen]
+        got = json.loads(path.read_text(encoding="utf-8"))
+        assert [r["model"] for r in got] == [model]
+        assert [r["scenario"] for r in got] == [scen]
+        assert got == boards[scen]
 
 
 def test_board_excludes_removed_matrix_cells(tmp_path):
@@ -189,11 +190,13 @@ def test_board_excludes_removed_matrix_cells(tmp_path):
     jsonl.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
     keep = GridCell(scenario="200k", model="mkeep", effort="high", source="s", harness="h")
 
-    out1 = tmp_path / "filtered.json"
+    out1 = tmp_path / "latest_200k.json"
     boards = generate_all_boards(jsonl, out1, cells=[keep])
     got = json.loads(out1.read_text(encoding="utf-8"))
     assert [r["model"] for r in got] == ["mkeep"]
     assert boards["10k"] == [] and boards["sentence"] == []
+    assert json.loads((tmp_path / "latest_10k.json").read_text(encoding="utf-8")) == []
+    assert json.loads((tmp_path / "latest_sentence.json").read_text(encoding="utf-8")) == []
 
     out2 = tmp_path / "unfiltered.json"
     generate_latest_json(jsonl, out2, scenario="200k")

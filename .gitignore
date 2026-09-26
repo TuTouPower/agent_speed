@@ -1,10 +1,12 @@
 /artifacts/
 /data/*
 !/data/results.jsonl
-!/data/latest.json
+!/data/latest_200k.json
+!/data/latest_10k.json
+!/data/latest_sentence.json
 !/data/models.json
-!/data/pricing_latest.json
-!/data/pricing_unmatched.json
+!/data/latest_pricing.json
+!/data/unmatched_pricing.json
 !/data/.gitkeep
 .scratch/
 node_modules/

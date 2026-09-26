@@ -1,4 +1,4 @@
-"""Best-effort README board preview regeneration after latest.json updates."""
+"""Best-effort README board preview regeneration after latest_200k.json updates."""
 
 from __future__ import annotations
 

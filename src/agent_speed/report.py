@@ -95,7 +95,7 @@ def generate_latest_json(
     """读 data/results.jsonl 重新生成榜单。
 
     - scenario 为 None 时不过滤（兼容旧调用）；为档位名时只含该档；
-    - 唯一输出 `data/latest.json` 为扁平数组（行内 scenario 自描述），各档互不混排，不合成总分；
+    - 默认写出 `data/latest_{scenario}.json`（200k / 10k / sentence 各一份）；行内 scenario 自描述，各档互不混排，不合成总分；
     - 每个格子跨全部 batch 收集有效成功调用；
     - 按 start_time 取最近最多 4 次有效成功；有效次数 < 2 不上站；
     - 不再要求同一次 bench / 同一 batch_id 内凑满 2 次；
@@ -104,7 +104,7 @@ def generate_latest_json(
     - codex 等无生成窗口的格子照常上站，生成 TPS 为 None；
     - 中位数由最近最多 4 次有效成功计算（含 wall 秒，三位小数）；
     - 按端到端 TPS 降序覆盖写输出文件；某档无上站行时写 `[]`；不改写 results.jsonl；
-      `_collect_only=True` 时只计算返回，不写盘（供合一文件组装）。
+      `_collect_only=True` 时只计算返回，不写盘。
     """
     jsonl_path = Path(results_jsonl)
     out_path = Path(output_json)
@@ -214,23 +214,38 @@ def generate_latest_json(
     return rows
 
 
+BOARD_FILENAMES: dict[str, str] = {
+    "200k": "latest_200k.json",
+    "10k": "latest_10k.json",
+    "sentence": "latest_sentence.json",
+}
+
+
+def board_path(data_dir: Path | str, scenario: str) -> Path:
+    """data/ 下某档榜单路径；未知档位回退 latest_{scenario}.json。"""
+    name = BOARD_FILENAMES.get(scenario, f"latest_{scenario}.json")
+    return Path(data_dir) / name
+
+
 def generate_all_boards(
     results_jsonl: Path | str,
     output_path: Path | str,
     cells: list | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """同一份 results.jsonl 写出唯一输出文件：扁平数组，行内 scenario 自描述。
+    """同一份 results.jsonl 写出三份分档榜：latest_200k / latest_10k / latest_sentence。
 
-    按 200k / 10k / sentence 分档块拼接，各档内按端到端 TPS 降序，
-    互不混排，不合成总分，不改写 results.jsonl。
+    output_path 为 200k 榜路径（或其父目录）；同目录写出 10k / sentence 旁路文件。
+    各档内按端到端 TPS 降序，互不混排，不合成总分，不改写 results.jsonl。
     cells 给出时只收录矩阵内格子（配置已删模型不上榜，明细保留）。
     """
     out_path = Path(output_path)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+    data_dir = out_path if out_path.suffix == "" else out_path.parent
+    data_dir.mkdir(parents=True, exist_ok=True)
     allowed = matrix_allow_set(cells)
     boards: dict[str, list[dict[str, Any]]] = {}
     for scen in BOARD_SCENARIOS:
-        boards[scen] = generate_latest_json(results_jsonl, out_path, scenario=scen, _collect_only=True, allowed=allowed)
-    flat = boards["200k"] + boards["10k"] + boards["sentence"]
-    out_path.write_text(json.dumps(flat, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        path = board_path(data_dir, scen)
+        boards[scen] = generate_latest_json(
+            results_jsonl, path, scenario=scen, _collect_only=False, allowed=allowed
+        )
     return boards

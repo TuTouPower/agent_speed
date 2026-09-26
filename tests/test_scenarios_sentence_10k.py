@@ -187,7 +187,7 @@ def test_scenarios_config_validation_rejects_bad_entries(tmp_path):
 def test_ac006_three_boards_split(tmp_path):
     from agent_speed.report import generate_latest_json
     jsonl = tmp_path / "results.jsonl"
-    out200 = tmp_path / "latest.json"
+    out200 = tmp_path / "latest_200k.json"
     out10 = tmp_path / "board_10k.json"
     outsen = tmp_path / "board_sentence.json"
     rows = []

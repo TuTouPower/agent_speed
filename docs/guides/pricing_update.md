@@ -21,8 +21,8 @@ AGENT_SPEED_ADOPTED_CSV=/path/to/adopted.csv python3 scripts/update_pricing.py
 
 写出：
 
-- 成功：覆盖 `data/pricing_latest.json`（须等于采用表行数）与空的 `data/pricing_unmatched.json`
-- 失败（有未对齐）：**不**覆盖 `pricing_latest.json`；写出 `pricing_unmatched.json` 诊断清单；进程非零退出
+- 成功：覆盖 `data/latest_pricing.json`（须等于采用表行数）与空的 `data/unmatched_pricing.json`
+- 失败（有未对齐）：**不**覆盖 `latest_pricing.json`；写出 `unmatched_pricing.json` 诊断清单；进程非零退出
 
 模型表路径默认 `data/models.json`，可用 `--models` 覆盖。
 
@@ -56,13 +56,13 @@ ______________________________________________________________________
 
 脚本要求采用表每一行都能对齐；对不上就报错退出，禁止留下残缺单价表。
 
-1. 看终端 ERROR 与 `data/pricing_unmatched.json` 里的 `served_model`。
+1. 看终端 ERROR 与 `data/unmatched_pricing.json` 里的 `served_model`。
 2. 若对应本仓已有模型但字面不同：在 `data/models.json` 该行加 `pricing_aliases`。
 3. 若本仓尚无该模型：增模型表行（可用上游 `served_model` 作为 `id`），必要时再加别名。
-4. 再跑 `python3 scripts/update_pricing.py`，确认退出码 0 且 `pricing_unmatched.json` 为 `[]`。
+4. 再跑 `python3 scripts/update_pricing.py`，确认退出码 0 且 `unmatched_pricing.json` 为 `[]`。
 
 ______________________________________________________________________
 
 ## 5. 与测速流水线的关系
 
-本脚本**不**改 `run_bench.py` / `report.py` / `data/results.jsonl` / `data/latest.json` 行为。单价产物独立入库，供后续排名维度使用。
+本脚本**不**改 `run_bench.py` / `report.py` / `data/results.jsonl` / `data/latest_*.json` 行为。单价产物独立入库，供后续排名维度使用。

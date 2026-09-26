@@ -107,11 +107,11 @@ def test_command_code_goat_override(fixture_models, fixture_adopted):
 
 
 def test_cli_writes_outputs_when_complete(tmp_path):
-    """全量对齐时写入 pricing_latest，unmatched 为空，退出码 0。"""
+    """全量对齐时写入 latest_pricing，unmatched 为空，退出码 0。"""
     models_path = tmp_path / "models.json"
     models_path.write_text((FIXTURES / "models_complete.json").read_text(encoding="utf-8"), encoding="utf-8")
-    out_latest = tmp_path / "pricing_latest.json"
-    out_unmatched = tmp_path / "pricing_unmatched.json"
+    out_latest = tmp_path / "latest_pricing.json"
+    out_unmatched = tmp_path / "unmatched_pricing.json"
     r = subprocess.run(
         [
             sys.executable,
@@ -137,13 +137,13 @@ def test_cli_writes_outputs_when_complete(tmp_path):
 
 
 def test_cli_fails_without_writing_latest_when_unmatched(tmp_path, fixture_models):
-    """有未对齐时非零退出，写出 unmatched 诊断，不覆盖 pricing_latest。"""
+    """有未对齐时非零退出，写出 unmatched 诊断，不覆盖 latest_pricing。"""
     models_path = tmp_path / "models.json"
     models_path.write_text(json.dumps(fixture_models, ensure_ascii=False), encoding="utf-8")
-    out_latest = tmp_path / "pricing_latest.json"
+    out_latest = tmp_path / "latest_pricing.json"
     sentinel = [{"sentinel": True}]
     out_latest.write_text(json.dumps(sentinel), encoding="utf-8")
-    out_unmatched = tmp_path / "pricing_unmatched.json"
+    out_unmatched = tmp_path / "unmatched_pricing.json"
     r = subprocess.run(
         [
             sys.executable,
@@ -179,9 +179,9 @@ def test_guide_and_agents_and_gitignore():
 
     agents = AGENTS_PATH.read_text(encoding="utf-8")
     assert "`scripts/update_pricing.py`" in agents or "update_pricing.py" in agents
-    assert "pricing_latest.json" in agents
-    assert "pricing_unmatched.json" in agents
+    assert "latest_pricing.json" in agents
+    assert "unmatched_pricing.json" in agents
 
     gi = GITIGNORE_PATH.read_text(encoding="utf-8")
-    assert "!/data/pricing_latest.json" in gi
-    assert "!/data/pricing_unmatched.json" in gi
+    assert "!/data/latest_pricing.json" in gi
+    assert "!/data/unmatched_pricing.json" in gi

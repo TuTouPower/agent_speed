@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""report.py — 从 data/results.jsonl 生成唯一合一榜单 data/latest.json。
+"""report.py — 从 data/results.jsonl 生成分档榜 data/latest_{200k,10k,sentence}.json。
 
 用法：
-  python3 report.py [--results data/results.jsonl] [--out data/latest.json]
+  python3 report.py [--results data/results.jsonl] [--out data/latest_200k.json]
 """
 
 from __future__ import annotations
@@ -22,9 +22,9 @@ from agent_speed.board_preview import refresh_board_preview
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="生成合一榜单 data/latest.json（扁平数组，200k / 10k / sentence 分档块）")
+    ap = argparse.ArgumentParser(description="生成分档榜 data/latest_{200k,10k,sentence}.json")
     ap.add_argument("--results", default=str(REPO_ROOT / "data" / "results.jsonl"), help="输入 results.jsonl 路径")
-    ap.add_argument("--out", default=str(REPO_ROOT / "data" / "latest.json"), help="输出合一榜单路径")
+    ap.add_argument("--out", default=str(REPO_ROOT / "data" / "latest_200k.json"), help="200k 榜输出路径（同目录另写 latest_10k / latest_sentence）")
     args = ap.parse_args(argv)
 
     results_file = Path(args.results)
@@ -32,7 +32,7 @@ def main(argv: list[str] | None = None) -> int:
 
     boards = generate_all_boards(results_file, out_file, cells=load_benchmark_config().cells)
     for scen, rows in boards.items():
-        print(f"Generated {len(rows)} rows to {out_file} (scenario={scen})")
+        print(f"Generated {len(rows)} rows for scenario={scen}")
     preview = refresh_board_preview(latest=out_file)
     if preview is not None:
         print(f"Updated board preview: {preview}")

@@ -1,0 +1,383 @@
+[
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-pro-ultraspeed",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 4,
+    "e2e_tps": 255.25,
+    "gen_tps": 349.89,
+    "ttft": 21.072,
+    "wall": 21.132,
+    "out_tokens": 5228.5,
+    "in_tokens": 41112.0,
+    "batch_id": "63be2bb39086",
+    "sample_times": [
+      "2026-09-23T11:42:05.885599+08:00",
+      "2026-09-23T12:48:53.261455+08:00",
+      "2026-09-23T12:48:53.261594+08:00",
+      "2026-09-23T12:48:53.261671+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gemini-3.8-flash",
+    "effort": "high",
+    "source": "antigravity",
+    "harness": "antigravity",
+    "valid_reps": 3,
+    "e2e_tps": 185.84,
+    "gen_tps": 267.84,
+    "ttft": 21.897,
+    "wall": 35.793,
+    "out_tokens": 5916.0,
+    "in_tokens": 24691.0,
+    "batch_id": "5301ac866b8b",
+    "sample_times": [
+      "2026-09-23T18:21:53.280874+08:00",
+      "2026-09-23T18:21:53.281003+08:00",
+      "2026-09-23T18:21:53.281074+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "deepseek-v4.1-flash",
+    "effort": "high",
+    "source": "deepseek-official",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 137.56,
+    "gen_tps": 217.58,
+    "ttft": 37.614,
+    "wall": 37.912,
+    "out_tokens": 5221.0,
+    "in_tokens": 14095.0,
+    "batch_id": "367ef29ff99e",
+    "sample_times": [
+      "2026-09-23T11:00:39.534249+08:00",
+      "2026-09-23T11:00:39.536761+08:00",
+      "2026-09-23T11:01:16.092072+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "deepseek-v4.1-flash",
+    "effort": "high",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 121.76,
+    "gen_tps": 214.9,
+    "ttft": 31.938,
+    "wall": 32.18,
+    "out_tokens": 4064.0,
+    "in_tokens": 22377.0,
+    "batch_id": "6c2d2183d1fb",
+    "sample_times": [
+      "2026-09-23T11:00:39.534172+08:00",
+      "2026-09-23T11:00:39.535918+08:00",
+      "2026-09-23T11:01:08.866969+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "MiniMax-M3",
+    "effort": null,
+    "source": "minimax-official",
+    "harness": "opencode",
+    "valid_reps": 4,
+    "e2e_tps": 118.87,
+    "gen_tps": 186.83,
+    "ttft": 19.755,
+    "wall": 19.993,
+    "out_tokens": 2866.5,
+    "in_tokens": 20499.5,
+    "batch_id": "1f4b6b3bf83e",
+    "sample_times": [
+      "2026-09-23T10:03:31.200162+08:00",
+      "2026-09-23T12:41:55.199931+08:00",
+      "2026-09-23T12:41:55.200127+08:00",
+      "2026-09-23T12:41:55.200195+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "grok-4.7-fast",
+    "effort": "high",
+    "source": "grok-build",
+    "harness": "grok-build",
+    "valid_reps": 3,
+    "e2e_tps": 105.58,
+    "gen_tps": 112.5,
+    "ttft": 4.248,
+    "wall": 214.82,
+    "out_tokens": 21544.0,
+    "in_tokens": 57765.0,
+    "batch_id": "7e88ac71163d",
+    "sample_times": [
+      "2026-09-23T11:09:50.149612+08:00",
+      "2026-09-23T11:09:50.149659+08:00",
+      "2026-09-23T11:12:28.053785+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gemini-3.8-flash",
+    "effort": "high",
+    "source": "antigravity-cliproxyapi",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 104.85,
+    "gen_tps": 248.87,
+    "ttft": 29.948,
+    "wall": 30.198,
+    "out_tokens": 3201.0,
+    "in_tokens": 24153.0,
+    "batch_id": "7d5f971671f0",
+    "sample_times": [
+      "2026-09-23T18:21:22.053168+08:00",
+      "2026-09-23T18:21:22.053222+08:00",
+      "2026-09-23T18:21:22.053265+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "grok-4.7",
+    "effort": "high",
+    "source": "grok-build",
+    "harness": "grok-build",
+    "valid_reps": 2,
+    "e2e_tps": 57.58,
+    "gen_tps": 59.79,
+    "ttft": 4.515,
+    "wall": 290.661,
+    "out_tokens": 16716.5,
+    "in_tokens": 89717.5,
+    "batch_id": "cda89b1dc111",
+    "sample_times": [
+      "2026-09-23T11:16:53.401064+08:00",
+      "2026-09-23T11:16:53.401125+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "MiniMax-M3",
+    "effort": null,
+    "source": "minimax-official",
+    "harness": "minimax-code",
+    "valid_reps": 3,
+    "e2e_tps": 57.33,
+    "gen_tps": 68.32,
+    "ttft": 4.396,
+    "wall": 59.212,
+    "out_tokens": 4016.0,
+    "in_tokens": 21785.0,
+    "batch_id": "bf22add108ea",
+    "sample_times": [
+      "2026-09-23T13:12:17.695963+08:00",
+      "2026-09-23T13:12:17.696062+08:00",
+      "2026-09-23T13:12:17.696118+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-luna",
+    "effort": "max",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 3,
+    "e2e_tps": 47.53,
+    "gen_tps": null,
+    "ttft": 104.635,
+    "wall": 112.108,
+    "out_tokens": 5504.0,
+    "in_tokens": 27752.0,
+    "batch_id": "26398426f526",
+    "sample_times": [
+      "2026-09-23T11:34:04.125933+08:00",
+      "2026-09-23T11:34:04.126040+08:00",
+      "2026-09-23T11:35:56.236755+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-luna",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 3,
+    "e2e_tps": 44.51,
+    "gen_tps": null,
+    "ttft": 72.467,
+    "wall": 81.389,
+    "out_tokens": 3623.0,
+    "in_tokens": 27857.0,
+    "batch_id": "a65952db9c0f",
+    "sample_times": [
+      "2026-09-23T11:31:30.893951+08:00",
+      "2026-09-23T11:31:30.895180+08:00",
+      "2026-09-23T11:32:52.286229+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-flash",
+    "effort": null,
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 37.86,
+    "gen_tps": 56.46,
+    "ttft": 134.841,
+    "wall": 135.08,
+    "out_tokens": 4980.0,
+    "in_tokens": 13024.0,
+    "batch_id": "5602e0bf2c67",
+    "sample_times": [
+      "2026-09-23T11:01:41.049206+08:00",
+      "2026-09-23T11:01:41.050520+08:00",
+      "2026-09-23T11:02:41.895052+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-pro",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 4,
+    "e2e_tps": 34.69,
+    "gen_tps": 43.34,
+    "ttft": 151.72,
+    "wall": 151.787,
+    "out_tokens": 5265.0,
+    "in_tokens": 41112.0,
+    "batch_id": "2a505328b3cd",
+    "sample_times": [
+      "2026-09-23T10:11:05.469894+08:00",
+      "2026-09-23T12:46:21.398514+08:00",
+      "2026-09-23T12:46:21.398650+08:00",
+      "2026-09-23T12:46:21.398734+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "muse-spark-1.3-contributor",
+    "effort": "high",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 33.31,
+    "gen_tps": 48.84,
+    "ttft": 77.967,
+    "wall": 78.234,
+    "out_tokens": 2896.0,
+    "in_tokens": 21034.0,
+    "batch_id": "18d01b4216a0",
+    "sample_times": [
+      "2026-09-23T11:04:56.977543+08:00",
+      "2026-09-23T11:04:56.977644+08:00",
+      "2026-09-23T11:06:15.213629+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "muse-spark-1.3-contributor",
+    "effort": "xhigh",
+    "source": "opencode-go",
+    "harness": "opencode",
+    "valid_reps": 3,
+    "e2e_tps": 32.91,
+    "gen_tps": 50.25,
+    "ttft": 77.039,
+    "wall": 77.294,
+    "out_tokens": 2443.0,
+    "in_tokens": 20903.0,
+    "batch_id": "422ae186478a",
+    "sample_times": [
+      "2026-09-23T11:07:04.599286+08:00",
+      "2026-09-23T11:07:04.599372+08:00",
+      "2026-09-23T11:08:09.624048+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-sol",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 3,
+    "e2e_tps": 32.36,
+    "gen_tps": null,
+    "ttft": 55.725,
+    "wall": 64.057,
+    "out_tokens": 2073.0,
+    "in_tokens": 27931.0,
+    "batch_id": "6022595491f9",
+    "sample_times": [
+      "2026-09-23T11:37:43.428852+08:00",
+      "2026-09-23T11:37:43.430081+08:00",
+      "2026-09-23T11:38:47.487886+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "source": "codex",
+    "harness": "codex",
+    "valid_reps": 3,
+    "e2e_tps": 30.18,
+    "gen_tps": null,
+    "ttft": 163.768,
+    "wall": 171.568,
+    "out_tokens": 5178.0,
+    "in_tokens": 28479.0,
+    "batch_id": "32c0649da7f9",
+    "sample_times": [
+      "2026-09-23T11:25:52.109095+08:00",
+      "2026-09-23T11:25:52.109153+08:00",
+      "2026-09-23T11:28:43.680629+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  },
+  {
+    "scenario": "10k",
+    "model": "mimo-v2.6-flash",
+    "effort": "high",
+    "source": "mimo-official",
+    "harness": "mimo-code",
+    "valid_reps": 4,
+    "e2e_tps": 21.62,
+    "gen_tps": 23.25,
+    "ttft": 178.463,
+    "wall": 178.61,
+    "out_tokens": 3835.5,
+    "in_tokens": 41112.0,
+    "batch_id": "d99cdcf86692",
+    "sample_times": [
+      "2026-09-23T10:06:40.610344+08:00",
+      "2026-09-23T12:41:55.200008+08:00",
+      "2026-09-23T12:41:55.204579+08:00",
+      "2026-09-23T12:41:55.204896+08:00"
+    ],
+    "generated_at": "2026-09-26T02:40:21.000561+00:00"
+  }
+]

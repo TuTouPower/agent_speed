@@ -6,11 +6,11 @@
 `--csv` 指向本地文件。覆盖规则硬编码在本脚本，不另建转换配置。
 
 写出：
-- data/pricing_latest.json（对齐成功的单价行；须覆盖采用表全部行）
-- data/pricing_unmatched.json（仅在失败时写出诊断清单）
+- data/latest_pricing.json（对齐成功的单价行；须覆盖采用表全部行）
+- data/unmatched_pricing.json（仅在失败时写出诊断清单）
 
 任一上游行无法在模型表对齐时：打印报错、写出未对齐清单、**不**覆盖
-pricing_latest.json，并以非零退出码失败。必须拿全数据。
+latest_pricing.json，并以非零退出码失败。必须拿全数据。
 """
 
 from __future__ import annotations
@@ -311,12 +311,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     ap.add_argument(
         "--out-latest",
-        default=str(REPO_ROOT / "data" / "pricing_latest.json"),
+        default=str(REPO_ROOT / "data" / "latest_pricing.json"),
         help="对齐单价输出路径",
     )
     ap.add_argument(
         "--out-unmatched",
-        default=str(REPO_ROOT / "data" / "pricing_unmatched.json"),
+        default=str(REPO_ROOT / "data" / "unmatched_pricing.json"),
         help="未对齐清单输出路径",
     )
     ap.add_argument(
@@ -333,7 +333,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if unmatched:
         write_json(Path(args.out_unmatched), unmatched)
-        # 禁止写出残缺单价表：不覆盖既有 pricing_latest.json
+        # 禁止写出残缺单价表：不覆盖既有 latest_pricing.json
         samples = unmatched[:20]
         lines = [
             f"ERROR: 单价对齐未拿全数据：采用表 {len(adopted)} 行，对齐 {len(latest)} 行，"

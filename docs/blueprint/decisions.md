@@ -17,5 +17,5 @@
 
 - 背景：Agent 排名需要单价维度；上游采用表与本仓模型 ID 不完全同字面，且有两条业务覆盖（OpenCode DeepSeek 用量上限、Command Code GOAT 月费）。若再拆「转换配置 + 转换脚本」会双份维护。
 - 选项：A 独立映射表 + 配置化覆盖；B 别名挂在 `data/models.json`，抓取/对齐/覆盖写在 `scripts/update_pricing.py` 内常量。
-- 结论：选 B。对齐只靠 `id` / `pricing_aliases` 精确匹配；套餐→source 与两条覆盖硬编码在脚本；未对齐进 `pricing_unmatched.json` 驱动人工补录。
+- 结论：选 B。对齐只靠 `id` / `pricing_aliases` 精确匹配；套餐→source 与两条覆盖硬编码在脚本；未对齐进 `unmatched_pricing.json` 驱动人工补录。
 - 替代：无
