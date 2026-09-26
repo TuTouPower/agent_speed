@@ -151,7 +151,8 @@ def build_served_index(models: list[dict[str, Any]]) -> dict[str, str]:
 
 def fetch_adopted_csv(url: str, dest: Path) -> Path:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    with urllib.request.urlopen(url, timeout=60) as resp:
+    req = urllib.request.Request(url, headers={"User-Agent": "agent_speed/1.0"})
+    with urllib.request.urlopen(req, timeout=60) as resp:
         dest.write_bytes(resp.read())
     return dest
 
@@ -181,6 +182,7 @@ def recompute_real_usd_per_mtok(price_usd: float | None, monthly_tokens: int | N
 def apply_overrides(
     plan: str,
     served_model: str,
+    local_model_id: str,
     price_usd: float | None,
     monthly_tokens: int | None,
     monthly_yi: float | None,
@@ -190,7 +192,8 @@ def apply_overrides(
     """返回 (price_usd, monthly_tokens, monthly_yi, real_usd_per_mtok, notes)。"""
     extra: list[str] = []
 
-    if plan == OPENCODE_GO_PLAN and served_model.startswith("deepseek-"):
+    is_deepseek = served_model.startswith("deepseek-") or local_model_id.startswith("deepseek-")
+    if plan == OPENCODE_GO_PLAN and is_deepseek:
         scale = OPENCODE_DEEPSEEK_USAGE_TO / OPENCODE_DEEPSEEK_USAGE_FROM
         if monthly_tokens is not None:
             monthly_tokens = int(round(monthly_tokens * scale))
@@ -231,7 +234,7 @@ def row_to_pricing(
     notes = (upstream.get("decision_note") or "").strip()
 
     price_usd, monthly_tokens, monthly_yi, real, notes = apply_overrides(
-        plan, served, price_usd, monthly_tokens, monthly_yi, real, notes
+        plan, served, local_model_id, price_usd, monthly_tokens, monthly_yi, real, notes
     )
 
     return {

@@ -95,6 +95,26 @@ def test_opencode_deepseek_override(fixture_models, fixture_adopted):
     assert row["source"] == "opencode-go"
 
 
+def test_opencode_deepseek_override_via_local_id():
+    """当上游 served_model 非 deepseek- 开头别名，但本仓 id 为 deepseek- 时仍应用覆盖。"""
+    models = [{"id": "deepseek-v4-custom", "pricing_aliases": ["ds-short-alias"]}]
+    adopted = [
+        {
+            "plan_name": "OpenCode Go",
+            "served_model": "ds-short-alias",
+            "price_usd": "10.0",
+            "monthly_tokens": "1000000",
+            "monthly_yi": "0.01",
+            "real_usd_per_mtok": "10.0",
+            "decision_note": "",
+        }
+    ]
+    latest, _ = up.build_pricing(models, adopted)
+    assert len(latest) == 1
+    assert latest[0]["monthly_tokens"] == 4000000
+    assert "本仓覆盖" in latest[0]["notes"]
+
+
 def test_command_code_goat_override(fixture_models, fixture_adopted):
     """AC-005：Command Code GOAT 月费 10.78，额度不变，真实单价按 10.78 重算。"""
     latest, _ = up.build_pricing(fixture_models, fixture_adopted)
