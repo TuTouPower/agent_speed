@@ -82,6 +82,11 @@ OPENCODE_DEEPSEEK_USAGE_FROM = 15.0
 OPENCODE_DEEPSEEK_USAGE_TO = 60.0
 COMMAND_CODE_GOAT_PLAN = "Command Code GOAT"
 COMMAND_CODE_GOAT_PRICE = 10.78
+COMMAND_CODE_GOAT_PROMO_PLAN = "Command Code GOAT (促销至 9/28)"
+COMMAND_CODE_GOAT_PROMO_MODEL = "deepseek-v4.1-flash"
+COMMAND_CODE_GOAT_PROMO_UNTIL = "2026-09-28"
+COMMAND_CODE_GOAT_BASE_ALLOWANCE = 40.0
+COMMAND_CODE_GOAT_PROMO_ALLOWANCE = 60.0
 
 PRICING_FIELDS = (
     "plan",
@@ -254,6 +259,47 @@ def row_to_pricing(
     }
 
 
+def build_command_code_goat_promo_row(
+    upstream: dict[str, str],
+    local_model_id: str,
+) -> dict[str, Any]:
+    upstream_notes = (upstream.get("decision_note") or "").strip()
+    price_usd = COMMAND_CODE_GOAT_PRICE
+    monthly_tokens = _parse_optional_int(upstream.get("monthly_tokens"))
+    monthly_yi = _parse_optional_float(upstream.get("monthly_yi"))
+
+    scale = COMMAND_CODE_GOAT_PROMO_ALLOWANCE / COMMAND_CODE_GOAT_BASE_ALLOWANCE
+    if monthly_tokens is not None:
+        monthly_tokens = int(round(monthly_tokens * scale))
+    if monthly_yi is not None:
+        monthly_yi = monthly_yi * scale
+    real_usd_per_mtok = recompute_real_usd_per_mtok(price_usd, monthly_tokens)
+
+    promo_note = (
+        f"本仓覆盖：Command Code GOAT 月费 10→{COMMAND_CODE_GOAT_PRICE}；"
+        f"促销期（至 {COMMAND_CODE_GOAT_PROMO_UNTIL}）优惠额度 "
+        f"${COMMAND_CODE_GOAT_BASE_ALLOWANCE:g}→${COMMAND_CODE_GOAT_PROMO_ALLOWANCE:g}（×{scale:g}），"
+        f"月额度按比例放大，按新月费与优惠额度重算真实单价。"
+    )
+    notes = f"{upstream_notes} | {promo_note}" if upstream_notes else promo_note
+
+    return {
+        "plan": COMMAND_CODE_GOAT_PROMO_PLAN,
+        "model": local_model_id,
+        "source": PLAN_TO_SOURCE.get(COMMAND_CODE_GOAT_PLAN, ""),
+        "billing": (upstream.get("billing") or "").strip() or None,
+        "price_usd": price_usd,
+        "monthly_tokens": monthly_tokens,
+        "monthly_yi": monthly_yi,
+        "real_usd_per_mtok": real_usd_per_mtok,
+        "unmetered": _parse_unmetered(upstream.get("unmetered")),
+        "promo_until": COMMAND_CODE_GOAT_PROMO_UNTIL,
+        "confidence": (upstream.get("confidence") or "").strip() or None,
+        "citation": (upstream.get("source") or "").strip() or None,
+        "notes": notes or None,
+    }
+
+
 def build_pricing(
     models: list[dict[str, Any]],
     adopted_rows: list[dict[str, str]],
@@ -285,6 +331,8 @@ def build_pricing(
             )
             continue
         latest.append(row_to_pricing(upstream, local_id))
+        if plan == COMMAND_CODE_GOAT_PLAN and local_id == COMMAND_CODE_GOAT_PROMO_MODEL:
+            latest.append(build_command_code_goat_promo_row(upstream, local_id))
 
     latest.sort(
         key=lambda r: (

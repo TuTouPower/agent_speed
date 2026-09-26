@@ -126,6 +126,51 @@ def test_command_code_goat_override(fixture_models, fixture_adopted):
     assert row["notes"] and "本仓覆盖" in row["notes"] and "10.78" in row["notes"]
 
 
+def test_command_code_goat_deepseek_promo_override():
+    """Command Code GOAT × deepseek-v4.1-flash：保留常态行，并新增 9.28 前促销行（$40→$60）。"""
+    models = [{"id": "deepseek-v4.1-flash"}]
+    adopted = [
+        {
+            "plan_name": "Command Code GOAT",
+            "served_model": "deepseek-v4.1-flash",
+            "price_usd": "10",
+            "monthly_tokens": "4140800000",
+            "monthly_yi": "41.408",
+            "real_usd_per_mtok": "0.0024149923",
+            "decision_note": "upstream goat note",
+            "billing": "subscription",
+            "source": "https://commandcode.ai/",
+        }
+    ]
+    latest, unmatched = up.build_pricing(models, adopted)
+    assert unmatched == []
+    assert len(latest) == 2
+
+    base_row = next(r for r in latest if r["plan"] == "Command Code GOAT")
+    promo_row = next(r for r in latest if r["plan"] == "Command Code GOAT (促销至 9/28)")
+
+    # 常态行保持不动
+    assert base_row["model"] == "deepseek-v4.1-flash"
+    assert base_row["price_usd"] == 10.78
+    assert base_row["monthly_tokens"] == 4140800000
+    assert base_row["monthly_yi"] == pytest.approx(41.408)
+    assert base_row["promo_until"] is None
+    assert base_row["real_usd_per_mtok"] == pytest.approx(10.78 / 4140.8)
+
+    # 优惠期行
+    assert promo_row["model"] == "deepseek-v4.1-flash"
+    assert promo_row["price_usd"] == 10.78
+    assert promo_row["monthly_tokens"] == 6211200000
+    assert promo_row["monthly_yi"] == pytest.approx(62.112)
+    assert promo_row["promo_until"] == "2026-09-28"
+    assert promo_row["real_usd_per_mtok"] == pytest.approx(10.78 / 6211.2)
+    assert promo_row["notes"] and "促销期" in promo_row["notes"] and "60" in promo_row["notes"]
+
+    # 排序：promo 行单价更低排在前面
+    assert latest[0]["plan"] == "Command Code GOAT (促销至 9/28)"
+    assert latest[1]["plan"] == "Command Code GOAT"
+
+
 def test_cli_writes_outputs_when_complete(tmp_path):
     """全量对齐时写入 latest_pricing，unmatched 为空，退出码 0。"""
     models_path = tmp_path / "models.json"

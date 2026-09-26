@@ -165,6 +165,21 @@
     "notes": "237.989→171.766亿：Step实测负载打不到标准97% cache（2026-09-22用户裁定），改套低缓存统一负载（conventions.lowCacheTokenMix 85%/14.5%/0.5%）混合价¥0.466/M；国内站月度8000M Credit÷该价，1M Credit=¥1，cached/input/output=¥0.27/1.35/8.1。英文 $1≈7M 与人民币口径对 3.5 差 0%、对 3.7 因美元价四舍五入少 3.2%，采用中文精确口径。未采用旧 Coding Plan Prompt/5h 表；未加 Studio 40% 创作额度；step-3.5-flash-2603 与 3.5 同价不单列；step-router-v1 不画独立点。无面板 token+% 或打满实测，按官方绝对 Credit+价表+统一低缓存口径；汇率1 USD=6.7787 CNY（2026-09-04 人民币汇率中间价），旧汇率7.2；人民币月费除以汇率换美元；https://www.xinhuanet.com/20260904/4c1ce1cbf39d416997cb9c237d6f5024/c.html"
   },
   {
+    "plan": "Command Code GOAT (促销至 9/28)",
+    "model": "deepseek-v4.1-flash",
+    "source": "",
+    "billing": "subscription",
+    "price_usd": 10.78,
+    "monthly_tokens": 6211200000,
+    "monthly_yi": 62.112,
+    "real_usd_per_mtok": 0.0017355744461617722,
+    "unmetered": null,
+    "promo_until": "2026-09-28",
+    "confidence": "medium",
+    "citation": "https://commandcode.ai/docs/plans/goat 官方每模型 allowance 与三段价；https://commandcode.ai/pricing；$10→$70 credits；command-code-goat-deepseek-round1-2026-09-10.json",
+    "notes": "新增48.485亿：min(共享月池$70, 模型allowance $40) ÷ 统一标准负载加权价；官网闲时 cached/input/output=$0.003/$0.15/$0.60，高峰2×。用户确认 V4 Flash / Vision 已下线，Command Code 这两点删除（旧Flash 43.274亿、Vision 14.425亿）。官方请求数仅作交叉检查，不再作为额度主值；忽略 processing fee；同套餐各模型额度不可相加 | 本仓覆盖：Command Code GOAT 月费 10→10.78；促销期（至 2026-09-28）优惠额度 $40→$60（×1.5），月额度按比例放大，按新月费与优惠额度重算真实单价。"
+  },
+  {
     "plan": "Step Plan Plus (¥99)",
     "model": "step-3.5-flash",
     "source": "",
