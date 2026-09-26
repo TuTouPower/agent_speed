@@ -17,6 +17,8 @@
 - `data/results.jsonl`：原始测速调用账本（追加写）。
 - `data/latest.json`：公开展示站聚合汇总表（覆盖写，扁平数组，行内 `scenario` 自描述）。
 - `data/models.json`：本仓权威模型身份表（`id` 主键；可选 `pricing_aliases` 挂定价仓 `served_model`）；测速与单价共用同一套模型 ID。
+- `scripts/update_pricing.py`：单价旁路——抓取定价仓 `adopted.csv`，按模型表精确对齐并应用硬编码覆盖，写出 `data/pricing_latest.json` / `data/pricing_unmatched.json`；**不**改测速流水线。
+- `data/pricing_latest.json` / `data/pricing_unmatched.json`：单价产物与未对齐清单（覆盖写）。
 - `tests/`：自动化测试套件。
 - `docs/`：项目规范与知识库。
     - `docs/specs/`：生效需求级规范（语料、调度、上站报告、发布）。

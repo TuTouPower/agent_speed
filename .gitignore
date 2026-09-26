@@ -3,6 +3,8 @@
 !/data/results.jsonl
 !/data/latest.json
 !/data/models.json
+!/data/pricing_latest.json
+!/data/pricing_unmatched.json
 !/data/.gitkeep
 .scratch/
 node_modules/

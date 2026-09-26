@@ -1,0 +1,51 @@
+{
+  "tid": "t009",
+  "attempt": 1,
+  "execution_id": "5570cdfe51d3415dbe9164b6e3dcbf07",
+  "status": "done",
+  "branch": "t009_pricing_update",
+  "base_sha": "a5f2475d005d1775b83f63cc62ce0df2636a7005",
+  "tests": "pytest tests -q: 68 passed; pytest .repo_template/tests -q -m contract: 132 passed; git diff --check clean",
+  "blackbox": "未定义（docs/blueprint/testing.md blackbox_verify 章节正文为「无」；不伪写通过）",
+  "review": "Round 1 PASS (single: review_general.md PASS, scope c777de93cfbda1b2, zero findings)",
+  "ac_evidence": {
+    "AC-001": [
+      "scripts/update_pricing.py",
+      "data/pricing_latest.json",
+      "data/pricing_unmatched.json",
+      ".gitignore",
+      "tests/test_update_pricing.py::test_cli_writes_outputs"
+    ],
+    "AC-002": [
+      "scripts/update_pricing.py",
+      "data/pricing_latest.json",
+      "tests/test_update_pricing.py::test_pricing_row_fields_and_sortable"
+    ],
+    "AC-003": [
+      "scripts/update_pricing.py",
+      "tests/test_update_pricing.py::test_align_exact_id_and_alias",
+      "tests/fixtures/pricing/adopted.csv"
+    ],
+    "AC-004": [
+      "scripts/update_pricing.py",
+      "tests/test_update_pricing.py::test_opencode_deepseek_override",
+      "data/pricing_latest.json"
+    ],
+    "AC-005": [
+      "scripts/update_pricing.py",
+      "tests/test_update_pricing.py::test_command_code_goat_override",
+      "data/pricing_latest.json"
+    ],
+    "AC-006": [
+      "docs/guides/pricing_update.md",
+      "tests/test_update_pricing.py::test_guide_and_agents_and_gitignore"
+    ],
+    "AC-007": [
+      "AGENTS.md",
+      "scripts/update_pricing.py",
+      "tests/test_update_pricing.py::test_guide_and_agents_and_gitignore"
+    ]
+  },
+  "pending": [],
+  "findings": []
+}

@@ -1,0 +1,1017 @@
+[
+  {
+    "plan": "ChatGPT Plus",
+    "served_model": "gpt-5.6-sol",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 5x",
+    "served_model": "gpt-5.6-sol",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 20x",
+    "served_model": "gpt-5.6-sol",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Devin Max",
+    "served_model": "claude-opus-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Pro",
+    "served_model": "claude-opus-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-opus-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 5x (9/14+)",
+    "served_model": "claude-opus-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-fable-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-opus-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok Plus",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok Heavy",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok Lite",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Ultra",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Ultra (Fast)",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro+",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 199",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 99",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 699",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 199",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 99",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 49",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Kimi 会员 699",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (新客 ¥118) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Lite (老客 ¥49) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (新客 ¥538) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Pro (老客 ¥149) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (新客 ¥1078) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 忙时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 中间值",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 闲时",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 忙时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 中间值",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GLM Coding Max (老客 ¥469) 闲时",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "阿里云百炼 Coding Plan Pro",
+    "served_model": "qwen3.7-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Alibaba Cloud Coding Plan Pro",
+    "served_model": "qwen3.7-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "glm-5.2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "glm-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "kimi-k2.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "longcat-2.0",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "minimax-m2.7",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "minimax-m2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "muse-spark-1.2-contributor",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "qwen3.8-max",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "qwen3.8-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "qwen3.7-max",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "qwen3.7-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "qwen3.6-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "hy4-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "hy3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "OpenCode Go",
+    "served_model": "omen-alpha",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "gpt-5.6-sol",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "glm-5.2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "hy3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.8-27b",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.7-max",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.7-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.6-plus",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.8-max",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.8-max-0902",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "hy4-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "qwen3.8-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "deepseek-v4-flash-fast",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "muse-spark-1.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "muse-spark-1.2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "muse-spark-1.2-contributor",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "kimi-k2.7-code-highspeed",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "grok-4.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "gemini-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "glm-5.2-fast",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "inkling",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "inkling-small",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "step-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "step-3.5-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Command Code GOAT",
+    "served_model": "nemotron-3-ultra",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "deepseek-v4-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "glm-5.2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "glm-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Pro",
+    "served_model": "minimax-m2.7",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "deepseek-v4-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "glm-5.3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "glm-5.3-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "glm-5.2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "glm-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "kimi-k3",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "kimi-k2.7-code",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Ollama Max",
+    "served_model": "minimax-m2.7",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Mini (¥49)",
+    "served_model": "step-3.5-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Mini (¥49)",
+    "served_model": "step-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Mini (¥49)",
+    "served_model": "step-5-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Plus (¥99)",
+    "served_model": "step-3.5-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Plus (¥99)",
+    "served_model": "step-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Plus (¥99)",
+    "served_model": "step-5-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Pro (¥199)",
+    "served_model": "step-3.5-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Pro (¥199)",
+    "served_model": "step-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Pro (¥199)",
+    "served_model": "step-5-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Max (¥699)",
+    "served_model": "step-3.5-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Max (¥699)",
+    "served_model": "step-3.7-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Step Plan Max (¥699)",
+    "served_model": "step-5-preview",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Lite 日间",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Lite 夜间0.8×",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Lite 日间",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Lite 夜间0.8×",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Standard 日间",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Standard 夜间0.8×",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Standard 日间",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Standard 夜间0.8×",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Pro 日间",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Pro 夜间0.8×",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Pro 日间",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Pro 夜间0.8×",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Max 日间",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Max 夜间0.8×",
+    "served_model": "mimo-v2.5-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Max 日间",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiMo Token Plan Max 夜间0.8×",
+    "served_model": "mimo-v2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Plus",
+    "served_model": "gpt-5.6-terra",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Plus",
+    "served_model": "gpt-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 5x",
+    "served_model": "gpt-5.6-terra",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 5x",
+    "served_model": "gpt-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 20x",
+    "served_model": "gpt-5.6-terra",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "ChatGPT Pro 20x",
+    "served_model": "gpt-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Pro",
+    "served_model": "claude-sonnet-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Pro",
+    "served_model": "claude-opus-4.8",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-sonnet-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-opus-4.8",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 20x (9/14+)",
+    "served_model": "claude-fable-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 5x (9/14+)",
+    "served_model": "claude-sonnet-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 5x (9/14+)",
+    "served_model": "claude-fable-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 5x (9/14+)",
+    "served_model": "claude-fable-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Pro",
+    "served_model": "claude-opus-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Max 5x (9/14+)",
+    "served_model": "claude-opus-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Ultra (Standard)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Ultra",
+    "served_model": "grok-4.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro (Standard)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro+ (Standard)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok Heavy",
+    "served_model": "grok-4.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "SuperGrok",
+    "served_model": "grok-4.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiniMax Token Plan Plus",
+    "served_model": "minimax-m2.7",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "MiniMax Token Plan Plus (Global)",
+    "served_model": "minimax-m2.7",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Ultra (Composer Fast)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro (Composer Fast)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Cursor Pro+ (Composer Fast)",
+    "served_model": "composer-2.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Devin Pro (促销至 10/31)",
+    "served_model": "swe-2",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "DeepSeek V4 Flash API 闲时",
+    "served_model": "deepseek-v4-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "DeepSeek V4 Flash API 忙时",
+    "served_model": "deepseek-v4-flash",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "DeepSeek V4 Pro API 闲时",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "DeepSeek V4 Pro API 忙时",
+    "served_model": "deepseek-v4-pro",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GPT-5.6 Sol API",
+    "served_model": "gpt-5.6-sol",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Grok 4.6 API (<200k)",
+    "served_model": "grok-4.6",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Opus 5 API",
+    "served_model": "claude-opus-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Sonnet 5 API",
+    "served_model": "claude-sonnet-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Fable 5 API",
+    "served_model": "claude-fable-5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Fable 5.1 API",
+    "served_model": "claude-fable-5.1",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "Claude Opus 5.5 API",
+    "served_model": "claude-opus-5.5",
+    "reason": "no_exact_id_or_alias"
+  },
+  {
+    "plan": "GPT-5.6 Terra API",
+    "served_model": "gpt-5.6-terra",
+    "reason": "no_exact_id_or_alias"
+  }
+]
