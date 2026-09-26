@@ -1,0 +1,37 @@
+{
+  "tid": "t008",
+  "attempt": 1,
+  "execution_id": "ec6fad32cd2845b1837256b4c235e652",
+  "status": "done",
+  "branch": "t008_model_registry",
+  "base_sha": "6944aea3cb5767e5984935859a748d7cbda39273",
+  "tests": "pytest tests -q: 62 passed; pytest .repo_template/tests -q -m contract: 132 passed; git diff --check clean",
+  "blackbox": "未定义（docs/blueprint/testing.md blackbox_verify 章节正文为「无」；不伪写通过）",
+  "review": "Round 1 PASS (single: review_general.md PASS, scope de99157a4992d7e3, zero findings)",
+  "ac_evidence": {
+    "AC-001": [
+      "data/models.json",
+      "tests/test_model_registry.py::test_ac001_models_json_shape"
+    ],
+    "AC-002": [
+      "data/models.json",
+      "tests/test_model_registry.py::test_ac002_model_ids_unique"
+    ],
+    "AC-003": [
+      "data/models.json",
+      "config/benchmark.yaml",
+      "data/results.jsonl",
+      "tests/test_model_registry.py::test_ac003_covers_benchmark_and_results"
+    ],
+    "AC-004": [
+      ".gitignore",
+      "tests/test_model_registry.py::test_ac004_gitignore_tracks_models_json"
+    ],
+    "AC-005": [
+      "AGENTS.md",
+      "tests/test_model_registry.py::test_ac005_agents_md_declares_models_json"
+    ]
+  },
+  "pending": [],
+  "findings": []
+}

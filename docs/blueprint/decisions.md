@@ -12,3 +12,10 @@
 - 选项：A 三档排进同一数组；B 同一份 `results.jsonl` 写出三份榜，互不混排，不合成总分。
 - 结论：选 B。运行入口一次一档（`sentence` / `10k` / `200k`，未指定为 `200k`）；`sentence` 为单句输入加有界短输出提示（800 到 1200 字），上站门槛仍是 `out_tokens >= 500`；`10k` 任务说明与 `task_200k.md` 一致、切片为 `django_10k.txt` 全文且不截断；账单门槛分母取记录自己的 `cl100k_tokens`。不做 `1k`；`100k` 不在本 task，仍 parked。
 - 替代：无
+
+## 002 单价更新单脚本内嵌覆盖、不建独立映射表（2026-09-26）
+
+- 背景：Agent 排名需要单价维度；上游采用表与本仓模型 ID 不完全同字面，且有两条业务覆盖（OpenCode DeepSeek 用量上限、Command Code GOAT 月费）。若再拆「转换配置 + 转换脚本」会双份维护。
+- 选项：A 独立映射表 + 配置化覆盖；B 别名挂在 `data/models.json`，抓取/对齐/覆盖写在 `scripts/update_pricing.py` 内常量。
+- 结论：选 B。对齐只靠 `id` / `pricing_aliases` 精确匹配；套餐→source 与两条覆盖硬编码在脚本；未对齐进 `pricing_unmatched.json` 驱动人工补录。
+- 替代：无

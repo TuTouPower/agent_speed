@@ -5,6 +5,8 @@
 |术语|英文|说明|
 |---|---|---|
 |比较单位|Comparison Unit|基准比较单位为「`model` × `effort` × `source` × `harness` × `scenario`」。|
+|本仓模型 ID|Model ID|`data/models.json` 中的 `id`，测速格子与结果行的权威模型主键；原样字符串，禁止大小写折叠。|
+|定价仓别名|Pricing Alias|`pricing_aliases`：定价仓 `served_model` 与本仓 `id` 字面不同时挂在模型表行上；字面相同可不写。|
 |评测场景|Scenario|评测输入上下文与任务规模。已支持 `sentence`、`10k`、`200k` 三档独立评测；`100k` 仍未做。|
 |服务提供方|Source|模型服务提供方渠道（如 `deepseek-official`、`opencode-go`、`cpa`、`google-antigravity` 等，非裸写 `official`）。|
 |运行框架|Harness|调用驱动框架（opencode、grok、codex、kimi、antigravity）。|
