@@ -18,7 +18,7 @@
     - 不得将调试运行产物（`runs/`）及本地环境变量文件（`.env`）提交入库。
 - **基线评测文件纳入**：
     - 200K 语料切片及其 manifest、评测任务 Prompt（`prompts/task_200k.md`）。
-    - 原始测速明细 `data/results.jsonl` 与公开上站聚合数据 `data/latest.json`。
+    - 原始测速明细 `data/results.jsonl` 与公开上站聚合数据 `data/latest_200k.json`。
 
 ## 4. 文档与工程蓝图体系
 

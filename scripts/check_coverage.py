@@ -49,18 +49,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.scenarios:
         scenarios = tuple(s for s in args.scenarios.split(",") if s in VALID_SCENARIOS)
 
-    combined_path = REPO_ROOT / "data" / "latest.json"
-    flat: list = []
-    if combined_path.exists():
-        try:
-            loaded = json.load(open(combined_path, encoding="utf-8"))
-            if isinstance(loaded, list):
-                flat = loaded
-        except Exception:
-            flat = []
+    from agent_speed.report import board_path
 
     for scen in scenarios:
-        board_rows: list = [r for r in flat if isinstance(r, dict) and r.get("scenario") == scen]
+        board_file = board_path(REPO_ROOT / "data", scen)
+        board_rows: list = []
+        if board_file.exists():
+            try:
+                loaded = json.load(open(board_file, encoding="utf-8"))
+                if isinstance(loaded, list):
+                    board_rows = [r for r in loaded if isinstance(r, dict)]
+            except Exception:
+                board_rows = []
         statuses, stale = compute_coverage(bench_cfg.cells, records, scen, board_rows)
 
         print(f"== {scen}（矩阵 {len(statuses)} 格，榜 {len(board_rows)} 行）")

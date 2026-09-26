@@ -132,10 +132,10 @@ def main(argv: list[str] | None = None) -> int:
 
     # 测速完成后自动刷新合一榜单（各档互不混排，不合成总分）
     data_dir = REPO_ROOT / "data"
-    boards = generate_all_boards(out_path, data_dir / "latest.json", cells=bench_cfg.cells)
+    boards = generate_all_boards(out_path, data_dir / "latest_200k.json", cells=bench_cfg.cells)
     for scen, rows in boards.items():
-        print(f"Auto-generated data/latest.json ({len(rows)} rows for scenario={scen})")
-    latest_path = data_dir / "latest.json"
+        print(f"Auto-generated data/latest_{scen}.json ({len(rows)} rows)")
+    latest_path = data_dir / "latest_200k.json"
     preview = refresh_board_preview(latest=latest_path)
     if preview is not None:
         print(f"Updated board preview: {preview}")

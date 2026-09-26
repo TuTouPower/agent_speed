@@ -1,0 +1,23 @@
+[
+  {
+    "id": "Deepseek-v4.1-flash"
+  },
+  {
+    "id": "MiniMax-M3",
+    "pricing_aliases": [
+      "minimax-m3"
+    ]
+  },
+  {
+    "id": "UNKNOWN-MODEL"
+  },
+  {
+    "id": "deepseek-v4.1-flash"
+  },
+  {
+    "id": "gpt-6-sol"
+  },
+  {
+    "id": "known-only"
+  }
+]

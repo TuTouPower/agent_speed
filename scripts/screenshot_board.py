@@ -2,13 +2,13 @@
 """screenshot_board.py — 截取 Agent Speed 公开榜单预览图（供 README 展示）。
 
 复用历史 render_md.py 的 Chrome Headless + Retina + 自动裁白边思路。
-优先本地 web 目录（可注入刚生成的 latest.json），否则截线上站点。
+优先本地 web 目录（可注入刚生成的 latest_200k.json，复制为站点的 latest.json），否则截线上站点。
 
 用法：
   python3 scripts/screenshot_board.py
   python3 scripts/screenshot_board.py --url https://agent-speed.ooll.lol
   python3 scripts/screenshot_board.py --web-dir ../great_websites/systems/agent_speed/web \\
-      --latest data/latest.json -o docs/board-preview-dark.png
+      --latest data/latest_200k.json -o docs/board-preview-dark.png
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ from PIL import Image, ImageChops
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUT = REPO_ROOT / "docs" / "board-preview-dark.png"
 DEFAULT_URL = "https://agent-speed.ooll.lol/?theme=dark"
-DEFAULT_LATEST = REPO_ROOT / "data" / "latest.json"
+DEFAULT_LATEST = REPO_ROOT / "data" / "latest_200k.json"
 
 CHROME_CANDIDATES = [
     os.environ.get("CHROME_BIN", ""),
@@ -195,7 +195,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="截取 Agent Speed 榜单预览图")
     ap.add_argument("--url", default=DEFAULT_URL, help="线上榜单 URL（无本地 web 时使用）")
     ap.add_argument("--web-dir", default=None, help="本地 great_websites/.../web 目录")
-    ap.add_argument("--latest", default=str(DEFAULT_LATEST), help="注入到本地 web 的 latest.json")
+    ap.add_argument("--latest", default=str(DEFAULT_LATEST), help="注入到本地 web 的源榜（复制为 latest.json）")
     ap.add_argument("-o", "--out", default=str(DEFAULT_OUT), help="输出 PNG 路径")
     ap.add_argument("--width", type=int, default=1440)
     ap.add_argument("--height", type=int, default=2200)
