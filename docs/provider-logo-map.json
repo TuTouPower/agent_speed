@@ -1,6 +1,6 @@
 {
   "source": "FeiZhuLulu/real-api-pricing web/src/assets/provider-logos (+ derived/points.json vendor)",
-  "note": "单价仓是厂商级图标（非每模型一图）。按 derived/points.json 的 vendor 映射；inkling* 上游 vendor=other，暂用 Command Code 渠道标；nemotron 按型号归 Microsoft。",
+  "note": "单价仓是厂商级图标（非每模型一图）。按 derived/points.json 的 vendor 映射；inkling* 上游 vendor=other，暂用 Command Code 渠道标；nemotron 按型号归 Microsoft。 另含测速榜独有模型 gpt-6-luna / grok-4.7-fast / k2.8-preview（不在单价采用表）。",
   "logo_dir": "docs/provider-logos",
   "absolute_dir": "/workspace/agent_speed_hist/docs/provider-logos",
   "files": [
@@ -171,6 +171,13 @@
       "file": "openai.svg",
       "path": "docs/provider-logos/openai.svg"
     },
+    "gpt-6-luna": {
+      "vendor": "OpenAI",
+      "logo_slug": "openai",
+      "file": "openai.svg",
+      "path": "docs/provider-logos/openai.svg",
+      "note": "speed-board only; vendor by name"
+    },
     "gpt-6-sol": {
       "vendor": "OpenAI",
       "logo_slug": "openai",
@@ -195,6 +202,13 @@
       "file": "xai.svg",
       "path": "docs/provider-logos/xai.svg"
     },
+    "grok-4.7-fast": {
+      "vendor": "xAI",
+      "logo_slug": "xai",
+      "file": "xai.svg",
+      "path": "docs/provider-logos/xai.svg",
+      "note": "speed-board only; vendor by name"
+    },
     "hy3": {
       "vendor": "Tencent",
       "logo_slug": "tencent",
@@ -206,6 +220,27 @@
       "logo_slug": "tencent",
       "file": "tencent.svg",
       "path": "docs/provider-logos/tencent.svg"
+    },
+    "inkling": {
+      "vendor": "Command Code",
+      "logo_slug": "command-code",
+      "file": "command-code.webp",
+      "path": "docs/provider-logos/command-code.webp",
+      "note": "heuristic/fallback"
+    },
+    "inkling-small": {
+      "vendor": "Command Code",
+      "logo_slug": "command-code",
+      "file": "command-code.webp",
+      "path": "docs/provider-logos/command-code.webp",
+      "note": "heuristic/fallback"
+    },
+    "k2.8-preview": {
+      "vendor": "Kimi",
+      "logo_slug": "kimi",
+      "file": "kimi.svg",
+      "path": "docs/provider-logos/kimi.svg",
+      "note": "speed-board only; Kimi family by name"
     },
     "kimi-k2.6": {
       "vendor": "Kimi",
@@ -303,6 +338,13 @@
       "file": "meta.svg",
       "path": "docs/provider-logos/meta.svg"
     },
+    "nemotron-3-ultra": {
+      "vendor": "Microsoft",
+      "logo_slug": "microsoft",
+      "file": "microsoft.svg",
+      "path": "docs/provider-logos/microsoft.svg",
+      "note": "heuristic/fallback"
+    },
     "omen-alpha": {
       "vendor": "OpenCode",
       "logo_slug": "opencode",
@@ -374,27 +416,6 @@
       "logo_slug": "devin",
       "file": "devin.svg",
       "path": "docs/provider-logos/devin.svg"
-    },
-    "nemotron-3-ultra": {
-      "vendor": "Microsoft",
-      "logo_slug": "microsoft",
-      "file": "microsoft.svg",
-      "path": "docs/provider-logos/microsoft.svg",
-      "note": "heuristic/fallback"
-    },
-    "inkling": {
-      "vendor": "Command Code",
-      "logo_slug": "command-code",
-      "file": "command-code.webp",
-      "path": "docs/provider-logos/command-code.webp",
-      "note": "heuristic/fallback"
-    },
-    "inkling-small": {
-      "vendor": "Command Code",
-      "logo_slug": "command-code",
-      "file": "command-code.webp",
-      "path": "docs/provider-logos/command-code.webp",
-      "note": "heuristic/fallback"
     }
   },
   "missing_vendor": [],
